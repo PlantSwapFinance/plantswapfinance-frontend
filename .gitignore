@@ -34,13 +34,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 debug.log*
-
-# Still in dev.
-/src/views/Beta1
-/src/views/Beta2
-/src/views/Beta3
-/src/views/Beta4
-/src/views/Beta5
-/src/views/Farms
-/src/views/Teams
-/src/views/Garden
