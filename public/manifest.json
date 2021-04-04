@@ -1,0 +1,16 @@
+{
+  "short_name": "PlantSwap",
+  "name": "PlantSwap",
+  "description": "Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "type": "image/x-icon",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
