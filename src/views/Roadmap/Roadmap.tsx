@@ -2,7 +2,6 @@ import React from 'react'
 import Page from 'components/layout/Page'
 import { Image, Heading, Text } from '@plantswap-libs/uikit'
 import styled from 'styled-components'
-import useI18n from 'hooks/useI18n'
 import Divider from './components/Divider'
 
 const StyledImage = styled(Image)`
