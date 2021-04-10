@@ -43,6 +43,10 @@ const config: MenuEntry[] = [
         label: 'Github',
         href: 'https://github.com/plantswapfinance',
       },
+      {
+        label: "Blog",
+        href: "https://plantswapfinance.medium.com",
+      },
     ],
   },
 ]
