@@ -31,6 +31,11 @@ const config: MenuEntry[] = [
     href: '#',
   },
   {
+    label: "Project",
+    icon: "ProjectIcon",
+    href: "/project",
+  },
+  {
     label: 'Roadmap',
     icon: 'RoadmapIcon',
     href: '/roadmap',

@@ -23,6 +23,7 @@ const Teams = lazy(() => import('./views/Teams'))
 const Team = lazy(() => import('./views/Teams/Team'))
 const Roadmap = lazy(() => import('./views/Roadmap'))
 const Profile = lazy(() => import('./views/Profile'))
+const Project = lazy(() => import('./views/Project'))
 // Beta
 const Beta1 = lazy(() => import('./views/Beta1'))
 const Beta2 = lazy(() => import('./views/Beta2'))
@@ -76,6 +77,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/profile">
               <Profile />
+            </Route>
+            <Route path="/Project">
+              <Project />
             </Route>
 
             <Route exact path="/beta1">
