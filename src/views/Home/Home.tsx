@@ -68,6 +68,9 @@ const Home: React.FC = () => {
         </Heading>
         <Text>{TranslateString(578, 'Swap and Farm $PLANT with others and')}</Text>
         <Text>{TranslateString(578, 'with our smart contracts on Binance Smart Chain.')}</Text>
+        <br />
+        <Text>Fees from these transactions will be used to</Text>
+        <Text>plant trees and support environmental causes.</Text>
       </Hero>
       <div>
         <Cards>
