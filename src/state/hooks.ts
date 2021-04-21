@@ -205,7 +205,7 @@ export const usePriceCakeBusd = (): BigNumber => {
   // const cakeBnbFarm = useFarmFromPid(1)
   // const bnbBusdFarm = useFarmFromPid(2)
 
-  const plantBusdFarm = useFarmFromPid(3)
+  const plantBusdFarm = useFarmFromPid(1)
 
   // const bnbBusdPrice = bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : ZERO
   // const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : ZERO
