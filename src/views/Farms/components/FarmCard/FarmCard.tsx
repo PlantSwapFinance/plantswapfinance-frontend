@@ -86,12 +86,12 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
 interface FarmCardProps {
   farm: FarmWithStakedValue
   removed: boolean
-  cakePrice?: BigNumber
+  plantPrice?: BigNumber
   provider?: ProviderType
   account?: string
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, plantPrice, account }) => {
   const TranslateString = useI18n()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
@@ -105,7 +105,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
     ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
 
-  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PLANT', '')
+  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PLANT', 'PLANT')
   const earnLabel = farm.dual ? farm.dual.earnLabel : 'CAKE'
 
   const farmAPY = farm.apy && farm.apy.toLocaleString('en-US', { maximumFractionDigits: 2 })
@@ -132,7 +132,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           <Text bold style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apy ? (
               <>
-                <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apy={farm.apy} />
+                <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} plantPrice={plantPrice} apy={farm.apy} />
                 {farmAPY}%
               </>
             ) : (
