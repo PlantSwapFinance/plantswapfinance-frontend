@@ -21,14 +21,14 @@ const config: MenuEntry[] = [
     ],
   },
   {
-    label: 'Farms (soon)',
+    label: 'Farms',
     icon: 'FarmIcon',
-    href: '#',
+    href: '/farms',
   },
   {
-    label: 'Garden (soon)',
+    label: 'Gardens',
     icon: 'PoolIcon',
-    href: '#',
+    href: '/gardens',
   },
   {
     label: "Project",
