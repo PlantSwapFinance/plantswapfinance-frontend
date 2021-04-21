@@ -200,19 +200,12 @@ export const useGetApiPrice = (token: string) => {
   return prices[token.toLowerCase()]
 }
 
-export const usePriceCakeBusd = (): BigNumber => {
+export const usePricePlantBusd = (): BigNumber => {
   const ZERO = new BigNumber(0)
-  // const cakeBnbFarm = useFarmFromPid(1)
-  // const bnbBusdFarm = useFarmFromPid(2)
 
   const plantBusdFarm = useFarmFromPid(1)
-
-  // const bnbBusdPrice = bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : ZERO
-  // const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : ZERO
   
   const plantBusdPrice = plantBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(plantBusdFarm.tokenPriceVsQuote) : ZERO
-
-  // return cakeBusdPrice
 
   return plantBusdPrice
 }

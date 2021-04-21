@@ -13,7 +13,7 @@ export interface Ifo {
   launchTime: string
   saleAmount: string
   raiseAmount: string
-  cakeToBurn: string
+  plantToBurn: string
   projectSiteUrl: string
   currency: string
   currencyAddress: string

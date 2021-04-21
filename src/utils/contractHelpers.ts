@@ -12,6 +12,7 @@ import {
   getBunnyFactoryAddress,
   getBunnySpecialAddress,
   getCakeAddress,
+  getPlantAddress,
   getLotteryAddress,
   getLotteryTicketAddress,
   getMasterChefAddress,
@@ -27,6 +28,7 @@ import bunnySpecialAbi from 'config/abi/bunnySpecial.json'
 import bep20Abi from 'config/abi/erc20.json'
 import lpTokenAbi from 'config/abi/lpToken.json'
 import cakeAbi from 'config/abi/cake.json'
+import plantAbi from 'config/abi/plant.json'
 import ifoAbi from 'config/abi/ifo.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import lotteryAbi from 'config/abi/lottery.json'
@@ -60,6 +62,9 @@ export const getPointCenterIfoContract = (web3?: Web3) => {
 }
 export const getCakeContract = (web3?: Web3) => {
   return getContract(cakeAbi, getCakeAddress(), web3)
+}
+export const getPlantContract = (web3?: Web3) => {
+  return getContract(plantAbi, getPlantAddress(), web3)
 }
 export const getProfileContract = (web3?: Web3) => {
   return getContract(profileABI, getPlantProfileAddress(), web3)
