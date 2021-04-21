@@ -7,16 +7,16 @@ const config: MenuEntry[] = [
     href: '/',
   },
   {
-    label: 'Trade (soon)',
+    label: 'Trade (PancakeSwap)',
     icon: 'TradeIcon',
     items: [
       {
         label: 'Exchange',
-        href: '#',
+        href: 'https://exchange.pancakeswap.finance/#/swap?inputCurrency=BNB&outputCurrency=0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
       },
       {
         label: 'Liquidity',
-        href: '#',
+        href: 'https://exchange.pancakeswap.finance/#/add/BNB/0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
       },
     ],
   },
