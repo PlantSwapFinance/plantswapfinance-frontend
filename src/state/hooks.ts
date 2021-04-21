@@ -202,13 +202,19 @@ export const useGetApiPrice = (token: string) => {
 
 export const usePriceCakeBusd = (): BigNumber => {
   const ZERO = new BigNumber(0)
-  const cakeBnbFarm = useFarmFromPid(1)
-  const bnbBusdFarm = useFarmFromPid(2)
+  // const cakeBnbFarm = useFarmFromPid(1)
+  // const bnbBusdFarm = useFarmFromPid(2)
 
-  const bnbBusdPrice = bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : ZERO
-  const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : ZERO
+  const plantBusdFarm = useFarmFromPid(3)
 
-  return cakeBusdPrice
+  // const bnbBusdPrice = bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : ZERO
+  // const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : ZERO
+  
+  const plantBusdPrice = plantBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(plantBusdFarm.tokenPriceVsQuote) : ZERO
+
+  // return cakeBusdPrice
+
+  return plantBusdPrice
 }
 
 // Block
