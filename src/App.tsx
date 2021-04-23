@@ -3,7 +3,7 @@ import { Router, Redirect, Route, Switch } from 'react-router-dom'
 import { ResetCSS } from '@plantswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
-import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
+import { useFetchPriceList, useFetchProfile, useFetchPublicData, useFetchPancakeSwapPublicData } from 'state/hooks'
 import useGetDocumentTitlePrice from './hooks/useGetDocumentTitlePrice'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
@@ -46,6 +46,7 @@ const App: React.FC = () => {
 
   useEagerConnect()
   useFetchPublicData()
+  useFetchPancakeSwapPublicData()
   useFetchProfile()
   useFetchPriceList()
   useGetDocumentTitlePrice()

@@ -69,6 +69,20 @@ export interface PoolConfig {
   harvest?: boolean
   isFinished?: boolean
 }
+export interface PancakeSwapFarmConfig {
+  pid: number
+  lpSymbol: string
+  lpAddresses: Address
+  token: Token
+  quoteToken: Token
+  multiplier?: string
+  isCommunity?: boolean
+  dual?: {
+    rewardPerBlock: number
+    earnLabel: string
+    endBlock: number
+  }
+}
 
 export type Images = {
   lg: string

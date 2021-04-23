@@ -17,6 +17,9 @@ export const getPlantAddress = () => {
 export const getMasterChefAddress = () => {
   return getAddress(addresses.masterChef)
 }
+export const getMasterChefPancakeSwapAddress = () => {
+  return getAddress(addresses.masterChefPancakeSwap)
+}
 export const getMulticallAddress = () => {
   return getAddress(addresses.mulltiCall)
 }
