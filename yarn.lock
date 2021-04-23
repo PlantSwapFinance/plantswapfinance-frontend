@@ -2025,10 +2025,10 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@plantswap-libs/uikit@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@plantswap-libs/uikit/-/uikit-0.0.1.tgz#b170b27d47b4c738dfe13b46fcbc8914593c1a66"
-  integrity sha512-roGAxypSAW18UteN068sgRrWumhLF0irTYirn8qa+feHVufDfER90Pfm5TbOsNxp8gToCji5vQtfz41/wjvvfQ==
+"@plantswap-libs/uikit@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@plantswap-libs/uikit/-/uikit-0.0.2.tgz#2c9baa140d1b6c66cb4fbc64ad377e9b0c824b42"
+  integrity sha512-tcQZ4o69lKQHDoQiq4hQojv6fLpr/SccjVgr1dvGXBh/ol+upW20HkbwT85gullxJlroe/FvUmroDMm5CLLv2w==
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
