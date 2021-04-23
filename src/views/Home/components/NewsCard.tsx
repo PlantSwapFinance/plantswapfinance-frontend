@@ -29,6 +29,8 @@ const NewsCard = () => {
           {TranslateString(542, 'News & Announcement')}
         </Heading>
         <Block>
+          <Label><a href="https://plantswapfinance.medium.com/are-you-farming-plant-7e6f2dd8a7f5">Are you farming 🚜 $PLANT 🌱</a></Label>
+          <br />
           <Label><a href="https://app.bounce.finance/fixed-swap/5279">🌱PLANT Token available on Bounce.finance!</a></Label>
           <br />
           <Label><a href="https://plantswapfinance.medium.com/plant-token-as-been-deploy-on-binance-smart-chain-d81a3d202d96">🌱PLANT Token as been deploy on Binance Smart Chain</a></Label>
