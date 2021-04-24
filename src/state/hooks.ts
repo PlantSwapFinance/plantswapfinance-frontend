@@ -241,7 +241,7 @@ export const useGetApiPrice = (token: string) => {
 export const usePricePlantBusd = (): BigNumber => {
   const ZERO = new BigNumber(0)
 
-  const plantBnbFarm = useFarmFromPid(1)
+  const plantBnbFarm = useFarmFromPid(4)
   
   const bnbBusdPancakeSwapFarm = usePancakeSwapFarmFromPid(2)
   
