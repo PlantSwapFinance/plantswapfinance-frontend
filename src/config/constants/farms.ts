@@ -6,7 +6,7 @@ const farms: FarmConfig[] = [
   // New V2
   {
     pid: 4,
-    lpSymbol: 'PLANT-BNB LP',
+    lpSymbol: 'PLANT-BNB LP V2',
     lpAddresses: {
       97: '',
       56: '0x79268898de0f8c67ad73d9e33534d9874411aaaa',
@@ -16,10 +16,10 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 5,
-    lpSymbol: 'PLANT-BUSD LP',
+    lpSymbol: 'PLANT-BUSD LP V2',
     lpAddresses: {
       97: '',
-      56: '0xf71070df7c352a2668266703dc5d3d539d336bb0',
+      56: '0xdf638da5adff2c7fdb2ce0fbbfa15813fa113aaa',
     },
     token: tokens.plant,
     quoteToken: tokens.busd,
