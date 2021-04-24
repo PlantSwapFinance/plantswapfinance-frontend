@@ -3,6 +3,28 @@ import { FarmConfig } from './types'
 
 const farms: FarmConfig[] = [
 
+  // New V2
+  {
+    pid: 4,
+    lpSymbol: 'PLANT-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x79268898de0f8c67ad73d9e33534d9874411aaaa',
+    },
+    token: tokens.plant,
+    quoteToken: tokens.wbnb,
+  },
+  {
+    pid: 5,
+    lpSymbol: 'PLANT-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0xf71070df7c352a2668266703dc5d3d539d336bb0',
+    },
+    token: tokens.plant,
+    quoteToken: tokens.busd,
+  },
+  // V1 (Not to use anymore)
   {
     pid: 1,
     lpSymbol: 'PLANT-BNB LP',
