@@ -4,6 +4,7 @@ import { Image, Heading, Text, BaseLayout } from '@plantswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 import Page from 'components/layout/Page'
 import PlantStats from 'views/Home/components/PlantStats'
+import MarketCap from 'views/Home/components/MarketCap'
 import QuickDescriptionCard from 'views/Home/components/QuickDescriptionCard'
 import NewsCard from 'views/Home/components/NewsCard'
 import Divider from './components/Divider'
@@ -83,6 +84,7 @@ const Home: React.FC = () => {
       <div>
         <Cards>
           <PlantStats />
+          <MarketCap />
         </Cards>
       </div>
       <Divider />
