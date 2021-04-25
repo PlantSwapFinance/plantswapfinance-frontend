@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Image, Heading, Text, BaseLayout } from '@plantswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 import Page from 'components/layout/Page'
+import PlantStats from 'views/Home/components/PlantStats'
 import QuickDescriptionCard from 'views/Home/components/QuickDescriptionCard'
 import NewsCard from 'views/Home/components/NewsCard'
 import Divider from './components/Divider'
@@ -91,6 +92,11 @@ const Home: React.FC = () => {
           <Text>Later this year, when the community around Plant Swap finance will have grown, we will release a governance token to decentralize the decision making on which causes to support, what goal to focus on and regulate the different economic incentives of this eco-system. More on this later…</Text>
         <br /><br />
         <StyledImage src="/images/endPage.svg" alt="PlantSwap Finance" width={680} height={155} />
+      <div>
+        <Cards>
+          <PlantStats />
+        </Cards>
+      </div>
     </Page>
   )
 }
