@@ -38,11 +38,11 @@ const PlantStats = () => {
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(538, 'Total PLANT Burned')}</Text>
-          <CardValue fontSize="14px" decimals={0} value={burnedBalance} />
+          <CardValue fontSize="14px" decimals={3} value={burnedBalance} />
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(540, 'New PLANT/block')}</Text>
-          <CardValue fontSize="14px" decimals={2} value={0.02} />
+          <CardValue fontSize="14px" decimals={3} value={0.02} />
         </Row>
       </CardBody>
     </StyledPlantStats>
