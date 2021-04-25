@@ -30,7 +30,7 @@ const PlantStats = () => {
     <StyledPlantStats>
       <CardBody>
         <Heading size="xl" mb="24px">
-          {TranslateString(534, 'Plant Stats')}
+          {TranslateString(534, 'PLANT Stats')}
         </Heading>
         <Row>
           <Text fontSize="14px">{TranslateString(536, 'Total PLANT Supply')}</Text>
