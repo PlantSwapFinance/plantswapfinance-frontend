@@ -1,8 +1,14 @@
 {
   "short_name": "PlantSwap",
-  "name": "PlantSwap",
-  "description": "Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain.",
+  "name": "PlantSwap.",
+  "description": "PlantSwap.finance Fram $PLANT with DeFi and help plant trees",
   "icons": [
+    {
+      "src": "logoPLANT.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "favicon.ico",
       "type": "image/x-icon",
