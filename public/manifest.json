@@ -7,6 +7,18 @@
       "src": "favicon.ico",
       "type": "image/x-icon",
       "sizes": "256x256"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "plantswap.icon",
+      "sizes": "196x196",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": ".",
