@@ -12,6 +12,9 @@ import ToastListener from './components/ToastListener'
 import PageLoader from './components/PageLoader'
 import EasterEgg from './components/EasterEgg'
 import Garden from './views/Garden'
+import Barns from './views/Barns'
+import Tree from './views/Tree'
+import DevelopmentFund from './views/DevelopmentFund'
 import history from './routerHistory'
 
 // Route-based code splitting
@@ -27,8 +30,6 @@ const Project = lazy(() => import('./views/Project'))
 // Beta
 const Beta1 = lazy(() => import('./views/Beta1'))
 const Beta2 = lazy(() => import('./views/Beta2'))
-const Beta3 = lazy(() => import('./views/Beta3'))
-const Beta4 = lazy(() => import('./views/Beta4'))
 const Beta5 = lazy(() => import('./views/Beta5'))
 
 // This config is required for number formating
@@ -67,6 +68,15 @@ const App: React.FC = () => {
             <Route path="/gardens">
               <Garden />
             </Route>
+            <Route path="/barns">
+              <Barns />
+            </Route>
+            <Route path="/tree">
+              <Tree />
+            </Route>
+            <Route path="/developmentFund">
+              <DevelopmentFund />
+            </Route>
             <Route exact path="/teams">
               <Teams />
             </Route>
@@ -88,12 +98,6 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/beta2">
               <Beta2 />
-            </Route>
-            <Route exact path="/beta3">
-              <Beta3 />
-            </Route>
-            <Route exact path="/beta4">
-              <Beta4 />
             </Route>
             <Route exact path="/beta5">
               <Beta5 />
