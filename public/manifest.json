@@ -1,51 +1,16 @@
 {
   "short_name": "PlantSwap",
-  "name": "PlantSwap.",
-  "description": "PlantSwap.finance Fram $PLANT with DeFi and help plant trees",
+  "name": "PlantSwap",
+  "description": "Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain.",
   "icons": [
-    {
-      "src": "logoPLANT.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
     {
       "src": "favicon.ico",
       "type": "image/x-icon",
       "sizes": "256x256"
-    },
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "plantswap.icon",
-      "sizes": "196x196",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "screenshots": [
-    {
-      "src": "/images/screenshot1.png",
-      "type": "image/png",
-      "sizes": "616x1234"
-    },
-    {
-      "src": "/images/screenshot2.jpg",
-      "type": "image/jpg",
-      "sizes": "616x1228"
-    },
-    {
-      "src": "/images/screenshot2.jpg",
-      "type": "image/jpg",
-      "sizes": "616x1230"
-    }
-  ]
+  "background_color": "#ffffff"
 }
