@@ -3,43 +3,43 @@ import { PoolConfig, PoolCategory } from './types'
 
 const pools: PoolConfig[] = [
   {
-    sousId: 0,
+    sousId: 1,
     stakingToken: tokens.plant,
     earningToken: tokens.plant,
     contractAddress: {
-      56: '0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
-      97: '0xd6756c4876ACD3c0162AF74Ba25b6b78F951836b',
+      56: '0xEe60b364586B91945a7521C025c09a5E72832f4f',
+      97: '',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,
     sortOrder: 1,
-    tokenPerBlock: '0.004',
+    tokenPerBlock: '0.003',
   },
   {
-    sousId: 0,
-    stakingToken: tokens.wbnb,
-    earningToken: tokens.plant,
-    contractAddress: {
-      56: '0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
-      97: '0xd6756c4876ACD3c0162AF74Ba25b6b78F951836b',
-    },
-    poolCategory: PoolCategory.CORE,
-    harvest: true,
-    sortOrder: 1,
-    tokenPerBlock: '0.002285',
-  },
-  {
-    sousId: 0,
+    sousId: 2,
     stakingToken: tokens.busd,
     earningToken: tokens.plant,
     contractAddress: {
-      56: '0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
-      97: '0xd6756c4876ACD3c0162AF74Ba25b6b78F951836b',
+      56: '0x6E93982FFBfD12Fa029Ededa13D96d02DB5eB130',
+      97: '',
     },
     poolCategory: PoolCategory.CORE,
     harvest: true,
-    sortOrder: 1,
-    tokenPerBlock: '0.002285',
+    sortOrder: 2,
+    tokenPerBlock: '0.002',
+  },
+  {
+    sousId: 3,
+    stakingToken: tokens.cake,
+    earningToken: tokens.plant,
+    contractAddress: {
+      56: '0xDF9ED26b847dFC66884909E73197f56A9a0A3482',
+      97: '',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    sortOrder: 3,
+    tokenPerBlock: '0.002',
   },
 ]
 
