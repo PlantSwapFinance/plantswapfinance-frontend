@@ -103,7 +103,7 @@ const StyledImage = styled(Image)`
   margin-top: 58px;
 `
 
-const Farms: React.FC = () => {
+const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { path } = useRouteMatch()
   const { pathname } = useLocation()
   const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_farm_accepted_risk')
