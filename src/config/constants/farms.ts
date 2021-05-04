@@ -13,7 +13,7 @@ const farms: FarmConfig[] = [
     },
     isTokenOnly: true,
     token: tokens.plant,
-    quoteToken: tokens.busd,
+    quoteToken: tokens.usdc,
   },
   // New V2
   {
@@ -68,7 +68,7 @@ const farms: FarmConfig[] = [
     lpAddresses: tokens.cake.address,
     isTokenOnly: true,
     token: tokens.cake,
-    quoteToken: tokens.cake,
+    quoteToken: tokens.busd,
   },
   {
     pid: 9,
