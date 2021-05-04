@@ -68,7 +68,7 @@ const farms: FarmConfig[] = [
     lpAddresses: tokens.cake.address,
     isTokenOnly: true,
     token: tokens.cake,
-    quoteToken: tokens.busd,
+    quoteToken: tokens.cake,
   },
   {
     pid: 9,
