@@ -3,7 +3,7 @@ import { Route, useRouteMatch } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, useModal } from '@plantswap-libs/uikit'
+import { Image, Heading, useModal, Text } from '@plantswap-libs/uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import useI18n from 'hooks/useI18n'
@@ -24,7 +24,7 @@ const StyledImage = styled(Image)`
   margin-top: 58px;
 `
 
-const Farm: React.FC = () => {
+const GardenV1: React.FC = () => {
   const { path } = useRouteMatch()
   const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_garden_accepted_risk')
   const TranslateString = useI18n()
@@ -68,9 +68,10 @@ const Farm: React.FC = () => {
           </ul>
         </div>
         <img src="/images/garden.svg" alt="Gardens" width={600} height={315} />
+        <br />
+        <Text>We will take a final snapshot of the Gardens at 11 PM GMT/UTC (May 4th, 2021) and we will invite you to migrate your tokens to the Garden v2! Thank you</Text>
       </Hero>
       <PoolTabButtons stackedOnly={stackedOnly} setStackedOnly={setStackedOnly} />
-      <Divider />
       <FlexLayout>
         <Route exact path={`${path}`}>
           <>
@@ -122,4 +123,4 @@ const Hero = styled.div`
   }
 `
 
-export default Farm
+export default GardenV1
