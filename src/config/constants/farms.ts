@@ -79,6 +79,15 @@ const farms: FarmConfig[] = [
     token: tokens.usdc,
     quoteToken: tokens.usdc,
   },
+  {
+    pid: 10,
+    risk: 3,
+    lpSymbol: 'CAKE',
+    lpAddresses: tokens.cake.address,
+    isTokenOnly: true,
+    token: tokens.cake,
+    quoteToken: tokens.cake,
+  },
 ]
 
 export default farms
