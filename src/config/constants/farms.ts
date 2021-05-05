@@ -64,11 +64,11 @@ const farms: FarmConfig[] = [
   {
     pid: 7,
     risk: 3,
-    lpSymbol: 'CAKE',
-    lpAddresses: tokens.cake.address,
+    lpSymbol: 'BUSD',
+    lpAddresses: tokens.busd.address,
     isTokenOnly: true,
-    token: tokens.cake,
-    quoteToken: tokens.cake,
+    token: tokens.busd,
+    quoteToken: tokens.busd,
   },
   {
     pid: 9,
