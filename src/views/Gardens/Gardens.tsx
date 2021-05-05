@@ -312,12 +312,7 @@ const Gardens: React.FC<FarmsProps> = (farmsProps) => {
             </ul>
           </div>
           <img src="/images/garden.svg" alt="Gardens" width={600} height={315} />
-        <br />
-        <Text>This new garden will be activated at 11:30 PM GMT/UTC (May 4th, 2021)!</Text>
         </Hero>
-        <Heading as="h2" size="xl" mb="14px">
-              {TranslateString(738, 'Are you looking for the Garden V1?')} <a href="/gardensv1">click here</a>
-        </Heading>
         <ControlContainer>
           <ViewControls>
             <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
