@@ -13,7 +13,7 @@ const farms: FarmConfig[] = [
     },
     isTokenOnly: true,
     token: tokens.plant,
-    quoteToken: tokens.usdc,
+    quoteToken: tokens.plant,
   },
   // New V2
   {
