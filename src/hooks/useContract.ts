@@ -3,15 +3,22 @@ import useWeb3 from 'hooks/useWeb3'
 import {
   getBep20Contract,
   getPlantContract,
+  getCakeContract,
+  getEggContract,
+  getBrewContract,
+  getFarmersSchoolContract,
+  getFarmerSpecialContract,
+  getPlantRabbitContract,
   getBunnyFactoryContract,
   getBunnySpecialContract,
-  getPlantRabbitContract,
   getProfileContract,
   getIfoContract,
   getLotteryContract,
   getLotteryTicketContract,
   getMasterchefContract,
   getMasterchefPancakeSwapContract,
+  getMasterchefGooseContract,
+  getMasterchefCafeswapContract,
   getPointCenterIfoContract,
   getSouschefContract,
   getClaimRefundContract,
@@ -36,12 +43,27 @@ export const usePlant = () => {
   return useMemo(() => getPlantContract(web3), [web3])
 }
 
-export const useBunnyFactory = () => {
+export const useCake = () => {
   const web3 = useWeb3()
-  return useMemo(() => getBunnyFactoryContract(web3), [web3])
+  return useMemo(() => getCakeContract(web3), [web3])
 }
 
-export const usePlantRabbits = () => {
+export const useEgg = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getEggContract(web3), [web3])
+}
+
+export const useBrew = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getBrewContract(web3), [web3])
+}
+
+export const useFarmersSchool = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getFarmersSchoolContract(web3), [web3])
+}
+
+export const usePlantswapFarmers = () => {
   const web3 = useWeb3()
   return useMemo(() => getPlantRabbitContract(web3), [web3])
 }
@@ -71,6 +93,16 @@ export const useMasterchefPancakeSwap = () => {
   return useMemo(() => getMasterchefPancakeSwapContract(web3), [web3])
 }
 
+export const useMasterchefGoose = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getMasterchefGooseContract(web3), [web3])
+}
+
+export const useMasterchefCafeswap = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getMasterchefCafeswapContract(web3), [web3])
+}
+
 export const useSousChef = (id) => {
   const web3 = useWeb3()
   return useMemo(() => getSouschefContract(id, web3), [id, web3])
@@ -81,12 +113,28 @@ export const usePointCenterIfoContract = () => {
   return useMemo(() => getPointCenterIfoContract(web3), [web3])
 }
 
-export const useBunnySpecialContract = () => {
+export const useFarmerSpecialContract = () => {
   const web3 = useWeb3()
-  return useMemo(() => getBunnySpecialContract(web3), [web3])
+  return useMemo(() => getFarmerSpecialContract(web3), [web3])
 }
 
 export const useClaimRefundContract = () => {
   const web3 = useWeb3()
   return useMemo(() => getClaimRefundContract(web3), [web3])
+}
+
+
+export const useBunnyFactory = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getBunnyFactoryContract(web3), [web3])
+}
+
+export const useBunnySpecialContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getBunnySpecialContract(web3), [web3])
+}
+
+export const usePlantRabbits = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getPlantRabbitContract(web3), [web3])
 }
