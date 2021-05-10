@@ -9,7 +9,7 @@ import useHasPlantBalance from 'hooks/useHasPlantBalance'
 import nftList from 'config/constants/nfts'
 import SelectionCard from '../components/SelectionCard'
 import NextStepButton from '../components/NextStepButton'
-import ApproveConfirmButtons from '../components/ApproveConfirmButtons'
+// import ApproveConfirmButtons from '../components/ApproveConfirmButtons'
 import useProfileCreation from './contexts/hook'
 import { MINT_COST, STARTER_FARMERS_IDS } from './config'
 
@@ -27,11 +27,11 @@ const Mint: React.FC = () => {
   const hasMinimumPlantRequired = useHasPlantBalance(minimumPlantBalanceToMint)
   const {
     isApproving,
-    isApproved,
+  //  isApproved,
     isConfirmed,
     isConfirming,
-    handleApprove,
-    handleConfirm,
+  //  handleApprove,
+ //   handleConfirm,
   } = useApproveConfirmTransaction({
     onRequiresApproval: async () => {
       // TODO: Move this to a helper, this check will be probably be used many times
