@@ -56,6 +56,7 @@ const fetchPancakeSwapFarms = async () => {
 
       // Ratio in % a LP tokens that are in staking, vs the total number in circulation
       const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
+      const lpTokenBalanceMasterC = new BigNumber(lpTokenBalanceMC)
 
       // Total value in staking in quote token value
       const lpTotalInQuoteToken = new BigNumber(quoteTokenBlanceLP)
@@ -65,9 +66,12 @@ const fetchPancakeSwapFarms = async () => {
 
       // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
       const tokenAmount = new BigNumber(tokenBalanceLP).div(new BigNumber(10).pow(tokenDecimals)).times(lpTokenRatio)
+      const tokenBalanceLPVal = new BigNumber(tokenBalanceLP)
       const quoteTokenAmount = new BigNumber(quoteTokenBlanceLP)
         .div(new BigNumber(10).pow(quoteTokenDecimals))
         .times(lpTokenRatio)
+        
+      const lpTotalAmount = new BigNumber(lpTotalSupply).div(new BigNumber(10).pow(tokenDecimals))
 
       const [info, totalAllocPoint] = await multicall(masterchefPancakeSwapABI, [
         {
@@ -88,8 +92,12 @@ const fetchPancakeSwapFarms = async () => {
         ...pancakeSwapFarmConfig,
         tokenAmount: tokenAmount.toJSON(),
         quoteTokenAmount: quoteTokenAmount.toJSON(),
+        lpTokenBalanceMC: lpTokenBalanceMasterC.toJSON(),
+        lpTokenRatio: lpTokenRatio.toJSON(),
+        lpTotalSupply: lpTotalAmount.toJSON(),
         lpTotalInQuoteToken: lpTotalInQuoteToken.toJSON(),
         tokenPriceVsQuote: quoteTokenAmount.div(tokenAmount).toJSON(),
+        tokenBalanceLP: tokenBalanceLPVal.toJSON(),
         poolWeight: poolWeight.toJSON(),
         multiplier: `${allocPoint.div(100).toString()}X`,
       }

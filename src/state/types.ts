@@ -1,6 +1,6 @@
 import { Toast } from '@plantswap-libs/uikit'
 import BigNumber from 'bignumber.js'
-import { CampaignType, FarmConfig, Nft, PoolConfig, PancakeSwapFarmConfig, Team } from 'config/constants/types'
+import { CampaignType, FarmConfig, BarnBetaConfig, Nft, PoolConfig, PancakeSwapFarmConfig, GooseFarmConfig, CafeswapFarmConfig, Team } from 'config/constants/types'
 
 export type TranslatableText =
   | string
@@ -15,6 +15,9 @@ export type TranslatableText =
 export interface Farm extends FarmConfig {
   tokenAmount?: BigNumber
   quoteTokenAmount?: BigNumber
+  lpTokenBalanceMC?: BigNumber
+  lpTokenRatio?: BigNumber
+  lpTotalSupply?: BigNumber
   lpTotalInQuoteToken?: BigNumber
   tokenPriceVsQuote?: BigNumber
   poolWeight?: BigNumber
@@ -27,6 +30,20 @@ export interface Farm extends FarmConfig {
 }
 
 export interface Garden extends FarmConfig {
+  tokenAmount?: BigNumber
+  quoteTokenAmount?: BigNumber
+  lpTotalInQuoteToken?: BigNumber
+  tokenPriceVsQuote?: BigNumber
+  poolWeight?: BigNumber
+  userData?: {
+    allowance: BigNumber
+    tokenBalance: BigNumber
+    stakedBalance: BigNumber
+    earnings: BigNumber
+  }
+}
+
+export interface BarnBeta extends BarnBetaConfig {
   tokenAmount?: BigNumber
   quoteTokenAmount?: BigNumber
   lpTotalInQuoteToken?: BigNumber
@@ -56,6 +73,9 @@ export interface Pool extends PoolConfig {
 export interface PancakeSwapFarm extends PancakeSwapFarmConfig {
   tokenAmount?: BigNumber
   quoteTokenAmount?: BigNumber
+  lpTokenBalanceMC?: BigNumber
+  lpTokenRatio?: BigNumber
+  lpTotalSupply?: BigNumber
   lpTotalInQuoteToken?: BigNumber
   tokenPriceVsQuote?: BigNumber
   poolWeight?: BigNumber
@@ -66,6 +86,42 @@ export interface PancakeSwapFarm extends PancakeSwapFarmConfig {
     earnings: BigNumber
   }
 }
+
+
+export interface GooseFarm extends GooseFarmConfig {
+  tokenAmount?: BigNumber
+  quoteTokenAmount?: BigNumber
+  lpTokenBalanceMC?: BigNumber
+  lpTokenRatio?: BigNumber
+  lpTotalSupply?: BigNumber
+  lpTotalInQuoteToken?: BigNumber
+  tokenPriceVsQuote?: BigNumber
+  poolWeight?: BigNumber
+  userData?: {
+    allowance: BigNumber
+    tokenBalance: BigNumber
+    stakedBalance: BigNumber
+    earnings: BigNumber
+  }
+}
+
+export interface CafeswapFarm extends CafeswapFarmConfig {
+  tokenAmount?: BigNumber
+  quoteTokenAmount?: BigNumber
+  lpTokenBalanceMC?: BigNumber
+  lpTokenRatio?: BigNumber
+  lpTotalSupply?: BigNumber
+  lpTotalInQuoteToken?: BigNumber
+  tokenPriceVsQuote?: BigNumber
+  poolWeight?: BigNumber
+  userData?: {
+    allowance: BigNumber
+    tokenBalance: BigNumber
+    stakedBalance: BigNumber
+    earnings: BigNumber
+  }
+}
+
 
 export interface Profile {
   userId: number
@@ -94,12 +150,24 @@ export interface GardensState {
   data: Garden[]
 }
 
+export interface BarnsBetaState {
+  data: BarnBeta[]
+}
+
 export interface PoolsState {
   data: Pool[]
 }
 
 export interface PancakeSwapFarmsState {
   data: PancakeSwapFarm[]
+}
+
+export interface GooseFarmsState {
+  data: GooseFarm[]
+}
+
+export interface CafeswapFarmsState {
+  data: CafeswapFarm[]
 }
 
 export interface ProfileState {
@@ -170,6 +238,7 @@ export interface BlockState {
 export interface State {
   farms: FarmsState
   gardens: GardensState
+  barnsBeta: BarnsBetaState
   toasts: ToastsState
   prices: PriceState
   pools: PoolsState
@@ -178,4 +247,6 @@ export interface State {
   achievements: AchievementState
   block: BlockState
   pancakeSwapFarms: PancakeSwapFarmsState
+  gooseFarms: GooseFarmsState
+  cafeswapFarms: CafeswapFarmsState
 }
