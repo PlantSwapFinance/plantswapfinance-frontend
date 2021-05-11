@@ -9,6 +9,7 @@ import profileReducer from './profile'
 import teamsReducer from './teams'
 import achievementsReducer from './achievements'
 import blockReducer from './block'
+import plantswapFarmsReducer from './plantswapFarms'
 import pancakeSwapFarmsReducer from './pancakeSwapFarms'
 import gooseFarmsReducer from './gooseFarms'
 import cafeswapFarmsReducer from './cafeswapFarms'
@@ -26,6 +27,7 @@ export default configureStore({
     teams: teamsReducer,
     achievements: achievementsReducer,
     block: blockReducer,
+    plantswapFarms: plantswapFarmsReducer,
     pancakeSwapFarms: pancakeSwapFarmsReducer,
     gooseFarms: gooseFarmsReducer,
     cafeswapFarms: cafeswapFarmsReducer,

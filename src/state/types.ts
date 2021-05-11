@@ -70,6 +70,24 @@ export interface Pool extends PoolConfig {
 }
 
 
+export interface PlantswapFarm extends FarmConfig {
+  tokenAmount?: BigNumber
+  quoteTokenAmount?: BigNumber
+  lpTokenBalanceMC?: BigNumber
+  lpTokenRatio?: BigNumber
+  lpTotalSupply?: BigNumber
+  lpTotalInQuoteToken?: BigNumber
+  tokenPriceVsQuote?: BigNumber
+  poolWeight?: BigNumber
+  userData?: {
+    allowance: BigNumber
+    tokenBalance: BigNumber
+    stakedBalance: BigNumber
+    earnings: BigNumber
+  }
+}
+
+
 export interface PancakeSwapFarm extends PancakeSwapFarmConfig {
   tokenAmount?: BigNumber
   quoteTokenAmount?: BigNumber
@@ -156,6 +174,10 @@ export interface BarnsBetaState {
 
 export interface PoolsState {
   data: Pool[]
+}
+
+export interface PlantswapFarmsState {
+  data: PlantswapFarm[]
 }
 
 export interface PancakeSwapFarmsState {
@@ -246,6 +268,7 @@ export interface State {
   teams: TeamsState
   achievements: AchievementState
   block: BlockState
+  plantswapFarms: PlantswapFarmsState
   pancakeSwapFarms: PancakeSwapFarmsState
   gooseFarms: GooseFarmsState
   cafeswapFarms: CafeswapFarmsState

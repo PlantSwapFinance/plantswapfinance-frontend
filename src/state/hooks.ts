@@ -13,6 +13,7 @@ import {
   fetchBarnsBetaPublicDataAsync,
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
+  fetchPlantswapFarmsPublicDataAsync,
   fetchPancakeSwapFarmsPublicDataAsync,
   fetchGooseFarmsPublicDataAsync,
   fetchCafeswapFarmsPublicDataAsync,
@@ -21,7 +22,7 @@ import {
   clear as clearToast,
   setBlock,
 } from './actions'
-import { State, Farm, BarnBeta, PancakeSwapFarm, GooseFarm, CafeswapFarm, Pool, ProfileState, TeamsState, AchievementState, PriceState } from './types'
+import { State, Farm, BarnBeta, PlantswapFarm, PancakeSwapFarm, GooseFarm, CafeswapFarm, Pool, ProfileState, TeamsState, AchievementState, PriceState } from './types'
 import { fetchProfile } from './profile'
 import { fetchTeam, fetchTeams } from './teams'
 import { fetchAchievements } from './achievements'
@@ -33,6 +34,25 @@ export const useFetchPublicData = () => {
   useEffect(() => {
     dispatch(fetchFarmsPublicDataAsync())
     dispatch(fetchGardensPublicDataAsync())
+    dispatch(fetchPoolsPublicDataAsync())
+  }, [dispatch, slowRefresh])
+
+  useEffect(() => {
+    const web3 = getWeb3NoAccount()
+    const interval = setInterval(async () => {
+      const blockNumber = await web3.eth.getBlockNumber()
+      dispatch(setBlock(blockNumber))
+    }, 6000)
+
+    return () => clearInterval(interval)
+  }, [dispatch])
+}
+
+export const useFetchPlantswapPublicData = () => {
+  const dispatch = useDispatch()
+  const { slowRefresh } = useRefresh()
+  useEffect(() => {
+    dispatch(fetchPlantswapFarmsPublicDataAsync())
     dispatch(fetchPoolsPublicDataAsync())
   }, [dispatch, slowRefresh])
 
@@ -208,6 +228,32 @@ export const useBarnBetaUser = (pid) => {
   }
 }
 
+
+export const usePlantswapFarms = (): PlantswapFarm[] => {
+  const farms = useSelector((state: State) => state.farms.data)
+  return farms
+}
+
+export const usePlantswapFarmFromPid = (pid): PlantswapFarm => {
+  const farm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid))
+  return farm
+}
+
+export const usePlantswapFarmFromSymbol = (lpSymbol: string): PlantswapFarm => {
+  const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpSymbol === lpSymbol))
+  return farm
+}
+
+export const usePlantswapFarmUser = (pid) => {
+  const farm = usePlantswapFarmFromPid(pid)
+
+  return {
+    allowance: farm.userData ? new BigNumber(farm.userData.allowance) : new BigNumber(0),
+    tokenBalance: farm.userData ? new BigNumber(farm.userData.tokenBalance) : new BigNumber(0),
+    stakedBalance: farm.userData ? new BigNumber(farm.userData.stakedBalance) : new BigNumber(0),
+    earnings: farm.userData ? new BigNumber(farm.userData.earnings) : new BigNumber(0),
+  }
+}
 
 // External Farms
 

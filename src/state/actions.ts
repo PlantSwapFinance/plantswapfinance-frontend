@@ -12,6 +12,7 @@ export {
 export { profileFetchStart, profileFetchSucceeded, profileFetchFailed } from './profile'
 export { fetchStart, teamFetchSucceeded, fetchFailed, teamsFetchSucceeded } from './teams'
 export { setBlock } from './block'
+export { fetchPlantswapFarmsPublicDataAsync, fetchPlantswapFarmUserDataAsync } from './plantswapFarms'
 export { fetchPancakeSwapFarmsPublicDataAsync, fetchPancakeSwapFarmUserDataAsync } from './pancakeSwapFarms'
 export { fetchGooseFarmsPublicDataAsync, fetchGooseFarmUserDataAsync } from './gooseFarms'
 export { fetchCafeswapFarmsPublicDataAsync, fetchCafeswapFarmUserDataAsync } from './cafeswapFarms'
