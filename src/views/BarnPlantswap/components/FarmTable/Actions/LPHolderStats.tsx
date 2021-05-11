@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Button, useModal } from '@plantswap-libs/uikit'
 import UnlockButton from 'components/UnlockButton'
 import { useWeb3React } from '@web3-react/core'
-import { useFarmUser } from 'state/hooks'
+import { usePlantswapFarmUser } from 'state/hooks'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import useI18n from 'hooks/useI18n'
 import { useApprove } from 'hooks/useApprove'
@@ -36,7 +36,7 @@ const LPHolderStats: React.FunctionComponent<FarmWithStakedValue> = ({ pid, lpSy
   const lpTotalSupplyBigNumber = new BigNumber(lpTotalSupply)
   const { account } = useWeb3React()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  const { allowance, tokenBalance, stakedBalance } = usePlantswapFarmUser(pid)
   const { onStake } = useStake(pid)
   const web3 = useWeb3()
 

@@ -64,20 +64,27 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
   const projectTokenLabel = farm.token.symbol
   const projectLinkLabel = farm.token.projectLink
   const projectLinkLink = farm.token.projectLink
-  const projectTokenAddress = token.address
+  const projectTokenAddress = token.address[56]
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const thisIsAToken = farm.isTokenOnly
-  const bscLp = `https://bscscan.com/address/${projectTokenAddress}`
-  const bscToken = `https://pancakeswap.info/pair/${lpAddress}`
+  const bscLpUrl = `https://bscscan.com/token/${projectTokenAddress}`
+  const bscTokenUrl = `https://bscscan.com/token/${projectTokenAddress}`
+  const pcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}`
+  const pcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}`
+
+  const pcsBuySellTokenUrl = `https://exchange.pancakeswap.finance/#/swap?inputCurrency=BNB&outputCurrency=${projectTokenAddress}`
 
   let lpOrToken = 'LP Token'
-  if(thisIsAToken) { lpOrToken = 'Token' }
+  if(thisIsAToken === true) { lpOrToken = 'Token' }
 
-  let lpOrTokenLink1 = <StyledLinkExternal href={bscToken}>{TranslateString(999, `View ${projectTokenLabel} Token Contract`)}</StyledLinkExternal>
-  if(thisIsAToken) { lpOrTokenLink1 = <StyledLinkExternal href={bscLp}>{TranslateString(999, `View ${lpOrToken} Contract`)}</StyledLinkExternal> }
+  let lpOrTokenLinkBSCScan = <StyledLinkExternal href={bscLpUrl}>{TranslateString(999, `View ${lpOrToken} Token Contract`)}</StyledLinkExternal>
+  if(thisIsAToken === true) { lpOrTokenLinkBSCScan = <StyledLinkExternal href={bscTokenUrl}>{TranslateString(999, `View ${projectTokenLabel} ${lpOrToken} Contract`)}</StyledLinkExternal> }
   
-  let lpOrTokenLink2 = null
-  if(thisIsAToken) { lpOrTokenLink2 = <StyledLinkExternal href={bscToken}>{TranslateString(999, `View ${projectTokenLabel} Token Contract`)}</StyledLinkExternal> }
+  let lpOrTokenLinkInfo = <StyledLinkExternal href={pcsInfoLpUrl}>{TranslateString(999, `View ${lpOrToken} informations`)}</StyledLinkExternal>
+  if(thisIsAToken === true) { lpOrTokenLinkInfo = <StyledLinkExternal href={pcsInfoTokenUrl}>{TranslateString(999, `View ${projectTokenLabel} Token informations`)}</StyledLinkExternal> }
+ 
+  let lpOrTokenLinkBuy = null
+  if(thisIsAToken === true) { lpOrTokenLinkBuy = <StyledLinkExternal href={pcsBuySellTokenUrl}>{TranslateString(999, `Buy/Sell ${projectTokenLabel}`)}</StyledLinkExternal> }
 
   return (
     <Container>
@@ -87,8 +94,9 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
             {TranslateString(999, `Go to ${projectLinkLabel}`, { name: projectLinkLabel })}
           </StyledLinkExternal>
         </StakeContainer>
-        {lpOrTokenLink1}
-        {lpOrTokenLink2}
+        {lpOrTokenLinkBSCScan}
+        {lpOrTokenLinkInfo}
+        {lpOrTokenLinkBuy}
       </InfoContainer>
       <ActionContainer>
         <ActionContent>

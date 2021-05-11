@@ -8,9 +8,9 @@ import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import usePersistState from 'hooks/usePersistState'
-import { useFarms, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
+import { usePlantswapFarms, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
-import { fetchFarmUserDataAsync } from 'state/actions'
+import { fetchPlantswapFarmUserDataAsync } from 'state/actions'
 import { Farm } from 'state/types'
 import useI18n from 'hooks/useI18n'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -131,7 +131,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { pathname } = useLocation()
   const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_farm_accepted_risk')
   const TranslateString = useI18n()
-  const farmsLP = useFarms()
+  const farmsLP = usePlantswapFarms()
   const plantPrice = usePricePlantBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useState(ViewMode.TABLE)
@@ -155,7 +155,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { fastRefresh } = useRefresh()
   useEffect(() => {
     if (account) {
-      dispatch(fetchFarmUserDataAsync(account))
+      dispatch(fetchPlantswapFarmUserDataAsync(account))
     }
   }, [account, dispatch, fastRefresh])
 
