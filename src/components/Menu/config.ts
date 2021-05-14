@@ -36,7 +36,7 @@ const config: MenuEntry[] = [
     href: '/gardensv1',
   },
   {
-    label: 'Barn (soon)',
+    label: 'Barn (beta)',
     icon: 'BarnIcon',
     href: '/barns',
   },
@@ -54,6 +54,11 @@ const config: MenuEntry[] = [
     label: "Project",
     icon: "ProjectIcon",
     href: "/project",
+  },
+  {
+    label: 'Gouvernance',
+    icon: 'VoteIcon',
+    href: '/vote',
   },
   {
     label: 'Roadmap',
