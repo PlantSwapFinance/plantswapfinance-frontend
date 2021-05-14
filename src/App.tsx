@@ -35,8 +35,8 @@ const Team = lazy(() => import('./views/Teams/Team'))
 const Roadmap = lazy(() => import('./views/Roadmap'))
 const Profile = lazy(() => import('./views/Profile'))
 const Project = lazy(() => import('./views/Project'))
+const Vote = lazy(() => import('./views/Vote'))
 // Beta
-const Beta1 = lazy(() => import('./views/Beta1'))
 const Beta2 = lazy(() => import('./views/Beta2'))
 const Beta5 = lazy(() => import('./views/Beta5'))
 
@@ -133,10 +133,10 @@ const App: React.FC = () => {
             <Route path="/Project">
               <Project />
             </Route>
-
-            <Route exact path="/beta1">
-              <Beta1 />
+            <Route exact path="/vote">
+              <Vote />
             </Route>
+            
             <Route exact path="/beta2">
               <Beta2 />
             </Route>
