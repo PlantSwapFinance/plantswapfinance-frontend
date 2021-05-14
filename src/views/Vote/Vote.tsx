@@ -11,7 +11,7 @@ const StyledImage = styled(Image)`
   margin-top: 58px;
 `
 
-const Beta1 = () => {
+const Vote = () => {
   const TranslateString = useI18n()
 
   return (
@@ -19,19 +19,17 @@ const Beta1 = () => {
       <Hero>
         <div>
           <Heading as="h1" size="xxl" mb="16px">
-            {TranslateString(738, 'Beta1')}
+            {TranslateString(738, 'Gouvernance')}
           </Heading>
           <ul>
-            <li>{TranslateString(580, 'Hello')}</li>
-            <li>{TranslateString(486, ' World')}</li>
+            <li>{TranslateString(580, 'Vote on proposals to chose the future of PlantSwap')}</li>
+            <li>{TranslateString(486, 'when you hold PLANT in your wallet')}</li>
           </ul>
         </div>
         <img src="/images/roadmap.svg" alt="Beta1" width={400} height={210} />
       </Hero>
       <Divider />
-        <Heading as="h2" size="xl" mb="14px">{TranslateString(738, '1. Hello world')}</Heading>
-          <br />
-          <Text>{TranslateString(738, '1.1')}</Text>
+          <iframe title="Snapshot Voting" src="https://snapshot.org/#/plantswap.eth" width="100%" height="500px"> </iframe>
         <br /><br />
       <Divider />
       <StyledImage src="/images/endPage.svg" alt="PlantSwap Finance" width={680} height={155} />
@@ -70,4 +68,4 @@ const Hero = styled.div`
   }
 `
 
-export default Beta1
+export default Vote
