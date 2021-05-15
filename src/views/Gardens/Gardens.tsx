@@ -175,10 +175,12 @@ const Gardens: React.FC<FarmsProps> = (farmsProps) => {
         if (!farm.lpTotalInQuoteToken || !prices) {
           return farm
         }
-
-        const quoteTokenPriceUsd = prices[farm.quoteToken.symbol.toLowerCase()]
-     //   const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
-     const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        
+        let quoteTokenPriceUsd = prices[farm.quoteToken.symbol.toLowerCase()]
+        if(farm.pid === 0) {
+          quoteTokenPriceUsd = plantPrice.toNumber()
+        }
+       const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
      
         const apy = isActive ? getGardenApy(farm.poolWeight, plantPrice, totalLiquidity) : 0
 
@@ -311,6 +313,7 @@ const Gardens: React.FC<FarmsProps> = (farmsProps) => {
               <li>{TranslateString(580, 'Stake PLANT to earn new tokens.')}</li>
               <li>{TranslateString(486, 'You can unstake at any time.')}</li>
               <li>{TranslateString(406, 'Rewards are calculated per block.')}</li>
+              <li>{TranslateString(999, 'If you still have tokens in Garden V1')} <a href="/gardensv1">Click here</a></li>
             </ul>
           </div>
           <img src="/images/garden.svg" alt="Gardens" width={600} height={315} />
