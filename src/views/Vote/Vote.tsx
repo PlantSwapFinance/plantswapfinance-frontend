@@ -19,7 +19,7 @@ const Vote = () => {
       <Hero>
         <div>
           <Heading as="h1" size="xxl" mb="16px">
-            {TranslateString(738, 'Gouvernance')}
+            {TranslateString(738, 'Governance')}
           </Heading>
           <ul>
             <li>{TranslateString(580, 'Vote on proposals to chose the future of PlantSwap')}</li>

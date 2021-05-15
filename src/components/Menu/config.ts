@@ -51,7 +51,7 @@ const config: MenuEntry[] = [
     href: "/project",
   },
   {
-    label: 'Gouvernance',
+    label: 'Governance',
     icon: 'VoteIcon',
     href: '/vote',
   },
