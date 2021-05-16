@@ -5,7 +5,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { getBep20Contract } from 'utils/contractHelpers'
 import { Button, Flex, Text } from '@plantswap-libs/uikit'
 import { Farm } from 'state/types'
-import { usePlantswapFarmFromSymbol, usePlantswapFarmUser } from 'state/hooks'
+import { useFarmFromSymbol, useFarmUser } from 'state/hooks'
 import useI18n from 'hooks/useI18n'
 import useWeb3 from 'hooks/useWeb3'
 import { useApprove } from 'hooks/useApprove'
@@ -30,8 +30,8 @@ interface FarmCardActionsProps {
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
   const TranslateString = useI18n()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { pid, lpAddresses } = usePlantswapFarmFromSymbol(farm.lpSymbol)
-  const { allowance, tokenBalance, stakedBalance, earnings } = usePlantswapFarmUser(pid)
+  const { pid, lpAddresses } = useFarmFromSymbol(farm.lpSymbol)
+  const { allowance, tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
   const lpAddress = getAddress(lpAddresses)
   const lpName = farm.lpSymbol.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
