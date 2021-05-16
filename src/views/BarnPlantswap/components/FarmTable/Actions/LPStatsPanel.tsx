@@ -6,7 +6,7 @@ import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { ActionContent } from './styles'
 
 import LPTotalSupply from './LPTotalSupply'
-import LPHolderStats from './LPHolderStats'
+// import LPHolderStats from './LPHolderStats'
 
 export interface LPStatsPanelProps {
   details: FarmWithStakedValue
