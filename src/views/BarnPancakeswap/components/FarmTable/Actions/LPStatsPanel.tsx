@@ -6,7 +6,7 @@ import { FarmWithStakedValue } from 'views/BarnPancakeswap/components/FarmCard/F
 import { ActionContent } from './styles'
 
 import LPTotalSupply from './LPTotalSupply'
-import LPHolderStats from './LPHolderStats'
+// import LPHolderStats from './LPHolderStats'
 
 export interface LPStatsPanelProps {
   details: FarmWithStakedValue
@@ -67,7 +67,7 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
   const projectTokenAddress = token.address
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const thisIsAToken = farm.isTokenOnly
-  const bscLpUrl = `https://bscscan.com/token/${projectTokenAddress}`
+  const bscLpUrl = `https://bscscan.com/token/${lpAddress}`
   const bscTokenUrl = `https://bscscan.com/token/${projectTokenAddress}`
   const pcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}`
   const pcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}`
@@ -102,12 +102,18 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
         <ActionContent>
           <LPTotalSupply {...farm} />
         </ActionContent>
-        <ActionContent>
-          <LPHolderStats {...farm} />
-        </ActionContent>
       </ActionContainer>
     </Container>
   )
 }
 
+/*
+
+      
+      <ActionContainer>
+        <ActionContent>
+          <LPHolderStats {...farm} />
+        </ActionContent>
+      </ActionContainer>
+      */
 export default LPStatsPanel

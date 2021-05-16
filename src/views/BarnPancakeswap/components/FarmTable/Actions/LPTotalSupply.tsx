@@ -19,27 +19,35 @@ const Container = styled.div`
   }
 `
 
-const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ lpSymbol, isTokenOnly, tokenAmount, lpTotalSupply }) => {
-  const tokenAmountBigNumber = new BigNumber(tokenAmount)
+const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ lpSymbol, isTokenOnly, lpTotalSupply, lpTokenBalanceMC }) => {
+  // const tokenAmountBigNumber = new BigNumber(tokenAmount)
   const lpTotalSupplyBigNumber = new BigNumber(lpTotalSupply)
-  let tokenAmountings = null
-  const thisIsAToken = isTokenOnly
-
+  const lpTokenBalanceMCBigNumber = new BigNumber(lpTokenBalanceMC)
+  // let tokenAmountings = null
   let lpTotalSupplings = null
+  let lpTokenBalanceMCings = null
+  let pcLPstack = null
+  const thisIsAToken = isTokenOnly
 
   let lpOrToken = 'LP Token'
   if(thisIsAToken) { lpOrToken = 'Token' }
 
-  if (tokenAmountBigNumber) {
-    tokenAmountings = getBalanceNumber(tokenAmountBigNumber, 1)
+  // if (tokenAmountBigNumber) {
+  //  tokenAmountings = getBalanceNumber(tokenAmountBigNumber, 1)
+ // }
+
+  if (lpTotalSupplyBigNumber) {
+    lpTotalSupplings = getBalanceNumber(lpTotalSupplyBigNumber, 18)
   }
 
-  if (tokenAmountBigNumber) {
-    lpTotalSupplings = getBalanceNumber(lpTotalSupplyBigNumber, 1)
+  if (lpTokenBalanceMCBigNumber) {
+    lpTokenBalanceMCings = getBalanceNumber(lpTokenBalanceMCBigNumber, 18)
   }
 
-  let lpOrTokenValue = tokenAmountings
+  let lpOrTokenValue = lpTotalSupplings
   if(thisIsAToken) { lpOrTokenValue = lpTotalSupplings }
+
+  pcLPstack = ((lpTokenBalanceMCings / lpOrTokenValue) * 100)
 
   const TranslateString = useI18n()
 
@@ -53,6 +61,32 @@ const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ lpSymbol,
         <ActionContent>
           <div>
             <LP>{lpOrTokenValue}</LP>
+            <LPvalue>{lpSymbol}</LPvalue>
+          </div>
+        </ActionContent>
+     </ActionContainer>
+     
+     <ActionContainer>
+        <ActionTitles>
+          <Title>{lpOrToken} </Title>
+          <Subtle>{TranslateString(999, 'Stack in Master Gardener')}</Subtle>
+        </ActionTitles>
+        <ActionContent>
+          <div>
+            <LP>{lpTokenBalanceMCings}</LP>
+            <LPvalue>{lpSymbol}</LPvalue>
+          </div>
+        </ActionContent>
+     </ActionContainer>
+
+     <ActionContainer>
+        <ActionTitles>
+          <Title>% of {lpOrToken} </Title>
+          <Subtle>{TranslateString(999, 'Stack in Master Gardener')}</Subtle>
+        </ActionTitles>
+        <ActionContent>
+          <div>
+            <LP>{pcLPstack}%</LP>
             <LPvalue>{lpSymbol}</LPvalue>
           </div>
         </ActionContent>

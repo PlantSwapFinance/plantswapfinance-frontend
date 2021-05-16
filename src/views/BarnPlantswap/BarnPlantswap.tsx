@@ -8,9 +8,9 @@ import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import usePersistState from 'hooks/usePersistState'
-import { usePlantswapFarms, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
+import { useFarms, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
-import { fetchPlantswapFarmUserDataAsync } from 'state/actions'
+import { fetchFarmUserDataAsync } from 'state/actions'
 import { Farm } from 'state/types'
 import useI18n from 'hooks/useI18n'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -131,7 +131,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { pathname } = useLocation()
   const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_farm_accepted_risk')
   const TranslateString = useI18n()
-  const farmsLP = usePlantswapFarms()
+  const farmsLP = useFarms()
   const plantPrice = usePricePlantBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useState(ViewMode.TABLE)
@@ -155,7 +155,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { fastRefresh } = useRefresh()
   useEffect(() => {
     if (account) {
-      dispatch(fetchPlantswapFarmUserDataAsync(account))
+      dispatch(fetchFarmUserDataAsync(account))
     }
   }, [account, dispatch, fastRefresh])
 
@@ -198,9 +198,14 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         if (!farm.lpTotalInQuoteToken || !prices) {
           return farm
         }
-
-        const quoteTokenPriceUsd = prices[farm.quoteToken.symbol.toLowerCase()]
-        const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        let quoteTokenPriceUsd = prices[farm.quoteToken.symbol.toLowerCase()]
+        if(farm.pid === 0) {
+          quoteTokenPriceUsd = plantPrice.toNumber()
+        }
+        let totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        if(farm.isTokenOnly === true) {
+          totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        }
         const apy = isActive ? getFarmApy(farm.poolWeight, plantPrice, totalLiquidity) : 0
 
         return { ...farm, apy, liquidity: totalLiquidity }

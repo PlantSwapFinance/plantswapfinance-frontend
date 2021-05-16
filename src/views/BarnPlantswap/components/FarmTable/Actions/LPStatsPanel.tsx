@@ -67,7 +67,7 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
   const projectTokenAddress = token.address[56]
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const thisIsAToken = farm.isTokenOnly
-  const bscLpUrl = `https://bscscan.com/token/${projectTokenAddress}`
+  const bscLpUrl = `https://bscscan.com/token/${lpAddress}`
   const bscTokenUrl = `https://bscscan.com/token/${projectTokenAddress}`
   const pcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}`
   const pcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}`
@@ -102,12 +102,19 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
         <ActionContent>
           <LPTotalSupply {...farm} />
         </ActionContent>
-        <ActionContent>
-          <LPHolderStats {...farm} />
-        </ActionContent>
       </ActionContainer>
     </Container>
   )
 }
+
+/*
+
+      
+      <ActionContainer>
+        <ActionContent>
+          <LPHolderStats {...farm} />
+        </ActionContent>
+      </ActionContainer>
+      */
 
 export default LPStatsPanel
