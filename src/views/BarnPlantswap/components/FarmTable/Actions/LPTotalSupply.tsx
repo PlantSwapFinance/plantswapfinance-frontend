@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { useBurnedBalance } from 'hooks/useTokenBalance'
 import useI18n from 'hooks/useI18n'
+import { getAddress } from 'utils/addressHelpers'
 import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, LP, LPvalue } from './styles'
 
 const Container = styled.div`
@@ -19,10 +21,11 @@ const Container = styled.div`
   }
 `
 
-const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ lpSymbol, isTokenOnly, tokenAmount, lpTotalSupply, lpTokenBalanceMC }) => {
+const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ token, lpSymbol, isTokenOnly, lpTotalSupply, lpTokenBalanceMC }) => {
   // const tokenAmountBigNumber = new BigNumber(tokenAmount)
   const lpTotalSupplyBigNumber = new BigNumber(lpTotalSupply)
   const lpTokenBalanceMCBigNumber = new BigNumber(lpTokenBalanceMC)
+  const burnedBalance = getBalanceNumber(useBurnedBalance(getAddress(token.address)))
   // let tokenAmountings = null
   let lpTotalSupplings = null
   let lpTokenBalanceMCings = null
@@ -37,7 +40,7 @@ const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ lpSymbol,
  // }
 
   if (lpTotalSupplyBigNumber) {
-    lpTotalSupplings = getBalanceNumber(lpTotalSupplyBigNumber, 18)
+    lpTotalSupplings = (getBalanceNumber(lpTotalSupplyBigNumber, 18) - burnedBalance)
   }
 
   if (lpTokenBalanceMCBigNumber) {
