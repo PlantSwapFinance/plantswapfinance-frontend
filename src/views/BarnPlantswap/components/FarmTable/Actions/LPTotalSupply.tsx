@@ -22,35 +22,32 @@ const Container = styled.div`
 `
 
 const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ token, lpSymbol, isTokenOnly, lpTotalSupply, lpTokenBalanceMC }) => {
-  // const tokenAmountBigNumber = new BigNumber(tokenAmount)
   const lpTotalSupplyBigNumber = new BigNumber(lpTotalSupply)
   const lpTokenBalanceMCBigNumber = new BigNumber(lpTokenBalanceMC)
   const burnedBalance = getBalanceNumber(useBurnedBalance(getAddress(token.address)))
-  // let tokenAmountings = null
+  const lpTotalSupplingsMinusBurnBigNumber = new BigNumber(lpTotalSupply).minus(burnedBalance)
   let lpTotalSupplings = null
+  let lpTotalSupplingsMinusBurn = null
   let lpTokenBalanceMCings = null
   let pcLPstack = null
   const thisIsAToken = isTokenOnly
+  const formatBurnBalance = burnedBalance.toFixed(3)
 
   let lpOrToken = 'LP Token'
   if(thisIsAToken) { lpOrToken = 'Token' }
 
-  // if (tokenAmountBigNumber) {
-  //  tokenAmountings = getBalanceNumber(tokenAmountBigNumber, 1)
- // }
-
   if (lpTotalSupplyBigNumber) {
-    lpTotalSupplings = (getBalanceNumber(lpTotalSupplyBigNumber, 18) - burnedBalance)
+    lpTotalSupplings = (getBalanceNumber(lpTotalSupplyBigNumber, 18)).toFixed(3)
+    lpTotalSupplingsMinusBurn = (getBalanceNumber(lpTotalSupplingsMinusBurnBigNumber, 18))
   }
 
   if (lpTokenBalanceMCBigNumber) {
-    lpTokenBalanceMCings = getBalanceNumber(lpTokenBalanceMCBigNumber, 18)
+    lpTokenBalanceMCings = getBalanceNumber(lpTokenBalanceMCBigNumber, 18).toFixed(4)
   }
 
-  let lpOrTokenValue = lpTotalSupplings
-  if(thisIsAToken) { lpOrTokenValue = lpTotalSupplings }
+  const lpOrTokenValue = lpTotalSupplingsMinusBurn.toFixed(4)
 
-  pcLPstack = ((lpTokenBalanceMCings / lpOrTokenValue) * 100)
+  pcLPstack = ((lpTokenBalanceMCings / lpOrTokenValue) * 100).toFixed(4)
 
   const TranslateString = useI18n()
 
@@ -64,7 +61,12 @@ const LPTotalSupply: React.FunctionComponent<FarmWithStakedValue> = ({ token, lp
         <ActionContent>
           <div>
             <LP>{lpOrTokenValue}</LP>
-            <LPvalue>{lpSymbol}</LPvalue>
+            <LPvalue>{lpSymbol} <br />
+              <ul>
+                <li> {lpTotalSupplings} Total Supply</li>
+                <li> {formatBurnBalance} Burn {lpOrToken}</li>
+              </ul>
+            </LPvalue>
           </div>
         </ActionContent>
      </ActionContainer>
