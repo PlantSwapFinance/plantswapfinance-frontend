@@ -230,28 +230,28 @@ export const useBarnBetaUser = (pid) => {
 
 
 export const usePlantswapFarms = (): PlantswapFarm[] => {
-  const farms = useSelector((state: State) => state.farms.data)
-  return farms
+  const plantswapFarms = useSelector((state: State) => state.farms.data)
+  return plantswapFarms
 }
 
 export const usePlantswapFarmFromPid = (pid): PlantswapFarm => {
-  const farm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid))
-  return farm
+  const plantswapFarm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid))
+  return plantswapFarm
 }
 
 export const usePlantswapFarmFromSymbol = (lpSymbol: string): PlantswapFarm => {
-  const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpSymbol === lpSymbol))
-  return farm
+  const plantswapFarm = useSelector((state: State) => state.farms.data.find((f) => f.lpSymbol === lpSymbol))
+  return plantswapFarm
 }
 
 export const usePlantswapFarmUser = (pid) => {
-  const farm = usePlantswapFarmFromPid(pid)
+  const plantswapFarm = usePlantswapFarmFromPid(pid)
 
   return {
-    allowance: farm.userData ? new BigNumber(farm.userData.allowance) : new BigNumber(0),
-    tokenBalance: farm.userData ? new BigNumber(farm.userData.tokenBalance) : new BigNumber(0),
-    stakedBalance: farm.userData ? new BigNumber(farm.userData.stakedBalance) : new BigNumber(0),
-    earnings: farm.userData ? new BigNumber(farm.userData.earnings) : new BigNumber(0),
+    allowance: plantswapFarm.userData ? new BigNumber(plantswapFarm.userData.allowance) : new BigNumber(0),
+    tokenBalance: plantswapFarm.userData ? new BigNumber(plantswapFarm.userData.tokenBalance) : new BigNumber(0),
+    stakedBalance: plantswapFarm.userData ? new BigNumber(plantswapFarm.userData.stakedBalance) : new BigNumber(0),
+    earnings: plantswapFarm.userData ? new BigNumber(plantswapFarm.userData.earnings) : new BigNumber(0),
   }
 }
 
