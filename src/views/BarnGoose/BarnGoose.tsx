@@ -200,7 +200,10 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         }
 
         const quoteTokenPriceUsd = prices[gooseFarm.quoteToken.symbol.toLowerCase()]
-        const totalLiquidity = new BigNumber(gooseFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        let totalLiquidity = new BigNumber(gooseFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        if(gooseFarm.isTokenOnly === true) {
+          totalLiquidity = new BigNumber(gooseFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        }
         const apy = isActive ? getGooseFarmApy(gooseFarm.poolWeight, eggPrice, totalLiquidity) : 0
 
         return { ...gooseFarm, apy, liquidity: totalLiquidity }
@@ -344,9 +347,9 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
                 <a href="/barns">
                   <img src="/images/plantswapBarn.svg" alt="PlantSwap Barn" width={28} height={28} style={{marginRight: '15px'}} /></a>
                 <a href="/barnPlantswap">
-                  <img src="/images/platforms/plantswap.svg" alt="PlantSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
+                  <img src="/images/platforms/plantswap.svg" alt="PlantSwap" width={36} height={36} style={{marginRight: '15px'}} /></a>
                 <a href="/barnPancakeswap">
-                  <img src="/images/platforms/pancakeswap.png" alt="PancakeSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
+                  <img src="/images/platforms/pancakeswap.svg" alt="PancakeSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
                 <a href="/barnGoose">
                   <img src="/images/platforms/goose.png" alt="GooseFinance" width={28} height={36} style={{marginRight: '15px'}} /></a>
                 <a href="/barnCafeswap">

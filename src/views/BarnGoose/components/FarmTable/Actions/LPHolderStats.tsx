@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Button, useModal } from '@plantswap-libs/uikit'
 import UnlockButton from 'components/UnlockButton'
 import { useWeb3React } from '@web3-react/core'
-import { useFarmUser } from 'state/hooks'
+import { useGooseFarmUser } from 'state/hooks'
 import { FarmWithStakedValue } from 'views/BarnGoose/components/FarmCard/FarmCard'
 import useI18n from 'hooks/useI18n'
 import { useApproveGoose } from 'hooks/barns/useApproveExternalFarms'
@@ -31,16 +31,13 @@ const Container = styled.div`
   }
 `
 
-const LPHolderStats: React.FunctionComponent<FarmWithStakedValue> = ({ pid, lpSymbol, lpAddresses, quoteToken, token, tokenAmount, lpTotalSupply, isTokenOnly }) => {
+const LPHolderStats: React.FunctionComponent<FarmWithStakedValue> = ({ pid, lpSymbol, lpAddresses, quoteToken, token, lpTokenBalanceMC, isTokenOnly }) => {
   const TranslateString = useI18n()
-  const lpTotalSupplyBigNumber = new BigNumber(lpTotalSupply)
   const { account } = useWeb3React()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  const { allowance, tokenBalance, stakedBalance } = useGooseFarmUser(pid)
   const { onStake } = useStakeGoose(pid)
   const web3 = useWeb3()
-
-  let lpTotalSupplings = null
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -50,33 +47,26 @@ const LPHolderStats: React.FunctionComponent<FarmWithStakedValue> = ({ pid, lpSy
     tokenAddress: token.address,
   })
 
-  
-  if (lpTotalSupplyBigNumber) {
-    lpTotalSupplings = getBalanceNumber(lpTotalSupplyBigNumber, 1)
-  }
-
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const rawStakedBalance = getBalanceNumber(stakedBalance)
-
-
-  const tokenAmountBigNumber = new BigNumber(tokenAmount)
-  let tokenAmountings = null
+  const lpTokenBalanceMCBigNumber = new BigNumber(lpTokenBalanceMC)
+  let lpTokenBalanceMCings = null
   const thisIsAToken = isTokenOnly
 
   let lpOrToken = 'LP'
   if(thisIsAToken) { lpOrToken = 'Token' }
 
-  if (tokenAmountBigNumber) {
-    tokenAmountings = getBalanceNumber(tokenAmountBigNumber, 1)
+  if (lpTokenBalanceMCBigNumber) {
+    lpTokenBalanceMCings = getBalanceNumber(lpTokenBalanceMCBigNumber, 18).toFixed(4)
   }
 
 
-  const displayPoolPortion = ((rawStakedBalance / tokenAmountings) * 100)
-  const displayPoolTokenPortion = ((rawStakedBalance / lpTotalSupplings) * 100)
+  const displayPoolPortion = ((rawStakedBalance / lpTokenBalanceMCings) * 100)
+  const displayPoolTokenPortion = ((rawStakedBalance / lpTokenBalanceMCings) * 100)
 
 
-  let lpOrTokenValue = displayPoolPortion
-  if(thisIsAToken) { lpOrTokenValue = displayPoolTokenPortion }
+  let lpOrTokenValue = displayPoolPortion.toFixed(4)
+  if(thisIsAToken) { lpOrTokenValue = displayPoolTokenPortion.toFixed(4) }
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={lpSymbol} addLiquidityUrl={addLiquidityUrl} />,

@@ -3,9 +3,7 @@ import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useBurnedBalance } from 'hooks/useTokenBalance'
 import useI18n from 'hooks/useI18n'
-import { getAddress } from 'utils/addressHelpers'
 import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, LP, LPvalue } from './styles'
 
 const Container = styled.div`
@@ -21,30 +19,18 @@ const Container = styled.div`
   }
 `
 
-const LPValue: React.FunctionComponent<FarmWithStakedValue> = ({ token, lpSymbol, isTokenOnly, lpTotalSupply, lpTokenBalanceMC }) => {
-  const lpTotalSupplyBigNumber = new BigNumber(lpTotalSupply)
-  const lpTokenBalanceMCBigNumber = new BigNumber(lpTokenBalanceMC)
-  const burnedBalance = getBalanceNumber(useBurnedBalance(getAddress(token.address)))
-  const lpTotalSupplingsMinusBurnBigNumber = new BigNumber(lpTotalSupply).minus(burnedBalance)
-  let lpTotalSupplingsMinusBurn = null
-  let lpTokenBalanceMCings = null
-  let pcLPstack = null
-  const thisIsAToken = isTokenOnly
+const LPValue: React.FunctionComponent<FarmWithStakedValue> = ({ token, quoteToken, lpSymbol, tokenAmount, quoteTokenAmount }) => {
+  const tokenAmountBigNumber = new BigNumber(tokenAmount)
+  const quoteTokenAmountBigNumber = new BigNumber(quoteTokenAmount)
+  let tokenAmounting = null
+  let quoteTokenAmounting = null
 
-  let lpOrToken = 'LP Token'
-  if(thisIsAToken) { lpOrToken = 'Token' }
-
-  if (lpTotalSupplyBigNumber) {
-    lpTotalSupplingsMinusBurn = (getBalanceNumber(lpTotalSupplingsMinusBurnBigNumber, 18))
+  if (tokenAmountBigNumber) {
+    tokenAmounting = (getBalanceNumber(tokenAmountBigNumber, 0)).toFixed(4)
   }
-
-  if (lpTokenBalanceMCBigNumber) {
-    lpTokenBalanceMCings = getBalanceNumber(lpTokenBalanceMCBigNumber, 18).toFixed(4)
+  if (quoteTokenAmountBigNumber) {
+    quoteTokenAmounting = (getBalanceNumber(quoteTokenAmountBigNumber, 0)).toFixed(4)
   }
-
-  const lpOrTokenValue = lpTotalSupplingsMinusBurn.toFixed(4)
-
-  pcLPstack = ((lpTokenBalanceMCings / lpOrTokenValue) * 100).toFixed(4)
 
   const TranslateString = useI18n()
 
@@ -52,12 +38,12 @@ const LPValue: React.FunctionComponent<FarmWithStakedValue> = ({ token, lpSymbol
     <Container>
      <ActionContainer>
         <ActionTitles>
-          <Title>{lpOrToken} </Title>
-          <Subtle>{TranslateString(999, 'Stack in Master Gardener')}</Subtle>
+          <Title>{token.symbol} </Title>
+          <Subtle>{TranslateString(999, 'in LP')}</Subtle>
         </ActionTitles>
         <ActionContent>
           <div>
-            <LP>{lpTokenBalanceMCings}</LP>
+            <LP>{tokenAmounting}</LP>
             <LPvalue>{lpSymbol}</LPvalue>
           </div>
         </ActionContent>
@@ -65,12 +51,12 @@ const LPValue: React.FunctionComponent<FarmWithStakedValue> = ({ token, lpSymbol
 
      <ActionContainer>
         <ActionTitles>
-          <Title>% of {lpOrToken} </Title>
-          <Subtle>{TranslateString(999, 'Stack in Master Gardener')}</Subtle>
+          <Title>{quoteToken.symbol} </Title>
+          <Subtle>{TranslateString(999, 'in LP')}</Subtle>
         </ActionTitles>
         <ActionContent>
           <div>
-            <LP>{pcLPstack}%</LP>
+            <LP>{quoteTokenAmounting}</LP>
             <LPvalue>{lpSymbol}</LPvalue>
           </div>
         </ActionContent>

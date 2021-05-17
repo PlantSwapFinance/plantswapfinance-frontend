@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { isEmpty } from 'lodash'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { ActionContent } from './styles'
-// import LPValue from './LPValue'
+import LPValue from './LPValue'
 import LPHolderStats from './LPHolderStats'
 
 export interface HolderStatsProps {
@@ -36,18 +37,13 @@ const ActionContainer = styled.div`
 
 const HolderStats: React.FunctionComponent<HolderStatsProps> = ({ details }) => {
   const farm = details
-
-  /*
-  
-      <ActionContainer>
-        <ActionContent>
-          <LPValue {...farm} />
-        </ActionContent>
-      </ActionContainer>
-  */
- 
+  let showValue = null
+  if(isEmpty(details.isTokenOnly)) {
+    showValue = <ActionContainer><ActionContent><LPValue {...farm} /></ActionContent></ActionContainer>
+  }
   return (
     <Container>
+      {showValue}
       <ActionContainer>
         <ActionContent>
           <LPHolderStats {...farm} />

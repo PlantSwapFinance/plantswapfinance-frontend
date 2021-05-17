@@ -6,7 +6,7 @@ import { FarmWithStakedValue } from 'views/BarnGoose/components/FarmCard/FarmCar
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useHarvestGoose } from 'hooks/barns/useHarvestGoose'
 import useI18n from 'hooks/useI18n'
-import { usePriceEggBusd } from 'state/hooks'
+import { usePricePlantBusd } from 'state/hooks'
 import { useCountUp } from 'react-countup'
 
 import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, Earned, Staked } from './styles'
@@ -14,14 +14,14 @@ import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, Earned, St
 const HarvestAction: React.FunctionComponent<FarmWithStakedValue> = ({ pid, userData }) => {
   const { account } = useWeb3React()
   const earningsBigNumber = userData && account ? new BigNumber(userData.earnings) : null
-  const eggPrice = usePriceEggBusd()
+  const cakePrice = usePricePlantBusd()
   let earnings = null
   let earningsBusd = 0
   let displayBalance = '?'
 
   if (earningsBigNumber) {
     earnings = getBalanceNumber(earningsBigNumber)
-    earningsBusd = new BigNumber(earnings).multipliedBy(eggPrice).toNumber()
+    earningsBusd = new BigNumber(earnings).multipliedBy(cakePrice).toNumber()
     displayBalance = earnings.toLocaleString()
   }
 

@@ -2,13 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import useI18n from 'hooks/useI18n'
 import { LinkExternal } from '@plantswap-libs/uikit'
-import { FarmWithStakedValue } from 'views/BarnGoose/components/FarmCard/FarmCard'
+import { FarmWithStakedValue } from 'views/BarnCafeswap/components/FarmCard/FarmCard'
 import { ActionContent } from './styles'
-
 import LPTotalSupply from './LPTotalSupply'
-import LPHolderStats from './LPHolderStats'
 
-export interface LPStatsPanelProps {
+export interface StatsPanelProps {
   details: FarmWithStakedValue
 }
 
@@ -56,7 +54,7 @@ const InfoContainer = styled.div`
   min-width: 200px;
 `
 
-const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) => {
+const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   const farm = details
 
   const TranslateString = useI18n()
@@ -64,10 +62,10 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
   const projectTokenLabel = farm.token.symbol
   const projectLinkLabel = farm.token.projectLink
   const projectLinkLink = farm.token.projectLink
-  const projectTokenAddress = token.address
+  const projectTokenAddress = token.address[56]
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const thisIsAToken = farm.isTokenOnly
-  const bscLpUrl = `https://bscscan.com/token/${projectTokenAddress}`
+  const bscLpUrl = `https://bscscan.com/token/${lpAddress}`
   const bscTokenUrl = `https://bscscan.com/token/${projectTokenAddress}`
   const pcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}`
   const pcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}`
@@ -102,12 +100,9 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
         <ActionContent>
           <LPTotalSupply {...farm} />
         </ActionContent>
-        <ActionContent>
-          <LPHolderStats {...farm} />
-        </ActionContent>
       </ActionContainer>
     </Container>
   )
 }
 
-export default LPStatsPanel
+export default StatsPanel

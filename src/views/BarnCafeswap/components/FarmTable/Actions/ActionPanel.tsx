@@ -112,7 +112,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({ details, apr, 
   })
   const lpAddress = cafeswapFarm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const bsc = `https://bscscan.com/address/${lpAddress}`
-  const info = `https://cafeswap.info/pair/${lpAddress}`
+  const info = `https://pancakeswap.info/pair/${lpAddress}`
   const isCommunityFarm = cafeswapCommunityFarms.includes(token.symbol)
 
   const thisIsAToken = cafeswapFarm.isTokenOnly

@@ -352,6 +352,10 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
                   <img src="/images/platforms/plantswap.svg" alt="PlantSwap" width={36} height={36} style={{marginRight: '15px'}} /></a>
                 <a href="/barnPancakeswap">
                   <img src="/images/platforms/pancakeswap.svg" alt="PancakeSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
+                <a href="/barnGoose">
+                  <img src="/images/platforms/goose.png" alt="GooseFinance" width={28} height={36} style={{marginRight: '15px'}} /></a>
+                <a href="/barnCafeswap">
+                  <img src="/images/platforms/cafeswap.png" alt="CafeSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
               </LabelWrapper>
               <LabelWrapper>
                 <Text>Filter Type</Text>

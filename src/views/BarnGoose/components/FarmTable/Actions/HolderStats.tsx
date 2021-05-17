@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { isEmpty } from 'lodash'
-import { FarmWithStakedValue } from 'views/BarnPancakeswap/components/FarmCard/FarmCard'
+import { FarmWithStakedValue } from 'views/BarnGoose/components/FarmCard/FarmCard'
 import { ActionContent } from './styles'
 import LPValue from './LPValue'
 import LPHolderStats from './LPHolderStats'

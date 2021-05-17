@@ -200,7 +200,10 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         }
 
         const quoteTokenPriceUsd = prices[cafeswapFarm.quoteToken.symbol.toLowerCase()]
-        const totalLiquidity = new BigNumber(cafeswapFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        let totalLiquidity = new BigNumber(cafeswapFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        if(cafeswapFarm.isTokenOnly === true) {
+          totalLiquidity = new BigNumber(cafeswapFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        }
         const apy = isActive ? getCafeswapFarmApy(cafeswapFarm.poolWeight, brewPrice, totalLiquidity) : 0
 
         return { ...cafeswapFarm, apy, liquidity: totalLiquidity }
@@ -344,13 +347,13 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
                 <a href="/barns">
                   <img src="/images/plantswapBarn.svg" alt="PlantSwap Barn" width={28} height={28} style={{marginRight: '15px'}} /></a>
                 <a href="/barnPlantswap">
-                  <img src="/images/platforms/plantswap.svg" alt="PlantSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
+                  <img src="/images/platforms/plantswap.svg" alt="PlantSwap" width={36} height={36} style={{marginRight: '15px'}} /></a>
                 <a href="/barnPancakeswap">
                   <img src="/images/platforms/pancakeswap.svg" alt="PancakeSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
                 <a href="/barnGoose">
-                  <img src="/images/platforms/goose.png" alt="GooseFinance" width={22} height={28} style={{marginRight: '15px'}} /></a>
+                  <img src="/images/platforms/goose.png" alt="GooseFinance" width={28} height={36} style={{marginRight: '15px'}} /></a>
                 <a href="/barnCafeswap">
-                  <img src="/images/platforms/cafeswap.png" alt="CafeSwap" width={36} height={36} style={{marginRight: '15px'}} /></a>
+                  <img src="/images/platforms/cafeswap.png" alt="CafeSwap" width={28} height={28} style={{marginRight: '15px'}} /></a>
               </LabelWrapper>
               <LabelWrapper>
                 <Text>Filter Type</Text>
