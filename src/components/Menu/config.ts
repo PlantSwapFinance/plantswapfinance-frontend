@@ -31,9 +31,13 @@ const config: MenuEntry[] = [
     href: '/gardens',
   },
   {
-    label: 'Barn (beta)',
+    label: 'Barn',
     icon: 'BarnIcon',
     href: '/barns',
+    status: {
+      text: 'BETA',
+      color: 'warning',
+    },
   },
   {
     label: 'Development Fund',
