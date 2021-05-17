@@ -2,13 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import useI18n from 'hooks/useI18n'
 import { LinkExternal } from '@plantswap-libs/uikit'
-import { FarmWithStakedValue } from 'views/BarnPancakeswap/components/FarmCard/FarmCard'
+import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { ActionContent } from './styles'
-
 import LPTotalSupply from './LPTotalSupply'
-// import LPHolderStats from './LPHolderStats'
 
-export interface LPStatsPanelProps {
+export interface StatsPanelProps {
   details: FarmWithStakedValue
 }
 
@@ -56,7 +54,7 @@ const InfoContainer = styled.div`
   min-width: 200px;
 `
 
-const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) => {
+const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   const farm = details
 
   const TranslateString = useI18n()
@@ -64,7 +62,7 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
   const projectTokenLabel = farm.token.symbol
   const projectLinkLabel = farm.token.projectLink
   const projectLinkLink = farm.token.projectLink
-  const projectTokenAddress = token.address
+  const projectTokenAddress = token.address[56]
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const thisIsAToken = farm.isTokenOnly
   const bscLpUrl = `https://bscscan.com/token/${lpAddress}`
@@ -107,13 +105,4 @@ const LPStatsPanel: React.FunctionComponent<LPStatsPanelProps> = ({ details }) =
   )
 }
 
-/*
-
-      
-      <ActionContainer>
-        <ActionContent>
-          <LPHolderStats {...farm} />
-        </ActionContent>
-      </ActionContainer>
-      */
-export default LPStatsPanel
+export default StatsPanel
