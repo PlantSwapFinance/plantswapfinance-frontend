@@ -78,7 +78,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ harvested, onDismiss, tokenName
   return (
     <Modal title={TranslateString(1068, 'Share your PlantSwap experience')} onDismiss={onDismiss}>
       <Heading as="h2" size="xl" mb="14px">Share your love for PlantSwap🌱</Heading>
-        <img src="/images/share-farm.svg" alt="Farms" width={680} height={357} />
+        <img src="/images/share-garden.svg" alt="Farms" width={680} height={357} />
       <Divider />
       <Text>You harvested <b>{harvested} {tokenHarvested}</b> or a total of <b>{formatUsdHarvested} USD.</b></Text>
       <Text>Yield farming with <u>{tokenName} pool</u> 🌱🌱🌱</Text>
