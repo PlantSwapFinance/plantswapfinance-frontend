@@ -58,6 +58,10 @@ const config: MenuEntry[] = [
     label: 'Governance',
     icon: 'VoteIcon',
     href: '/vote',
+    status: {
+      text: 'NEW',
+      color: 'failure',
+    },
   },
   {
     label: 'Roadmap',
