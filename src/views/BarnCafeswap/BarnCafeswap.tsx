@@ -8,7 +8,7 @@ import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import usePersistState from 'hooks/usePersistState'
-import { useCafeswapFarms, usePriceBrewBusd, useGetApiPrices } from 'state/hooks'
+import { useFetchCafeswapPublicData, useCafeswapFarms, usePriceBrewBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchCafeswapFarmUserDataAsync } from 'state/actions'
 import { CafeswapFarm } from 'state/types'
@@ -127,6 +127,7 @@ const StyledImage = styled(Image)`
 `
 
 const Farms: React.FC<FarmsProps> = (farmsProps) => {
+  useFetchCafeswapPublicData()
   const { path } = useRouteMatch()
   const { pathname } = useLocation()
   const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_farm_accepted_risk')

@@ -8,7 +8,7 @@ import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import usePersistState from 'hooks/usePersistState'
-import { useGooseFarms, usePriceEggBusd, useGetApiPrices } from 'state/hooks'
+import { useFetchGoosePublicData, useGooseFarms, usePriceEggBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchGooseFarmUserDataAsync } from 'state/actions'
 import { GooseFarm } from 'state/types'
@@ -126,7 +126,9 @@ const StyledImage = styled(Image)`
   margin-top: 58px;
 `
 
+
 const Farms: React.FC<FarmsProps> = (farmsProps) => {
+  useFetchGoosePublicData()
   const { path } = useRouteMatch()
   const { pathname } = useLocation()
   const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_farm_accepted_risk')
