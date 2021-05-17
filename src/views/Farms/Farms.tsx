@@ -1,13 +1,12 @@
-import React, { useEffect, useCallback, useState, useRef } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, useModal } from '@plantswap-libs/uikit'
+import { Image, Heading, RowType, Toggle, Text } from '@plantswap-libs/uikit'
 import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import usePersistState from 'hooks/usePersistState'
 import { useFarms, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
@@ -17,7 +16,6 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApy } from 'utils/apy'
 import { orderBy } from 'lodash'
 import Divider from './components/Divider'
-import RiskDisclaimer from './components/RiskDisclaimer'
 
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
@@ -106,7 +104,6 @@ const StyledImage = styled(Image)`
 const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { path } = useRouteMatch()
   const { pathname } = useLocation()
-  const [hasAcceptedRisk, setHasAcceptedRisk] = usePersistState(false, 'plantswap_farm_accepted_risk')
   const TranslateString = useI18n()
   const farmsLP = useFarms()
   const plantPrice = usePricePlantBusd()
@@ -115,18 +112,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
   const prices = useGetApiPrices()
-  const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
-  const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
   const {tokenMode} = farmsProps;
-
-  // TODO: memoize modal's handlers
-  const onPresentRiskDisclaimerRef = useRef(onPresentRiskDisclaimer)
-
-  useEffect(() => {
-    if (!hasAcceptedRisk) {
-      onPresentRiskDisclaimerRef.current()
-    }
-  }, [hasAcceptedRisk, onPresentRiskDisclaimerRef])
 
   const dispatch = useDispatch()
   const { fastRefresh } = useRefresh()
