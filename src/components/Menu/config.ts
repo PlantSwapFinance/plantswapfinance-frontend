@@ -26,7 +26,7 @@ const config: MenuEntry[] = [
     href: '/farms',
   },
   {
-    label: 'Gardens v2',
+    label: 'Gardens',
     icon: 'PoolIcon',
     href: '/gardens',
   },
