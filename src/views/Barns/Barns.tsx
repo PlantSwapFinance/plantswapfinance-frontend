@@ -36,6 +36,10 @@ const Barns: React.FC = () => {
         <img src="/images/platforms/plantswap.svg" alt="PlantSwap" width={128} height={128} style={{paddingRight: '36px'}} /></a>
       <a href="/barnPancakeswap">
         <img src="/images/platforms/pancakeswap.svg" alt="PancakeSwap" width={128} height={128} style={{paddingRight: '36px'}} /></a>
+      <a href="/barnGoose">
+        <img src="/images/platforms/goose.png" alt="GooseFinance" width={112} height={128} style={{paddingRight: '36px'}} /></a>
+      <a href="/barncafeswap">
+        <img src="/images/platforms/cafeswap.png" alt="CafeSwap" width={128} height={128} style={{paddingRight: '36px'}} /></a>
       <br />
 
       
