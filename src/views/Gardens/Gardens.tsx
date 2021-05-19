@@ -7,7 +7,7 @@ import { Image, Heading, RowType, Toggle, Text } from '@plantswap-libs/uikit'
 import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useGardens, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
+import { useGardens, usePricePlantBusd, usePriceCakeBusd } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchGardenUserDataAsync } from 'state/actions'
 import { Farm } from 'state/types'
@@ -107,11 +107,11 @@ const Gardens: React.FC<FarmsProps> = (farmsProps) => {
   const TranslateString = useI18n()
   const farmsLP = useGardens()
   const plantPrice = usePricePlantBusd()
+  const cakePrice = usePriceCakeBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useState(ViewMode.TABLE)
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
-  const prices = useGetApiPrices()
   const {tokenMode} = farmsProps;
 
   const dispatch = useDispatch()
@@ -158,13 +158,19 @@ const Gardens: React.FC<FarmsProps> = (farmsProps) => {
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
       let farmsToDisplayWithAPY: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        if (!farm.lpTotalInQuoteToken || !prices) {
+        if (!farm.lpTotalInQuoteToken) {
           return farm
         }
         
-        let quoteTokenPriceUsd = prices[farm.quoteToken.symbol.toLowerCase()]
+        let quoteTokenPriceUsd = 1
         if(farm.pid === 0) {
           quoteTokenPriceUsd = plantPrice.toNumber()
+        }
+        if(farm.pid === 10) {
+          quoteTokenPriceUsd = cakePrice.toNumber()
+        }
+        if(farm.pid === 7 || farm.pid === 9) {
+          quoteTokenPriceUsd = 1
         }
        const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
      
@@ -181,7 +187,7 @@ const Gardens: React.FC<FarmsProps> = (farmsProps) => {
       }
       return farmsToDisplayWithAPY
     },
-    [plantPrice, prices, query, isActive],
+    [plantPrice, cakePrice, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {

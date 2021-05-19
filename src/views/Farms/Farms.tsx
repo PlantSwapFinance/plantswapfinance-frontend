@@ -7,7 +7,7 @@ import { Image, Heading, RowType, Toggle, Text } from '@plantswap-libs/uikit'
 import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useFarms, usePricePlantBusd, useGetApiPrices } from 'state/hooks'
+import { useFarms, usePricePlantBusd, usePriceCakeBusd, usePriceBnbBusd } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import { Farm } from 'state/types'
@@ -107,11 +107,12 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const TranslateString = useI18n()
   const farmsLP = useFarms()
   const plantPrice = usePricePlantBusd()
+  const cakePrice = usePriceCakeBusd()
+  const bnbPrice = usePriceBnbBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useState(ViewMode.TABLE)
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
-  const prices = useGetApiPrices()
   const {tokenMode} = farmsProps;
 
   const dispatch = useDispatch()
@@ -158,11 +159,20 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
       let farmsToDisplayWithAPY: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        if (!farm.lpTotalInQuoteToken || !prices) {
+        if (!farm.lpTotalInQuoteToken) {
           return farm
         }
 
-        const quoteTokenPriceUsd = prices[farm.quoteToken.symbol.toLowerCase()]
+        let quoteTokenPriceUsd = 1
+        if(farm.pid === 4 || farm.pid === 1) {
+          quoteTokenPriceUsd = bnbPrice.toNumber()
+        }
+        if(farm.pid === 12) {
+          quoteTokenPriceUsd = cakePrice.toNumber()
+        }
+        if(farm.pid === 5 || farm.pid === 11 || farm.pid === 3) {
+          quoteTokenPriceUsd = 1
+        }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
         const apy = isActive ? getFarmApy(farm.poolWeight, plantPrice, totalLiquidity) : 0
 
@@ -177,7 +187,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       }
       return farmsToDisplayWithAPY
     },
-    [plantPrice, prices, query, isActive],
+    [plantPrice, cakePrice, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {

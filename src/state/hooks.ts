@@ -466,6 +466,14 @@ export const useGetApiPrice = (token: string) => {
   return prices[token.toLowerCase()]
 }
 
+export const usePriceBnbBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+  const bnbBusdPancakeSwapFarm = usePancakeSwapFarmFromPid(2)
+  const bnbBusdPrice = bnbBusdPancakeSwapFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdPancakeSwapFarm.tokenPriceVsQuote) : ZERO
+
+  return bnbBusdPrice
+}
+
 export const usePricePlantBusd = (): BigNumber => {
   const ZERO = new BigNumber(0)
 
