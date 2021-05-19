@@ -490,9 +490,9 @@ export const usePricePlantBusd = (): BigNumber => {
 export const usePriceCakeBusd = (): BigNumber => {
   const ZERO = new BigNumber(0)
 
-  const cakeBnbFarm = usePancakeSwapFarmFromPid(251)
+  const cakeBnbFarm = usePancakeSwapFarmFromPid(139)
   
-  const bnbBusdPancakeSwapFarm = usePancakeSwapFarmFromPid(252)
+  const bnbBusdPancakeSwapFarm = usePancakeSwapFarmFromPid(2)
   
   const bnbBusdPrice = bnbBusdPancakeSwapFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdPancakeSwapFarm.tokenPriceVsQuote) : ZERO
   const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : ZERO
