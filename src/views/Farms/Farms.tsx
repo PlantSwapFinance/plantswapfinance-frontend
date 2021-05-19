@@ -187,7 +187,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       }
       return farmsToDisplayWithAPY
     },
-    [plantPrice, cakePrice, query, isActive],
+    [plantPrice, cakePrice, bnbPrice, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {

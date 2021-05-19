@@ -8,7 +8,7 @@ import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import usePersistState from 'hooks/usePersistState'
-import { usePancakeSwapFarms, usePriceCakeBusd, useGetApiPrices } from 'state/hooks'
+import { usePancakeSwapFarms, usePriceCakeBusd, usePriceCakeBusd, usePriceBnbBusd } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchPancakeSwapFarmUserDataAsync } from 'state/actions'
 import { PancakeSwapFarm } from 'state/types'
@@ -133,11 +133,11 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const TranslateString = useI18n()
   const farmsLP = usePancakeSwapFarms()
   const cakePrice = usePriceCakeBusd()
+  const bnbPrice = usePriceBnbBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useState(ViewMode.TABLE)
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
-  const prices = useGetApiPrices()
   const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
   const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
   const {tokenMode} = farmsProps;
@@ -195,11 +195,20 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const farmsList = useCallback(
     (farmsToDisplay: PancakeSwapFarm[]): FarmWithStakedValue[] => {
       let farmsToDisplayWithAPY: FarmWithStakedValue[] = farmsToDisplay.map((pancakeSwapFarm) => {
-        if (!pancakeSwapFarm.lpTotalInQuoteToken || !prices) {
+        if (!pancakeSwapFarm.lpTotalInQuoteToken) {
           return pancakeSwapFarm
         }
-
-        const quoteTokenPriceUsd = prices[pancakeSwapFarm.quoteToken.symbol.toLowerCase()]
+        
+        let quoteTokenPriceUsd = 1
+        if(pancakeSwapFarm.quoteToken.symbol === "CAKE") {
+          quoteTokenPriceUsd = cakePrice.toNumber()
+        }
+        if(pancakeSwapFarm.quoteToken.symbol === "BNB" || pancakeSwapFarm.quoteToken.symbol === "WBNB") {
+          quoteTokenPriceUsd = bnbPrice.toNumber()
+        }
+        if(pancakeSwapFarm.quoteToken.symbol === "BUSD" || pancakeSwapFarm.quoteToken.symbol === "USDC") {
+          quoteTokenPriceUsd = 1
+        }
         let totalLiquidity = new BigNumber(pancakeSwapFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
         if(pancakeSwapFarm.isTokenOnly === true) {
           totalLiquidity = new BigNumber(pancakeSwapFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
@@ -217,7 +226,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       }
       return farmsToDisplayWithAPY
     },
-    [cakePrice, prices, query, isActive],
+    [cakePrice, bnbPrice, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
