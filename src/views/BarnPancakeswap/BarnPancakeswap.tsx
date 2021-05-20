@@ -249,7 +249,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       }
       return farmsToDisplayWithAPY
     },
-    [cakePrice, bnbPrice, qsdPrice, ustPrice, pbtcPrice, btcbPrice, ethPrice, allTokens, , query, isActive],
+    [cakePrice, bnbPrice, qsdPrice, ustPrice, pbtcPrice, btcbPrice, ethPrice, allTokens, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
