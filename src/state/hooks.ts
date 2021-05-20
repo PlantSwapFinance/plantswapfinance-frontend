@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Team } from 'config/constants/types'
 import { getWeb3NoAccount } from 'utils/web3'
 import useRefresh from 'hooks/useRefresh'
+import tokens from 'config/constants/tokens'
 import {
   fetchFarmsPublicDataAsync,
   fetchGardensPublicDataAsync,
@@ -534,4 +535,29 @@ export const useBlock = () => {
 
 export const useInitialBlock = () => {
   return useSelector((state: State) => state.block.initialBlock)
+}
+
+export const useTotalValue = (): BigNumber => {
+  const farms = useFarms()
+  const bnbPrice = usePriceBnbBusd()
+  const plantPrice = usePricePlantBusd()
+  const cakePrice = usePriceCakeBusd()
+  let value = new BigNumber(0)
+  for (let i = 0; i < farms.length; i++) {
+    const farm = farms[i]
+    if (farm.lpTotalInQuoteToken) {
+      let val
+      if (farm.quoteToken === tokens.bnb) {
+        val = bnbPrice.times(farm.lpTotalInQuoteToken)
+      } else if (farm.quoteToken === tokens.plant) {
+        val = plantPrice.times(farm.lpTotalInQuoteToken)
+      } else if (farm.quoteToken === tokens.cake) {
+        val = cakePrice.times(farm.lpTotalInQuoteToken)
+      } else {
+        val = farm.lpTotalInQuoteToken
+      }
+      value = value.plus(val)
+    }
+  }
+  return value
 }
