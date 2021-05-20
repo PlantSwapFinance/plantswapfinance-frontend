@@ -8,7 +8,7 @@ import useStake from 'hooks/useStake'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { usePricePlantBusd } from 'state/hooks'
 import { useWeb3React } from '@web3-react/core'
-import ShareModal from 'views/Farms/components/ShareModal'
+import ShareModal from 'views/BarnPlantswap/components/ShareModal'
 
 interface FarmCardActionsProps {
   earnings?: BigNumber

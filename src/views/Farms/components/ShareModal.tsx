@@ -12,6 +12,7 @@ import Divider from './Divider'
 
 interface ShareModalProps {
   harvested: string
+  type?: string
   onDismiss?: () => void
   tokenHarvested?: string
   tokenName?: string
