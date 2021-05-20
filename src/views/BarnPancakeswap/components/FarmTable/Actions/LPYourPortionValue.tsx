@@ -21,7 +21,7 @@ const Container = styled.div`
 `
 
 const LPYourPortionValue: React.FunctionComponent<FarmWithStakedValue> = ({ pid, token, quoteToken, tokenAmount, lpTokenBalanceMC, quoteTokenAmount }) => {
-  const { allowance, tokenBalance, stakedBalance } = usePancakeSwapFarmUser(pid)
+  const { stakedBalance } = usePancakeSwapFarmUser(pid)
 
   const rawStakedBalance = getBalanceNumber(stakedBalance)
   const tokenAmountBigNumber = new BigNumber(tokenAmount)
