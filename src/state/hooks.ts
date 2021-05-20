@@ -501,6 +501,45 @@ export const usePriceCakeBusd = (): BigNumber => {
   return cakeBusdPrice
 }
 
+// For PCS Barns
+export const usePriceQsdBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+  const qsdBnbFarm = usePancakeSwapFarmFromPid(251)
+  const bnbBusdPrice = usePriceBnbBusd()
+  const qsdBusdPrice = qsdBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(qsdBnbFarm.tokenPriceVsQuote) : ZERO
+  return qsdBusdPrice
+}
+
+export const usePriceUstBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+  const ustBusdFarm = usePancakeSwapFarmFromPid(293)
+  const ustBusdPrice = ustBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(ustBusdFarm.tokenPriceVsQuote) : ZERO
+  return ustBusdPrice
+}
+
+export const usePricePbtcBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+  const pbtcBnbFarm = usePancakeSwapFarmFromPid(227)
+  const bnbBusdPrice = usePriceBnbBusd()
+  const pbtcBusdPrice = pbtcBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(pbtcBnbFarm.tokenPriceVsQuote) : ZERO
+  return pbtcBusdPrice
+}
+
+export const usePriceBtcbBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+  const btcbBusdFarm = usePancakeSwapFarmFromPid(365)
+  const btcbBusdPrice = btcbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(btcbBusdFarm.tokenPriceVsQuote) : ZERO
+  return btcbBusdPrice
+}
+
+export const usePriceEthBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+  const ethBnbFarm = usePancakeSwapFarmFromPid(261)
+  const bnbBusdPrice = usePriceBnbBusd()
+  const ethBusdPrice = ethBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(ethBnbFarm.tokenPriceVsQuote) : ZERO
+  return ethBusdPrice
+}
+
 
 export const usePriceEggBusd = (): BigNumber => {
   const ZERO = new BigNumber(0)

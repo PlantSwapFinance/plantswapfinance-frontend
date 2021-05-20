@@ -7,8 +7,11 @@ import { Image, Heading, RowType, Toggle, Text, useModal } from '@plantswap-libs
 import styled  from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
+import tokens from 'config/constants/tokens'
 import usePersistState from 'hooks/usePersistState'
-import { usePancakeSwapFarms, usePriceCakeBusd, usePriceBnbBusd } from 'state/hooks'
+import { usePancakeSwapFarms, usePriceCakeBusd, 
+  usePriceBnbBusd, usePriceQsdBusd, usePriceUstBusd, 
+  usePricePbtcBusd, usePriceBtcbBusd, usePriceEthBusd } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchPancakeSwapFarmUserDataAsync } from 'state/actions'
 import { PancakeSwapFarm } from 'state/types'
@@ -134,6 +137,11 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const farmsLP = usePancakeSwapFarms()
   const cakePrice = usePriceCakeBusd()
   const bnbPrice = usePriceBnbBusd()
+  const qsdPrice = usePriceQsdBusd()
+  const ustPrice = usePriceUstBusd()
+  const pbtcPrice = usePricePbtcBusd()
+  const btcbPrice = usePriceBtcbBusd()
+  const ethPrice = usePriceEthBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useState(ViewMode.TABLE)
   const { account } = useWeb3React()
@@ -141,7 +149,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
   const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
   const {tokenMode} = farmsProps;
-
+  const allTokens = tokens
   // TODO: memoize modal's handlers
   const onPresentRiskDisclaimerRef = useRef(onPresentRiskDisclaimer)
 
@@ -200,14 +208,29 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         }
         
         let quoteTokenPriceUsd = 1
-        if(pancakeSwapFarm.quoteToken.symbol === "CAKE") {
+        if(pancakeSwapFarm.quoteToken === allTokens.cake) {
           quoteTokenPriceUsd = cakePrice.toNumber()
         }
-        if(pancakeSwapFarm.quoteToken.symbol === "BNB" || pancakeSwapFarm.quoteToken.symbol === "WBNB") {
+        if(pancakeSwapFarm.quoteToken === allTokens.bnb || pancakeSwapFarm.quoteToken === allTokens.wbnb) {
           quoteTokenPriceUsd = bnbPrice.toNumber()
         }
-        if(pancakeSwapFarm.quoteToken.symbol === "BUSD" || pancakeSwapFarm.quoteToken.symbol === "USDC") {
+        if(pancakeSwapFarm.quoteToken === allTokens.busd || pancakeSwapFarm.quoteToken === allTokens.usdc) {
           quoteTokenPriceUsd = 1
+        }
+        if(pancakeSwapFarm.quoteToken === allTokens.qsd) {
+          quoteTokenPriceUsd = qsdPrice.toNumber()
+        }
+        if(pancakeSwapFarm.quoteToken === allTokens.ust) {
+          quoteTokenPriceUsd = ustPrice.toNumber()
+        }
+        if(pancakeSwapFarm.quoteToken === allTokens.pbtc) {
+          quoteTokenPriceUsd = pbtcPrice.toNumber()
+        }
+        if(pancakeSwapFarm.quoteToken === allTokens.btcb) {
+          quoteTokenPriceUsd = btcbPrice.toNumber()
+        }
+        if(pancakeSwapFarm.quoteToken === allTokens.eth) {
+          quoteTokenPriceUsd = ethPrice.toNumber()
         }
         let totalLiquidity = new BigNumber(pancakeSwapFarm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
         if(pancakeSwapFarm.isTokenOnly === true) {
@@ -226,7 +249,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       }
       return farmsToDisplayWithAPY
     },
-    [cakePrice, bnbPrice, query, isActive],
+    [cakePrice, bnbPrice, qsdPrice, ustPrice, pbtcPrice, btcbPrice, ethPrice, allTokens, , query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
