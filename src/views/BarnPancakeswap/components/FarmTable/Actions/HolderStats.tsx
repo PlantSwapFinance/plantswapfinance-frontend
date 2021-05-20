@@ -5,6 +5,7 @@ import { FarmWithStakedValue } from 'views/BarnPancakeswap/components/FarmCard/F
 import { ActionContent } from './styles'
 import LPValue from './LPValue'
 import LPHolderStats from './LPHolderStats'
+import LPYourPortionValue from './LPYourPortionValue'
 
 export interface HolderStatsProps {
   details: FarmWithStakedValue
@@ -38,8 +39,10 @@ const ActionContainer = styled.div`
 const HolderStats: React.FunctionComponent<HolderStatsProps> = ({ details }) => {
   const farm = details
   let showValue = null
-  if(isEmpty(details.isTokenOnly)) {
+  let showYourValue = null
+  if(!farm.isTokenOnly) {
     showValue = <ActionContainer><ActionContent><LPValue {...farm} /></ActionContent></ActionContainer>
+    showYourValue = <ActionContainer><ActionContent><LPYourPortionValue {...farm} /></ActionContent></ActionContainer>
   }
   return (
     <Container>
@@ -49,6 +52,7 @@ const HolderStats: React.FunctionComponent<HolderStatsProps> = ({ details }) => 
           <LPHolderStats {...farm} />
         </ActionContent>
       </ActionContainer>
+      {showYourValue}
     </Container>
   )
 }
