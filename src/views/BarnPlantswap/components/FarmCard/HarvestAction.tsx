@@ -39,6 +39,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, lpSymbol
   const displayBalance = rawEarningsBalance.toLocaleString()
 
   const [onHarvestDone] = useModal(<ShareModal harvested={displayBalance} tokenHarvested="PLANT" tokenName={lpSymbol} usdHarvested={earningsBusd} />)
+  const [onCompoundDone] = useModal(<ShareModal harvested={displayBalance} type="compound" tokenHarvested="PLANT" tokenName={lpSymbol} usdHarvested={earningsBusd} />)
 
   return (
     <Flex mb="8px" justifyContent="space-between" alignItems="center">
@@ -54,6 +55,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, lpSymbol
               setPendingTx(true)
               await onStake(rawEarningsBalance.toString())
               setPendingTx(false)
+              onCompoundDone()
             }}
             >
               {TranslateString(999, 'Compound')}

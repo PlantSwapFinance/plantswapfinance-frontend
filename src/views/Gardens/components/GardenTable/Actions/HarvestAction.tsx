@@ -41,6 +41,7 @@ const HarvestAction: React.FunctionComponent<FarmWithStakedValue> = ({ pid, user
   const pidPlant = 0
   const { onStake } = useStake(pidPlant)
   const [onHarvestDone] = useModal(<ShareModal harvested={displayBalance} tokenHarvested={token.symbol} tokenName={lpSymbol} usdHarvested={earningsBusd} />)
+  const [onCompoundDone] = useModal(<ShareModal harvested={displayBalance} type="compound" tokenHarvested={token.symbol} tokenName={lpSymbol} usdHarvested={earningsBusd} />)
   const TranslateString = useI18n()
 
   const { countUp, update } = useCountUp({
@@ -78,6 +79,7 @@ const HarvestAction: React.FunctionComponent<FarmWithStakedValue> = ({ pid, user
                 setPendingTx(true)
                 await onStake(earnings.toString())
                 setPendingTx(false)
+                onCompoundDone()
               }}
               >
                 {TranslateString(999, 'Compound')}

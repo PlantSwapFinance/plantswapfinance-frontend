@@ -12,6 +12,7 @@ import Divider from './Divider'
 
 interface ShareModalProps {
   harvested: string
+  type?: string
   onDismiss?: () => void
   tokenHarvested?: string
   tokenName?: string
@@ -30,13 +31,17 @@ const TextCenter2 = styled(Text)`
   margin-bottom: 8px;
 `
 
-const ShareModal: React.FC<ShareModalProps> = ({ harvested, onDismiss, tokenName, tokenHarvested, usdHarvested }) => {
+const ShareModal: React.FC<ShareModalProps> = ({ harvested, type, onDismiss, tokenName, tokenHarvested, usdHarvested }) => {
   const TranslateString = useI18n()
 
   const formatUsdHarvested = usdHarvested.toFixed(2)
   
   const shareUrl = "https://PlantSwap.finance"
-  const shareTitle = `I just harvested ${harvested} ${tokenHarvested} (${formatUsdHarvested} USD)🌱🌱🌱`
+  let typeLabbel = "harvested"
+  let shareTitle = `I just harvested ${harvested} ${tokenHarvested} (${formatUsdHarvested} USD)🌱🌱🌱`
+  if(type === "compound") { 
+    typeLabbel = "compounded"
+    shareTitle = `I just compounded ${harvested} ${tokenHarvested} in the $PLANT Garden🌱🌱🌱` }
 
   const facebookQuote = shareTitle
   const facebookHashtag = "#PlantSwap #PLANT #DeFi #YieldFarming #LiquidityMining"
@@ -80,7 +85,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ harvested, onDismiss, tokenName
       <Heading as="h2" size="xl" mb="14px">Share your love for PlantSwap🌱</Heading>
         <img src="/images/share-garden.svg" alt="Farms" width={680} height={357} />
       <Divider />
-      <Text>You harvested <b>{harvested} {tokenHarvested}</b> or a total of <b>{formatUsdHarvested} USD.</b></Text>
+      <Text>You {typeLabbel} <b>{harvested} {tokenHarvested}</b> or a total of <b>{formatUsdHarvested} USD.</b></Text>
       <Text>Yield farming with <u>{tokenName} pool</u> 🌱🌱🌱</Text>
       <Text>Share this on social media!</Text>
 
