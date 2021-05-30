@@ -124,7 +124,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
         scale={0.6}
         position={[1.25, -3.01, -4.24]}
         rotation={[Math.PI / 2, 0, Math.PI / 2]}
-        onClick={() => { window.location.href='/barnPancakeswap' }}
       />
       <mesh
         geometry={nodes.CakeTokenTexture.geometry}
@@ -132,7 +131,6 @@ function Model(props: JSX.IntrinsicElements['group']) {
         scale={0.6}
         position={[1.23, -3.02, -5.03]}
         rotation={[Math.PI / 2, 0, Math.PI / 2]}
-        onClick={() => { window.location.href='/barnPlantswap' }}
       />
       <mesh
         geometry={nodes.ManageYourFarmingP2.geometry}
@@ -167,10 +165,8 @@ const TheBarn: React.FC = () => (
     <ambientLight intensity={0.5} />
     <pointLight castShadow intensity={0.7} position={[10, 10, 10]} />
     <Model />
-      <PlantswapBarn position={[0.2,-1,-2]} rotation={[0, (Math.PI / 2 - 0.3), 0]}
-        onClick={() => { window.location.href='/barnPlantswap' }} />
-      <PancakeswapBarn position={[4.2,-1,-2]} rotation={[0, (Math.PI / 2 - 0.4), 0]}
-        onClick={() => { window.location.href='/barnPancakeswap' }} />
+      <PlantswapBarn position={[0.2,-1,-2]} rotation={[0, (Math.PI / 2 - 0.3), 0]} />
+      <PancakeswapBarn position={[4.2,-1,-2]} rotation={[0, (Math.PI / 2 - 0.4), 0]} />
     <Controls />
   </Canvas>
 )
