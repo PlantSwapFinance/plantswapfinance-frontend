@@ -29,7 +29,7 @@ type GLTFResult = GLTF & {
 
 export default function Model(props: JSX.IntrinsicElements['group']) {
   const group = useRef<THREE.Group>()
-  const { nodes } = useGLTF('/PancakeswapImgsimple.glb') as GLTFResult
+  const { nodes } = useGLTF('/PancakeswapBarn.glb') as GLTFResult
   return (
     <group ref={group} {...props} dispose={null}>
       <mesh geometry={nodes.BasicBarnCube.geometry} material={nodes.BasicBarnCube.material} />
