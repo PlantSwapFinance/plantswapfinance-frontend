@@ -1378,7 +1378,96 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://www.redfoxlabs.io/',
   },
-
+  xend: {
+    symbol: 'XEND',
+    address: {
+      56: '0x4a080377f83D669D7bB83B3184a8A5E61B500608',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://xend.finance/',
+  },
+  cyc: {
+    symbol: 'CYC',
+    address: {
+      56: '0x810ee35443639348adbbc467b33310d2ab43c168',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://cyclone.xyz/',
+  },
+  chr: {
+    symbol: 'CHR',
+    address: {
+      56: '0xf9CeC8d50f6c8ad3Fb6dcCEC577e05aA32B224FE',
+      97: '',
+    },
+    decimals: 6,
+    projectLink: 'https://chromia.com/',
+  },
+  kalm: {
+    symbol: 'KALM',
+    address: {
+      56: '0x4BA0057f784858a48fe351445C672FF2a3d43515',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://kalmar.io/',
+  },
+  deri: {
+    symbol: 'DERI',
+    address: {
+      56: '0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://deri.finance/#/index',
+  },
+  well: {
+    symbol: 'WELL',
+    address: {
+      56: '0xf07a32eb035b786898c00bb1c64d8c6f8e7a46d5',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.bitwellex.com/',
+  },
+  popen: {
+    symbol: 'pOPEN',
+    address: {
+      56: '0xabae871b7e3b67aeec6b46ae9fe1a91660aadac5',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://opendao.io/',
+  },
+  ez: {
+    symbol: 'EZ',
+    address: {
+      56: '0x5512014efa6cd57764fa743756f7a6ce3358cc83',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://easyfi.network/',
+  },
+  vrt: {
+    symbol: 'VRT',
+    address: {
+      56: '0x5f84ce30dc3cf7909101c69086c50de191895883',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://venus.io/',
+  },
+  tusd: {
+    symbol: 'TUSD',
+    address: {
+      56: '0x14016e85a25aeb13065688cafb43044c2ef86784',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.trueusd.com/',
+  },
 
   // Goose
   
