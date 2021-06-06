@@ -171,10 +171,8 @@ const Row: React.FunctionComponent<RowProps> = (props) => {
           <td colSpan={6}>
             <ActionPanel {...props} />
             <Divider />
-            <br />
             <StatsPanel {...props} />
             <Divider />
-            <br />
             <HolderStats {...props} />
           </td>
         </tr>
