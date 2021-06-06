@@ -72,8 +72,8 @@ const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   const pcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}`
   const pcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}`
 
-  const yourPcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}?a=${account}`
-  const yourPcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}?a=${account}`
+  const yourBscInfoLpUrl = `https://bscscan.com/token/${lpAddress}?a=${account}`
+  const yourBscInfoTokenUrl = `https://bscscan.com/token/${projectTokenAddress}?a=${account}`
 
   const pcsBuySellTokenUrl = `https://exchange.pancakeswap.finance/#/swap?inputCurrency=BNB&outputCurrency=${projectTokenAddress}`
 
@@ -86,8 +86,8 @@ const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   let lpOrTokenLinkInfo = <StyledLinkExternal href={pcsInfoLpUrl}>{TranslateString(999, `View ${lpOrToken} informations`)}</StyledLinkExternal>
   if(thisIsAToken === true) { lpOrTokenLinkInfo = <StyledLinkExternal href={pcsInfoTokenUrl}>{TranslateString(999, `View ${projectTokenLabel} Token informations`)}</StyledLinkExternal> }
  
-  let yourLpOrTokenLinkInfo = <StyledLinkExternal href={yourPcsInfoLpUrl}>{TranslateString(999, `🔥View your ${lpOrToken} tx.`)}</StyledLinkExternal>
-  if(thisIsAToken === true) { yourLpOrTokenLinkInfo = <StyledLinkExternal href={yourPcsInfoTokenUrl}>{TranslateString(999, `🔥View your ${projectTokenLabel} Token tx.`)}</StyledLinkExternal> }
+  let yourLpOrTokenLinkInfo = <StyledLinkExternal href={yourBscInfoLpUrl}>{TranslateString(999, `🔥View your ${lpOrToken} tx.`)}</StyledLinkExternal>
+  if(thisIsAToken === true) { yourLpOrTokenLinkInfo = <StyledLinkExternal href={yourBscInfoTokenUrl}>{TranslateString(999, `🔥View your ${projectTokenLabel} Token tx.`)}</StyledLinkExternal> }
 
   let lpOrTokenLinkBuy = null
   if(thisIsAToken === true) { lpOrTokenLinkBuy = <StyledLinkExternal href={pcsBuySellTokenUrl}>{TranslateString(999, `Buy/Sell ${projectTokenLabel}`)}</StyledLinkExternal> }
