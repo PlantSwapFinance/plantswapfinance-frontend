@@ -39,6 +39,56 @@ const pancakeSwapFarms: PancakeSwapFarmConfig[] = [
    * V3 by order of release (some may be out of PID order due to multiplier boost)
    */
    {
+    pid: 403,
+    lpSymbol: 'MX-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x41f049d990d38305504631c9835f6f856bf1ba67',
+    },
+    token: tokens.mx,
+    quoteToken: tokens.busd,
+  },
+  {
+    pid: 402,
+    lpSymbol: 'bCFX-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0xA0387eBeA6be90849c2261b911fBBD52B4C9eAC4',
+    },
+    token: tokens.bcfx,
+    quoteToken: tokens.busd,
+  },
+  {
+    pid: 401,
+    lpSymbol: 'QKC-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x8853e3309a31583ea438f7704681f46f0d4d909b',
+    },
+    token: tokens.qkc,
+    quoteToken: tokens.busd,
+  },
+  {
+    pid: 400,
+    lpSymbol: 'KTN-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x48028de4a9b0d3d91180333d796021ec7757ba1b',
+    },
+    token: tokens.ktn,
+    quoteToken: tokens.wbnb,
+  },
+  {
+    pid: 399,
+    lpSymbol: 'MTRG-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x4dcA4D427511bC327639b222DA18FA5e334F686F',
+    },
+    token: tokens.mtrg,
+    quoteToken: tokens.busd,
+  },
+   {
     pid: 398,
     lpSymbol: 'SWG-BNB LP',
     lpAddresses: {
