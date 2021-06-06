@@ -1477,6 +1477,51 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://www.trueusd.com/',
   },
+  mtrg: {
+    symbol: 'MTRG',
+    address: {
+      56: '0xbd2949f67dcdc549c6ebe98696449fa79d988a9f',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.meter.io/',
+  },
+  ktn: {
+    symbol: 'KTN',
+    address: {
+      56: '0xdae6c2a48bfaa66b43815c5548b10800919c993e',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://kattana.io/',
+  },
+  qkc: {
+    symbol: 'QKC',
+    address: {
+      56: '0xa1434f1fc3f437fa33f7a781e041961c0205b5da',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://quarkchain.io/',
+  },
+  bcfx: {
+    symbol: 'bCFX',
+    address: {
+      56: '0x045c4324039dA91c52C55DF5D785385Aab073DcF',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.confluxnetwork.org/',
+  },
+  mx: {
+    symbol: 'MX',
+    address: {
+      56: '0x9f882567a62a5560d147d64871776eea72df41d3',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.mxc.com/',
+  },
 
   // Goose
   
