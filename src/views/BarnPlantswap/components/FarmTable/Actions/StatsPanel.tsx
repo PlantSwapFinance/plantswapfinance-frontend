@@ -1,4 +1,5 @@
 import React from 'react'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import useI18n from 'hooks/useI18n'
 import { LinkExternal } from '@plantswap-libs/uikit'
@@ -56,6 +57,7 @@ const InfoContainer = styled.div`
 
 const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   const farm = details
+  const { account } = useWeb3React()
 
   const TranslateString = useI18n()
   const { token } = farm
@@ -70,6 +72,9 @@ const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   const pcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}`
   const pcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}`
 
+  const yourPcsInfoLpUrl = `https://pancakeswap.info/pair/${lpAddress}?a=${account}`
+  const yourPcsInfoTokenUrl = `https://pancakeswap.info/token/${projectTokenAddress}?a=${account}`
+
   const pcsBuySellTokenUrl = `https://exchange.pancakeswap.finance/#/swap?inputCurrency=BNB&outputCurrency=${projectTokenAddress}`
 
   let lpOrToken = 'LP Token'
@@ -80,7 +85,10 @@ const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
   
   let lpOrTokenLinkInfo = <StyledLinkExternal href={pcsInfoLpUrl}>{TranslateString(999, `View ${lpOrToken} informations`)}</StyledLinkExternal>
   if(thisIsAToken === true) { lpOrTokenLinkInfo = <StyledLinkExternal href={pcsInfoTokenUrl}>{TranslateString(999, `View ${projectTokenLabel} Token informations`)}</StyledLinkExternal> }
- 
+
+  let yourLpOrTokenLinkInfo = <StyledLinkExternal href={yourPcsInfoLpUrl}>{TranslateString(999, `🔥View your ${lpOrToken} tx.`)}</StyledLinkExternal>
+  if(thisIsAToken === true) { yourLpOrTokenLinkInfo = <StyledLinkExternal href={yourPcsInfoTokenUrl}>{TranslateString(999, `🔥View your ${projectTokenLabel} Token tx.`)}</StyledLinkExternal> }
+
   let lpOrTokenLinkBuy = null
   if(thisIsAToken === true) { lpOrTokenLinkBuy = <StyledLinkExternal href={pcsBuySellTokenUrl}>{TranslateString(999, `Buy/Sell ${projectTokenLabel}`)}</StyledLinkExternal> }
 
@@ -95,6 +103,8 @@ const StatsPanel: React.FunctionComponent<StatsPanelProps> = ({ details }) => {
         {lpOrTokenLinkBSCScan}
         {lpOrTokenLinkInfo}
         {lpOrTokenLinkBuy}
+        <br />
+        {yourLpOrTokenLinkInfo}
       </InfoContainer>
       <ActionContainer>
         <ActionContent>
