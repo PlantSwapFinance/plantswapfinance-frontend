@@ -1522,7 +1522,97 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://www.mxc.com/',
   },
-
+  ata: {
+    symbol: 'ATA',
+    address: {
+      56: '0xA2120b9e674d3fC3875f415A7DF52e382F141225',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.ata.network/',
+  },
+  mbox: {
+    symbol: 'MBOX',
+    address: {
+      56: '0x3203c9E46cA618C8C1cE5dC67e7e9D75f5da2377',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.mobox.io/#/',
+  },
+  boring: {
+    symbol: 'BORING',
+    address: {
+      56: '0xffEecbf8D7267757c2dc3d13D730E97E15BfdF7F',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.boringdao.com/',
+  },
+  marsh: {
+    symbol: 'MARSH',
+    address: {
+      56: '0x2FA5dAF6Fe0708fBD63b1A7D1592577284f52256',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://unmarshal.io/',
+  },
+  ampl: {
+    symbol: 'AMPL',
+    address: {
+      56: '0xDB021b1B247fe2F1fa57e0A87C748Cc1E321F07F',
+      97: '',
+    },
+    decimals: 9,
+    projectLink: 'https://www.ampleforth.org/',
+  },
+  o3: {
+    symbol: 'O3',
+    address: {
+      56: '0xEe9801669C6138E84bD50dEB500827b776777d28',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://o3swap.com/',
+  },
+  hai: {
+    symbol: 'HAI',
+    address: {
+      56: '0xaA9E582e5751d703F85912903bacADdFed26484C',
+      97: '',
+    },
+    decimals: 8,
+    projectLink: 'https://hacken.io/',
+  },
+  htb: {
+    symbol: 'HTB',
+    address: {
+      56: '0x4e840AADD28DA189B9906674B4Afcb77C128d9ea',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.hotbit.io/',
+  },
+  woo: {
+    symbol: 'WOO',
+    address: {
+      56: '0x4691937a7508860F876c9c0a2a617E7d9E945D4B',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://woo.network/',
+  },
+  $dg: {
+    symbol: '$DG',
+    address: {
+      56: '0x9Fdc3ae5c814b79dcA2556564047C5e7e5449C19',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://decentral.games/',
+  },
+  
   // Goose
   
   egg: {
