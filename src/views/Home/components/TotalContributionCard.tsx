@@ -12,7 +12,7 @@ const StyledTotalContributionCard = styled(Card)`
 
 const TotalContributionCard = () => {
   const TranslateString = useI18n()
-  const rawTctn = 10250
+  const rawTctn = 10500
   const tctn = rawTctn.toLocaleString(undefined, {maximumFractionDigits:2})
 
   return (
