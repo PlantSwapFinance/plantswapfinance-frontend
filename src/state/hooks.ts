@@ -14,6 +14,8 @@ import {
   fetchBarnsBetaPublicDataAsync,
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
+  fetchVerticalGardensPublicDataAsync,
+  fetchVerticalGardensUserDataAsync,
   fetchPlantswapFarmsPublicDataAsync,
   fetchPancakeSwapFarmsPublicDataAsync,
   fetchGooseFarmsPublicDataAsync,
@@ -23,7 +25,7 @@ import {
   clear as clearToast,
   setBlock,
 } from './actions'
-import { State, Farm, BarnBeta, PlantswapFarm, PancakeSwapFarm, GooseFarm, CafeswapFarm, Pool, ProfileState, TeamsState, AchievementState, PriceState } from './types'
+import { State, Farm, VerticalGarden, BarnBeta, PlantswapFarm, PancakeSwapFarm, GooseFarm, CafeswapFarm, Pool, ProfileState, TeamsState, AchievementState, PriceState } from './types'
 import { fetchProfile } from './profile'
 import { fetchTeam, fetchTeams } from './teams'
 import { fetchAchievements } from './achievements'
@@ -36,6 +38,7 @@ export const useFetchPublicData = () => {
     dispatch(fetchFarmsPublicDataAsync())
     dispatch(fetchGardensPublicDataAsync())
     dispatch(fetchPoolsPublicDataAsync())
+    dispatch(fetchVerticalGardensPublicDataAsync())
   }, [dispatch, slowRefresh])
 
   useEffect(() => {
@@ -199,6 +202,27 @@ export const useGardenUser = (pid) => {
     stakedBalance: garden.userData ? new BigNumber(garden.userData.stakedBalance) : new BigNumber(0),
     earnings: garden.userData ? new BigNumber(garden.userData.earnings) : new BigNumber(0),
   }
+}
+
+
+// VerticalGardens
+
+export const useVerticalGardens = (account): VerticalGarden[] => {
+  const { fastRefresh } = useRefresh()
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (account) {
+      dispatch(fetchVerticalGardensUserDataAsync(account))
+    }
+  }, [account, dispatch, fastRefresh])
+
+  const verticalGardens = useSelector((state: State) => state.verticalGardens.data)
+  return verticalGardens
+}
+
+export const useVerticalGardenFromPid = (vgId): VerticalGarden => {
+  const verticalGarden = useSelector((state: State) => state.verticalGardens.data.find((p) => p.vgId === vgId))
+  return verticalGarden
 }
 
 // BarnsBeta
@@ -499,6 +523,22 @@ export const usePriceCakeBusd = (): BigNumber => {
   const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : ZERO
 
   return cakeBusdPrice
+}
+
+// For Vertical Garden
+
+
+export const usePriceOddzBusd = (): BigNumber => {
+  const ZERO = new BigNumber(0)
+
+  const oddzBnbFarm = usePancakeSwapFarmFromPid(343)
+  
+  const bnbBusdPancakeSwapFarm = usePancakeSwapFarmFromPid(2)
+  
+  const bnbBusdPrice = bnbBusdPancakeSwapFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdPancakeSwapFarm.tokenPriceVsQuote) : ZERO
+  const oddzBusdPrice = oddzBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(oddzBnbFarm.tokenPriceVsQuote) : ZERO
+
+  return oddzBusdPrice
 }
 
 // For PCS Barns

@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import web3NoAccount from 'utils/web3'
-import { poolsConfig } from 'config/constants'
+import { verticalGardensConfig, poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 
 // Addresses
@@ -47,6 +47,7 @@ import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import lotteryAbi from 'config/abi/lottery.json'
 import lotteryTicketAbi from 'config/abi/lotteryNft.json'
 import masterChef from 'config/abi/masterchef.json'
+import verticalGardens from 'config/abi/verticalGardens.json'
 import masterchefPancakeSwap from 'config/abi/masterchefPancakeSwap.json'
 import masterchefGoose from 'config/abi/masterchefGoose.json'
 import masterchefCafeswap from 'config/abi/masterchefCafeswap.json'
@@ -114,6 +115,11 @@ export const getLotteryTicketContract = (web3?: Web3) => {
 }
 export const getMasterchefContract = (web3?: Web3) => {
   return getContract(masterChef, getMasterChefAddress(), web3)
+}
+export const getVerticalGardenContract = (id: number, web3?: Web3) => {
+  const config = verticalGardensConfig.find((verticalGarden) => verticalGarden.vgId === id)
+  const abi = verticalGardens
+  return getContract(abi, getAddress(config.verticalGardenContractAddress), web3)
 }
 export const getMasterchefPancakeSwapContract = (web3?: Web3) => {
   return getContract(masterchefPancakeSwap, getMasterChefPancakeSwapAddress(), web3)
