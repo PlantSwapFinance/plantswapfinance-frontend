@@ -12,7 +12,8 @@ const verticalGardens: VerticalGardenConfig[] = [
       56: '0xBCb7b63B90459D536200Eb73f5b4D746da52A411',
       97: '',
     },
-    verticalGardenMasterGardenerPId: 17,
+    verticalGardenMasterGardenerPId: 18,
+    verticalGardenMasterGardenerAllocPt: 60,
     verticalGardenCategory: VerticalGardenCategory.PANCAKE,
     harvest: true,
     sortOrder: 1,
@@ -31,10 +32,11 @@ const verticalGardens: VerticalGardenConfig[] = [
       56: '0x32121B2a1eD671dd0F1FC28Fffb5F1500b08A327',
       97: '',
     },
-    verticalGardenMasterGardenerPId: 18,
+    verticalGardenMasterGardenerPId: 19,
+    verticalGardenMasterGardenerAllocPt: 30,
     verticalGardenCategory: VerticalGardenCategory.PANCAKE,
     harvest: true,
-    sortOrder: 1,
+    sortOrder: 2,
     isFinished: false,
     depositFee: 100, // 1%
     rewardCut: 1500, // 15%
