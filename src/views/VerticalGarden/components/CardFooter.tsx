@@ -6,7 +6,7 @@ import useI18n from 'hooks/useI18n'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { Flex, MetamaskIcon } from '@plantswap-libs/uikit'
 import Balance from 'components/Balance'
-import { CommunityTag, CoreTag, BinanceTag, PancakeSwapTag, GooseFinanceTag } from 'components/Tags'
+import { CommunityTag, CoreTag, BinanceTag, PancakeSwapTag, CafeswapTag, GooseFinanceTag } from 'components/Tags'
 import { useBlock } from 'state/hooks'
 import { VerticalGardenCategory } from 'config/constants/types'
 import { registerToken } from 'utils/wallet'
@@ -16,6 +16,7 @@ const tags = {
   [VerticalGardenCategory.BINANCE]: BinanceTag,
   [VerticalGardenCategory.CORE]: CoreTag,
   [VerticalGardenCategory.COMMUNITY]: CommunityTag,
+  [VerticalGardenCategory.CAFE]: CafeswapTag,
   [VerticalGardenCategory.PANCAKE]: PancakeSwapTag,
   [VerticalGardenCategory.GOOSE]: GooseFinanceTag,
 }
@@ -39,6 +40,7 @@ interface Props {
   startBlock: number
   endBlock: number
   isFinished: boolean
+  verticalGardenMasterGardenerAllocPt: number
   verticalGardenCategory: VerticalGardenCategory
 }
 
@@ -114,6 +116,7 @@ const CardFooter: React.FC<Props> = ({
   tokenEarnAddress,
   tokenDecimals,
   isFinished,
+  verticalGardenMasterGardenerAllocPt,
   startBlock,
   endBlock,
   verticalGardenCategory,
@@ -205,7 +208,7 @@ const CardFooter: React.FC<Props> = ({
             <LabelRight> {tokenRewardName}</LabelRight>
           </Row>
           )}
-          {harvestedPlant.toNumber() > 0 && (
+          {harvestedPlant.toNumber() > 0 || harvestedReward.toNumber() > 0 && (
           <Row mb="4px">
             <FlexFull>
               <Label>
@@ -250,7 +253,7 @@ const CardFooter: React.FC<Props> = ({
               <MetamaskIcon height={15} width={15} ml="4px" />
             </Flex>
           )}
-          {tokenEarnAddress && (
+          {tokenEarnAddress && verticalGardenMasterGardenerAllocPt > 0 && (
             <Flex mb="4px">
               <TokenLink onClick={() => registerToken(tokenEarnAddress, tokenEarnName, tokenDecimals, imageSrc)}>
                 Add {tokenEarnName} to Metamask
