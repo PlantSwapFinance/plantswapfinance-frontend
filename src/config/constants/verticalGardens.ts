@@ -43,7 +43,6 @@ const verticalGardens: VerticalGardenConfig[] = [
     rewardCut: 1500, // 15%
     rewardCutSplitDevelopmentFund: 50, // 50% of 15%
     rewardCutSplitBuyPlantAndBurn: 50, // 50% of 15%
-    displayOnHomePage: true,
   },
   {
     vgId: 3,
@@ -58,7 +57,7 @@ const verticalGardens: VerticalGardenConfig[] = [
     verticalGardenMasterGardenerAllocPt: 0,
     verticalGardenCategory: VerticalGardenCategory.CAFE,
     harvest: true,
-    sortOrder: 3,
+    sortOrder: 6,
     isFinished: false,
     depositFee: 100, // 1%
     rewardCut: 1500, // 15%
@@ -84,7 +83,6 @@ const verticalGardens: VerticalGardenConfig[] = [
     rewardCut: 1500, // 15%
     rewardCutSplitDevelopmentFund: 50, // 50% of 15%
     rewardCutSplitBuyPlantAndBurn: 50, // 50% of 15%
-    displayOnHomePage: true,
   },
   {
     vgId: 5,
@@ -105,6 +103,7 @@ const verticalGardens: VerticalGardenConfig[] = [
     rewardCut: 1500, // 15%
     rewardCutSplitDevelopmentFund: 50, // 50% of 15%
     rewardCutSplitBuyPlantAndBurn: 50, // 50% of 15%
+    displayOnHomePage: true,
   },
   {
     vgId: 6,
@@ -119,12 +118,13 @@ const verticalGardens: VerticalGardenConfig[] = [
     verticalGardenMasterGardenerAllocPt: 0,
     verticalGardenCategory: VerticalGardenCategory.COMMUNITY,
     harvest: true,
-    sortOrder: 6,
+    sortOrder: 3,
     isFinished: false,
     depositFee: 100, // 1%
     rewardCut: 1500, // 15%
     rewardCutSplitDevelopmentFund: 50, // 50% of 15%
     rewardCutSplitBuyPlantAndBurn: 50, // 50% of 15%
+    displayOnHomePage: true,
   },
    
 ]
