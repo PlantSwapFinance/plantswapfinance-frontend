@@ -19,6 +19,7 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const mesh = useRef<THREE.Mesh>()
   useFrame(() => {
     mesh.current.rotation.z += 0.025
+    mesh.current.rotation.x += 0.01
   })
   return (
     <group ref={group} {...props} dispose={null}>
@@ -36,8 +37,8 @@ const Plant: React.FC = () => (
 )
 
 const CanvaStyle = {
-  "width": "100%",
-  "height": "128px"
+  "width": "72px",
+  "height": "72px"
 }
 
 export default Plant;
