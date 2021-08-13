@@ -18,7 +18,8 @@ function Model(props: JSX.IntrinsicElements['group']) {
   const { nodes, materials } = useGLTF('/PLANT.glb') as GLTFResult
   const mesh = useRef<THREE.Mesh>()
   useFrame(() => {
-    mesh.current.rotation.z += 0.025
+    mesh.current.rotation.z += 0.01
+    mesh.current.rotation.x += 0.001
   })
   return (
     <group ref={group} {...props} dispose={null}>
@@ -30,14 +31,15 @@ function Model(props: JSX.IntrinsicElements['group']) {
 const Plant: React.FC = () => (
   <Canvas style={CanvaStyle}>
     <ambientLight intensity={0.25} />
-    <pointLight castShadow intensity={0.7} position={[10, 10, 10]} />
+    <pointLight castShadow intensity={0.7} position={[0, 0, 12]} />
     <Model />
   </Canvas>
 )
 
 const CanvaStyle = {
   "width": "100%",
-  "height": "128px"
+  "height": "200px",
+  "top": "-75px"
 }
 
 export default Plant;

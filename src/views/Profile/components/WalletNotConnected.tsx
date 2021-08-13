@@ -1,20 +1,20 @@
 import React from 'react'
-import { Heading, Text } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
-import UnlockButton from 'components/UnlockButton'
+import { Heading, Text } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 
 const WalletNotConnected = () => {
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
 
   return (
     <div>
-      <Heading size="xl" mb="8px">
-        {TranslateString(852, 'Oops!')}
+      <Heading scale="xl" mb="8px">
+        {t('Oops!')}
       </Heading>
       <Text as="p" mb="16px">
-        {TranslateString(999, 'Please connect your wallet to continue')}
+        {t('Please connect your wallet to continue')}
       </Text>
-      <UnlockButton />
+      <ConnectWalletButton />
     </div>
   )
 }

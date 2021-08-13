@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Button, Flex, Text, InjectedModalProps } from '@plantswap-libs/uikit'
+import { Button, Flex, Text, InjectedModalProps } from '@plantswap/uikit'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { getPlantProfileAddress } from 'utils/addressHelpers'
 import { usePlant } from 'hooks/useContract'
-import useI18n from 'hooks/useI18n'
-import useGetProfileCosts from 'hooks/useGetProfileCosts'
+import { useTranslation } from 'contexts/Localization'
+import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
 import useHasPlantBalance from 'hooks/useHasPlantBalance'
-import { useProfile } from 'state/hooks'
+import { useProfile } from 'state/profile/hooks'
 import { UseEditProfileResponse } from './reducer'
 import ProfileAvatar from '../ProfileAvatar'
 
@@ -44,8 +44,9 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
   const [needsApproval, setNeedsApproval] = useState(null)
   const { profile } = useProfile()
   const { numberPlantToUpdate, numberPlantToReactivate } = useGetProfileCosts()
-  const hasMinimumPlantRequired = useHasPlantBalance(profile.isActive ? numberPlantToUpdate : numberPlantToReactivate)
-  const TranslateString = useI18n()
+  const minimumPlantRequired = profile.isActive ? numberPlantToUpdate : numberPlantToReactivate
+  const hasMinimumPlantRequired = useHasPlantBalance(minimumPlantRequired)
+  const { t } = useTranslation()
   const { account } = useWeb3React()
   const plantContract = usePlant()
   const cost = profile.isActive ? numberPlantToUpdate : numberPlantToReactivate
@@ -56,8 +57,8 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
    */
   useEffect(() => {
     const checkApprovalStatus = async () => {
-      const response = await plantContract.methods.allowance(account, getPlantProfileAddress()).call()
-      const currentAllowance = new BigNumber(response)
+      const response = await plantContract.allowance(account, getPlantProfileAddress())
+      const currentAllowance = new BigNumber(response.toString())
       setNeedsApproval(currentAllowance.lt(cost))
     }
 
@@ -78,7 +79,7 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
       <Flex alignItems="center" style={{ height: '48px' }} justifyContent="center">
         <Text as="p" color="failure">
           {!hasMinimumPlantRequired &&
-            TranslateString(999, `${getFullDisplayBalance(numberPlantToUpdate)} PLANT required to change profile pic`)}
+            t('%minimum% PLANT required to change profile pic', { minimum: getFullDisplayBalance(minimumPlantRequired) })}
         </Text>
       </Flex>
       {profile.isActive ? (
@@ -89,10 +90,10 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
             onClick={needsApproval === true ? goToApprove : goToChange}
             disabled={!hasMinimumPlantRequired || needsApproval === null}
           >
-            {TranslateString(999, 'Change Profile Pic')}
+            {t('Change Profile Pic')}
           </Button>
           <DangerOutline width="100%" onClick={goToRemove}>
-            {TranslateString(999, 'Remove Profile Pic')}
+            {t('Remove Profile Pic')}
           </DangerOutline>
         </>
       ) : (
@@ -102,11 +103,11 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
           onClick={needsApproval === true ? goToApprove : goToChange}
           disabled={!hasMinimumPlantRequired || needsApproval === null}
         >
-          {TranslateString(999, 'Reactivate Profile')}
+          {t('Reactivate Profile')}
         </Button>
       )}
       <Button variant="text" width="100%" onClick={onDismiss}>
-        {TranslateString(999, 'Close Window')}
+        {t('Close Window')}
       </Button>
     </Flex>
   )

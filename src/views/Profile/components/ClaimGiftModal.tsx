@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Modal, Text, InjectedModalProps, Button, AutoRenewIcon } from '@plantswap-libs/uikit'
+import { Modal, Text, InjectedModalProps, Button, AutoRenewIcon } from '@plantswap/uikit'
 import { useWeb3React } from '@web3-react/core'
-import { useToast } from 'state/hooks'
+import useToast from 'hooks/useToast'
 import { useClaimRefundContract } from 'hooks/useContract'
-import useI18n from 'hooks/useI18n'
+import { useTranslation } from 'contexts/Localization'
 import { getClaimRefundContract } from 'utils/contractHelpers'
 
 interface ClaimGiftProps extends InjectedModalProps {
@@ -22,7 +22,7 @@ export const useCanClaim = () => {
   useEffect(() => {
     const fetchClaimStatus = async () => {
       const claimRefundContract = getClaimRefundContract()
-      const walletCanClaim = await claimRefundContract.methods.canClaim(account).call()
+      const walletCanClaim = await claimRefundContract.canClaim(account)
       setCanClaim(walletCanClaim)
     }
 
@@ -36,53 +36,41 @@ export const useCanClaim = () => {
 
 const ClaimGift: React.FC<ClaimGiftProps> = ({ onSuccess, onDismiss }) => {
   const [isConfirming, setIsConfirming] = useState(false)
-  const { account } = useWeb3React()
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
   const { canClaim } = useCanClaim()
   const claimRefundContract = useClaimRefundContract()
   const { toastSuccess, toastError } = useToast()
 
-  const handleClick = () => {
-    claimRefundContract.methods
-      .getPlantBack()
-      .send({ from: account })
-      .on('sending', () => {
-        setIsConfirming(true)
-      })
-      .on('receipt', () => {
-        toastSuccess('Success!')
-        onSuccess()
-        onDismiss()
-      })
-      .on('error', (error) => {
-        setIsConfirming(false)
-        toastError('Error', error?.message)
-      })
+  const handleClick = async () => {
+    const tx = await claimRefundContract.getPlantBack()
+    setIsConfirming(true)
+    const receipt = await tx.wait()
+    if (receipt.status) {
+      toastSuccess(t('Success!'))
+      onSuccess()
+      onDismiss()
+    } else {
+      setIsConfirming(false)
+      toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
+    }
   }
 
   return (
-    <Modal title={TranslateString(999, 'Claim your Gift!')} onDismiss={onDismiss}>
+    <Modal title={t('Claim your Gift!')} onDismiss={onDismiss}>
       <div style={{ maxWidth: '640px' }}>
-        <Text as="p">{TranslateString(999, 'Thank you for being a day-one user of Plant Profiles!')}</Text>
+        <Text as="p">{t('Thank you for being a day-one user of Plant Profiles!')}</Text>
         <Text as="p" mb="8px">
-          {TranslateString(
-            999,
-            "If you haven't already noticed, we made a mistake and the starter farmers you chose got mixed up and changed into another farmers. Oops!",
+          {t(
+            "If you haven't already noticed, we made a mistake and the starter bunny you chose got mixed up and changed into another bunny. Oops!",
           )}
         </Text>
-        <Text as="p">
-          {TranslateString(999, "To make it up to you, we'll refund you the full 4 PLANT it cost to make your farmers.")}
-        </Text>
+        <Text as="p">{t('To make it up to you, we’ll refund you the full 4 PLANT it cost to make your bunny.')}</Text>
         <Text as="p" mb="8px">
-          {TranslateString(
-            999,
-            "We're also preparing an all-new collectible for you to claim (for free!) in the near future.",
-          )}
+          {t('We’re also preparing an all-new collectible for you to claim (for free!) in the near future.')}
         </Text>
         <Text as="p" mb="24px">
-          {TranslateString(
-            999,
-            'Once you claim the refund, you can make another account with another wallet, mint a new farmers, and send it to your main account via the NFT page.',
+          {t(
+            'Once you claim the refund, you can make another account with another wallet, mint a new bunny, and send it to your main account via the NFT page.',
           )}
         </Text>
         <Button
@@ -91,7 +79,7 @@ const ClaimGift: React.FC<ClaimGiftProps> = ({ onSuccess, onDismiss }) => {
           onClick={handleClick}
           disabled={!canClaim}
         >
-          {TranslateString(999, 'Claim Your PLANT')}
+          {t('Claim Your PLANT')}
         </Button>
       </div>
     </Modal>

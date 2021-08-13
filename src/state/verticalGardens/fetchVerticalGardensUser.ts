@@ -5,7 +5,7 @@ import multicall from 'utils/multicall'
 import { getAddress } from 'utils/addressHelpers'
 import BigNumber from 'bignumber.js'
 
-const listVerticalGardens = verticalGardensConfig.filter((v) => v.vgId !== 0)
+const listVerticalGardens = verticalGardensConfig.filter((v) => v.vgId)
 
 export const fetchVerticalGardensAllowance = async (account) => {
   const calls = listVerticalGardens.map((v) => ({

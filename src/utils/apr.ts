@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, PLANT_PER_BLOCK } from 'config'
+import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK } from 'config'
+import lpAprs from 'config/constants/lpAprs.json'
 
 /**
  * Get the APR value in %
@@ -28,10 +29,20 @@ export const getPoolApr = (
  * @param poolLiquidityUsd Total pool liquidity in USD
  * @returns
  */
-export const getFarmApr = (poolWeight: BigNumber, plantPriceUsd: BigNumber, poolLiquidityUsd: BigNumber): number => {
-  const yearlyPlantRewardAllocation = PLANT_PER_BLOCK.times(BLOCKS_PER_YEAR).times(poolWeight)
-  const apr = yearlyPlantRewardAllocation.times(plantPriceUsd).div(poolLiquidityUsd).times(100)
-  return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
+export const getFarmApr = (
+  poolWeight: BigNumber,
+  plantPriceUsd: BigNumber,
+  poolLiquidityUsd: BigNumber,
+  farmAddress: string,
+): { plantRewardsApr: number; lpRewardsApr: number } => {
+  const yearlyPlantRewardAllocation = CAKE_PER_BLOCK.times(poolWeight)
+  const plantRewardsApr = yearlyPlantRewardAllocation.times(plantPriceUsd).div(poolLiquidityUsd).times(100)
+  let plantRewardsAprAsNumber = null
+  if (!plantRewardsApr.isNaN() && plantRewardsApr.isFinite()) {
+    plantRewardsAprAsNumber = plantRewardsApr.toNumber()
+  }
+  const lpRewardsApr = lpAprs[farmAddress?.toLocaleLowerCase()] ?? 0
+  return { plantRewardsApr: plantRewardsAprAsNumber, lpRewardsApr }
 }
 
 export default null

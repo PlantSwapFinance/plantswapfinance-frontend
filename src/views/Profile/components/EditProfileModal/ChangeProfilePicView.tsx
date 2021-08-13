@@ -1,78 +1,81 @@
 import React, { useState } from 'react'
-import { Button, InjectedModalProps, Skeleton, Text } from '@plantswap-libs/uikit'
+import { Button, InjectedModalProps, Skeleton, Text } from '@plantswap/uikit'
 import { useWeb3React } from '@web3-react/core'
-import { useDispatch } from 'react-redux'
-import nftList from 'config/constants/nfts'
-import { useProfile, useToast } from 'state/hooks'
-import useI18n from 'hooks/useI18n'
+import { useAppDispatch } from 'state'
+import { useGetCollectibles } from 'state/hooks'
+import { useProfile } from 'state/profile/hooks'
+import { useTranslation } from 'contexts/Localization'
+import useToast from 'hooks/useToast'
 import { fetchProfile } from 'state/profile'
-import useGetWalletNfts from 'hooks/useGetWalletNfts'
+import { getAddressByType } from 'utils/collectibles'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { usePlantswapGardeners, useProfile as useProfileContract } from 'hooks/useContract'
-import { getPlantProfileAddress, getPlantswapGardenersAddress } from 'utils/addressHelpers'
+import { useProfile as useProfileContract, usePlantswapGardeners } from 'hooks/useContract'
+import { getPlantProfileAddress } from 'utils/addressHelpers'
 import SelectionCard from '../SelectionCard'
 import ApproveConfirmButtons from '../ApproveConfirmButtons'
 
 type ChangeProfilePicPageProps = InjectedModalProps
 
 const ChangeProfilePicPage: React.FC<ChangeProfilePicPageProps> = ({ onDismiss }) => {
-  const [tokenId, setTokenId] = useState(null)
-  const TranslateString = useI18n()
-  const { isLoading, nfts: nftsInWallet } = useGetWalletNfts()
-  const dispatch = useDispatch()
+  const [selectedNft, setSelectedNft] = useState({
+    tokenId: null,
+    nftAddress: null,
+  })
+  const { t } = useTranslation()
+  const { isLoading, tokenIds, nftsInWallet } = useGetCollectibles()
+  const dispatch = useAppDispatch()
   const { profile } = useProfile()
-  const plantswapGardenersContract = usePlantswapGardeners()
   const profileContract = useProfileContract()
+  const plantswapGardenersContract = usePlantswapGardeners()
   const { account } = useWeb3React()
   const { toastSuccess } = useToast()
-  const {
-    isApproving,
-    isApproved,
-    isConfirmed,
-    isConfirming,
-    handleApprove,
-    handleConfirm,
-  } = useApproveConfirmTransaction({
-    onApprove: () => {
-      return plantswapGardenersContract.methods.approve(getPlantProfileAddress(), tokenId).send({ from: account })
-    },
-    onConfirm: () => {
-      if (!profile.isActive) {
-        return profileContract.methods.reactivateProfile(getPlantswapGardenersAddress(), tokenId).send({ from: account })
-      }
+  const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
+    useApproveConfirmTransaction({
+      onApprove: () => {
+        // const contract = getErc721Contract(selectedNft.nftAddress, library.getSigner())
+        return plantswapGardenersContract.approve(getPlantProfileAddress(), selectedNft.tokenId)
+      },
+      onConfirm: () => {
+        if (!profile.isActive) {
+          return profileContract.reactivateProfile(selectedNft.nftAddress, selectedNft.tokenId)
+        }
 
-      return profileContract.methods.updateProfile(getPlantswapGardenersAddress(), tokenId).send({ from: account })
-    },
-    onSuccess: async () => {
-      // Re-fetch profile
-      await dispatch(fetchProfile(account))
-      toastSuccess('Profile Updated!')
+        return profileContract.updateProfile(selectedNft.nftAddress, selectedNft.tokenId)
+      },
+      onSuccess: async () => {
+        // Re-fetch profile
+        await dispatch(fetchProfile(account))
+        toastSuccess(t('Profile Updated!'))
 
-      onDismiss()
-    },
-  })
-  const gardenerIds = Object.keys(nftsInWallet).map((nftWalletItem) => Number(nftWalletItem))
-  const walletNfts = nftList.filter((nft) => gardenerIds.includes(nft.gardenerId))
+        onDismiss()
+      },
+    })
 
   return (
     <>
       <Text as="p" color="textSubtle" mb="24px">
-        {TranslateString(999, 'Choose a new Collectible to use as your profile pic.')}
+        {t('Choose a new Collectible to use as your profile pic.')}
       </Text>
       {isLoading ? (
         <Skeleton height="80px" mb="16px" />
       ) : (
-        walletNfts.map((walletNft) => {
-          const [firstTokenId] = nftsInWallet[walletNft.gardenerId].tokenIds
+        nftsInWallet.map((walletNft) => {
+          const [firstTokenId] = tokenIds[walletNft.identifier]
+          const handleChange = (value: string) => {
+            setSelectedNft({
+              tokenId: Number(value),
+              nftAddress: getAddressByType(walletNft.type),
+            })
+          }
 
           return (
             <SelectionCard
               name="profilePicture"
-              key={walletNft.gardenerId}
+              key={walletNft.identifier}
               value={firstTokenId}
               image={`/images/nfts/${walletNft.images.md}`}
-              isChecked={firstTokenId === tokenId}
-              onChange={(value: string) => setTokenId(parseInt(value, 10))}
+              isChecked={firstTokenId === selectedNft.tokenId}
+              onChange={handleChange}
               disabled={isApproving || isConfirming || isConfirmed}
             >
               <Text bold>{walletNft.name}</Text>
@@ -80,26 +83,26 @@ const ChangeProfilePicPage: React.FC<ChangeProfilePicPageProps> = ({ onDismiss }
           )
         })
       )}
-      {!isLoading && walletNfts.length === 0 && (
+      {!isLoading && nftsInWallet.length === 0 && (
         <>
           <Text as="p" color="textSubtle" mb="16px">
-            {TranslateString(999, 'Sorry! You don’t have any eligible Collectibles in your wallet to use!')}
+            {t('Sorry! You don’t have any eligible Collectibles in your wallet to use!')}
           </Text>
           <Text as="p" color="textSubtle" mb="24px">
-            {TranslateString(999, 'Make sure you have a Plant Collectible in your wallet and try again!')}
+            {t('Make sure you have a Plant Collectible in your wallet and try again!')}
           </Text>
         </>
       )}
       <ApproveConfirmButtons
-        isApproveDisabled={isConfirmed || isConfirming || isApproved || tokenId === null}
+        isApproveDisabled={isConfirmed || isConfirming || isApproved || selectedNft.tokenId === null}
         isApproving={isApproving}
-        isConfirmDisabled={!isApproved || isConfirmed || tokenId === null}
+        isConfirmDisabled={!isApproved || isConfirmed || selectedNft.tokenId === null}
         isConfirming={isConfirming}
         onApprove={handleApprove}
         onConfirm={handleConfirm}
       />
       <Button variant="text" width="100%" onClick={onDismiss} disabled={isApproving || isConfirming}>
-        {TranslateString(999, 'Close Window')}
+        {t('Close Window')}
       </Button>
     </>
   )

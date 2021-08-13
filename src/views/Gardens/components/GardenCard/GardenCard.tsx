@@ -1,68 +1,55 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
-import { Flex, Text, Skeleton } from '@plantswap-libs/uikit'
-import { communityFarms } from 'config/constants'
+import { Flex, Text, Skeleton } from '@plantswap/uikit'
 import { Farm } from 'state/types'
-import { provider as ProviderType } from 'web3-core'
-import useI18n from 'hooks/useI18n'
+import { getBscScanLink } from 'utils'
+import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
+import { getAddress } from 'utils/addressHelpers'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
 
-export interface FarmWithStakedValue extends Farm {
-  apy?: number
+export interface GardenWithStakedValue extends Farm {
+  apr?: number
+  lpRewardsApr?: number
   liquidity?: BigNumber
 }
 
-const RainbowLight = keyframes`
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+const AccentGradient = keyframes`  
+  0% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 50% 0%;
+  }
 `
 
 const StyledCardAccent = styled.div`
-  background: linear-gradient(
-    45deg,
-    rgba(255, 0, 0, 1) 0%,
-    rgba(255, 154, 0, 1) 10%,
-    rgba(208, 222, 33, 1) 20%,
-    rgba(79, 220, 74, 1) 30%,
-    rgba(63, 218, 216, 1) 40%,
-    rgba(47, 201, 226, 1) 50%,
-    rgba(28, 127, 238, 1) 60%,
-    rgba(95, 21, 242, 1) 70%,
-    rgba(186, 12, 248, 1) 80%,
-    rgba(251, 7, 217, 1) 90%,
-    rgba(255, 0, 0, 1) 100%
-  );
-  background-size: 300% 300%;
-  animation: ${RainbowLight} 2s linear infinite;
+  background: ${({ theme }) => `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`};
+  background-size: 400% 400%;
+  animation: ${AccentGradient} 2s linear infinite;
   border-radius: 32px;
-  filter: blur(6px);
   position: absolute;
-  top: -2px;
-  right: -2px;
-  bottom: -2px;
-  left: -2px;
+  top: -1px;
+  right: -1px;
+  bottom: -3px;
+  left: -1px;
   z-index: -1;
 `
 
-const FCard = styled.div`
+const FCard = styled.div<{ isPromotedGarden: boolean }>`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
-  border-radius: 32px;
-  box-shadow: 0px 2px 12px -8px rgba(25, 19, 38, 0.1), 0px 1px 1px rgba(25, 19, 38, 0.05);
+  border-radius: ${({ theme, isPromotedGarden }) => (isPromotedGarden ? '31px' : theme.radii.card)};
+  box-shadow: 0px 1px 4px rgba(25, 19, 38, 0.15);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -72,7 +59,7 @@ const FCard = styled.div`
 `
 
 const Divider = styled.div`
-  background-color: ${({ theme }) => theme.colors.borderColor};
+  background-color: ${({ theme }) => theme.colors.cardBorder};
   height: 1px;
   margin: 28px auto;
   width: 100%;
@@ -84,57 +71,58 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
 `
 
 interface GardenCardProps {
-  farm: FarmWithStakedValue
+  garden: GardenWithStakedValue
+  displayApr: string
   removed: boolean
   plantPrice?: BigNumber
-  provider?: ProviderType
   account?: string
 }
 
-const GardenCard: React.FC<GardenCardProps> = ({ farm, removed, plantPrice, account }) => {
-  const TranslateString = useI18n()
+const GardenCard: React.FC<GardenCardProps> = ({ garden, displayApr, removed, plantPrice, account }) => {
+  const { t } = useTranslation()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  const isCommunityFarm = communityFarms.includes(farm.token.symbol)
-  // We assume the token name is coin pair + lp e.g. PLANT-BNB LP, LINK-BNB LP,
-  // NAR-PLANT LP. The images should be plant-bnb.svg, link-bnb.svg, nar-plant.svg
-  const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
+  const totalValueFormatted =
+    garden.liquidity && garden.liquidity.gt(0)
+      ? `$${garden.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+      : ''
 
-  const totalValueFormated = farm.liquidity
-    ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-    : '-'
-
-  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PLANT', 'PLANT')
-  const earnLabel = farm.dual ? farm.dual.earnLabel : 'PLANT'
-  const DepositLabel = farm.depositFee || 0
-
-  const farmAPY = farm.apy && farm.apy.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  const lpLabel = garden.lpSymbol && garden.lpSymbol.toUpperCase()
+  const earnLabel = garden.dual ? garden.dual.earnLabel : t('PLANT + Fees')
 
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
-    quoteTokenAddress: farm.quoteToken.address,
-    tokenAddress: farm.token.address,
+    quoteTokenAddress: garden.quoteToken.address,
+    tokenAddress: garden.token.address,
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  const lpAddress = getAddress(garden.lpAddresses)
+  const isPromotedGarden = garden.token.symbol === 'PLANT'
 
   return (
-    <FCard>
-      {farm.token.symbol === 'PLANT' && <StyledCardAccent />}
+    <FCard isPromotedGarden={isPromotedGarden}>
+      {isPromotedGarden && <StyledCardAccent />}
       <CardHeading
         lpLabel={lpLabel}
-        multiplier={farm.multiplier}
-        isCommunityFarm={isCommunityFarm}
-        farmImage={farmImage}
-        tokenSymbol={farm.token.symbol}
+        multiplier={garden.multiplier}
+        isCommunityGarden={garden.isCommunity}
+        token={garden.token}
+        quoteToken={garden.rewardToken}
       />
       {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
-          <Text>{TranslateString(736, 'APR')}:</Text>
+          <Text>{t('APR')}:</Text>
           <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-            {farm.apy ? (
+            {garden.apr ? (
               <>
-                <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} plantPrice={plantPrice} apy={farm.apy} />
-                {farmAPY}%
+                <ApyButton
+                  lpLabel={lpLabel}
+                  addLiquidityUrl={addLiquidityUrl}
+                  plantPrice={plantPrice}
+                  apr={garden.apr}
+                  displayApr={displayApr}
+                />
+                {displayApr}%
               </>
             ) : (
               <Skeleton height={24} width={80} />
@@ -143,16 +131,10 @@ const GardenCard: React.FC<GardenCardProps> = ({ farm, removed, plantPrice, acco
         </Flex>
       )}
       <Flex justifyContent="space-between">
-        <Text>{TranslateString(318, 'Earn')}:</Text>
+        <Text>{t('Earn')}:</Text>
         <Text bold>{earnLabel}</Text>
       </Flex>
-      <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
-      {DepositLabel > 0 && (
-      <Flex justifyContent="space-between">
-        <Text>{TranslateString(318, 'Deposit fee')}:</Text>
-        <Text>{DepositLabel/100}%</Text>
-      </Flex>
-      )}
+      <CardActionsContainer garden={garden} account={account} addLiquidityUrl={addLiquidityUrl} />
       <Divider />
       <ExpandableSectionButton
         onClick={() => setShowExpandableSection(!showExpandableSection)}
@@ -161,8 +143,9 @@ const GardenCard: React.FC<GardenCardProps> = ({ farm, removed, plantPrice, acco
       <ExpandingWrapper expanded={showExpandableSection}>
         <DetailsSection
           removed={removed}
-          bscScanAddress={`https://bscscan.com/address/${farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]}`}
-          totalValueFormated={totalValueFormated}
+          bscScanAddress={getBscScanLink(lpAddress, 'address')}
+          infoAddress={`https://pancakeswap.info/token/${lpAddress}`}
+          totalValueFormatted={totalValueFormatted}
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
         />

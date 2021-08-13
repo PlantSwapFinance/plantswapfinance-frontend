@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Helmet } from "react-helmet"
-import { Heading } from '@plantswap-libs/uikit'
-import { useProfile } from 'state/hooks'
+import { Heading, Text } from '@plantswap/uikit'
+import { useProfile } from 'state/profile/hooks'
+import { useTranslation } from 'contexts/Localization'
 import HeaderWrapper from 'views/Profile/components/HeaderWrapper'
 import NoProfileCard from './NoProfileCard'
 
 const TeamHeader = () => {
+  const { t } = useTranslation()
   const { isInitialized, profile } = useProfile()
   const showProfileCallout = isInitialized && !profile
 
@@ -14,33 +15,23 @@ const TeamHeader = () => {
     <>
       {showProfileCallout && <NoProfileCard />}
       <HeaderWrapper>
-        
-      <Helmet>
-        <title>PlantSwap.finance - Team & Profile 🌱</title>
-        <meta name="description" content="Find the different PlantSwap Gardeners Collectibles🌱" />
-        <meta name="keywords" content="plantswap,defi,collectibles,nft" />
-        <meta name="twitter:image" content="https://plantswap.finance/images/collectibles.svg" />
-        <meta name="twitter:domain" content="PlantSwap.finance" />
-        <meta name="twitter:description" content="Find the different PlantSwap Gardeners Collectibles🌱" />
-        <meta name="twitter:title" content="PlantSwap.Finance - Farm $PLANT with us and save the planet🌱" />
-        <meta property="og:title" content="PlantSwap.Finance - Farm $PLANT with us and save the planet🌱" />
-        <meta property="og:url" content="https://plantswap.finance/collectibles" />
-        <meta property="og:image" content="https://plantswap.finance/images/collectibles.svg" />
-        <meta property="og:description" content="Find the different PlantSwap Gardeners Collectibles🌱" />
-      </Helmet>
-      <Hero>
-        <div>
-          <Heading as="h1" size="xxl" mb="16px">
-          Team & Profile
-          </Heading>
-          <ul>
-            <li>Have a look at the different Gardeners Teams</li>
-            <li>Each month we donate funds to ecological</li>
-            <li>foundations in line with these teams names & descriptions.</li>
-          </ul>
-        </div>
-        <img src="/images/teams.svg" alt="Plantswap Teams" width={400} height={210} />
-      </Hero>
+          <Hero>
+            <div>
+            <Heading as="h1" scale="xxl" color="secondary">
+              {t('Teams & Profiles')}
+            </Heading>
+            <Text bold>
+              {t('Have a look at the different Gardeners Teams')}
+            </Text>
+            <Text bold>
+              {t('Each month we donate funds to ecological')}
+            </Text>
+            <Text bold>
+              {t('foundations in line with these teams names & descriptions.')}
+            </Text>
+            </div>
+            <img src="/images/teams.svg" alt="Plantswap Teams" width={400} height={210} />
+          </Hero>
       </HeaderWrapper>
     </>
   )

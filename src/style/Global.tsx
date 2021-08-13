@@ -1,10 +1,10 @@
 import { createGlobalStyle } from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
-import { PlantSwapTheme } from '@plantswap-libs/uikit/dist/theme'
+import { PlantTheme } from '@plantswap/uikit/dist/theme'
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
-  export interface DefaultTheme extends PlantSwapTheme {}
+  export interface DefaultTheme extends PlantTheme {}
 }
 
 const GlobalStyle = createGlobalStyle`
@@ -12,7 +12,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Kanit', sans-serif;
   }
   body {
-    
     background-color: ${({ theme }) => theme.colors.background};
 
     img {

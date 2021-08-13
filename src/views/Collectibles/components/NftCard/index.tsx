@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { ethers } from 'ethers'
 import {
   Card,
   CardBody,
@@ -11,20 +12,21 @@ import {
   Text,
   CardFooter,
   useModal,
-} from '@plantswap-libs/uikit'
-import { useProfile } from 'state/hooks'
-import useI18n from 'hooks/useI18n'
+} from '@plantswap/uikit'
+import { useProfile } from 'state/profile/hooks'
+import { useTranslation } from 'contexts/Localization'
 import { Nft } from 'config/constants/types'
 import InfoRow from '../InfoRow'
 import TransferNftModal from '../TransferNftModal'
 import ClaimNftModal from '../ClaimNftModal'
 import Preview from './Preview'
 
-interface NftCardProps {
+export interface NftCardProps {
   nft: Nft
   canClaim?: boolean
   tokenIds?: number[]
-  onSuccess: () => void
+  onClaim?: () => Promise<ethers.providers.TransactionResponse>
+  refresh: () => void
 }
 
 const Header = styled(InfoRow)`
@@ -48,11 +50,11 @@ const InfoBlock = styled.div`
   padding: 24px;
 `
 
-const NftCard: React.FC<NftCardProps> = ({ nft, onSuccess, canClaim = false, tokenIds = [] }) => {
+const NftCard: React.FC<NftCardProps> = ({ nft, canClaim = false, tokenIds = [], onClaim, refresh }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
   const { profile } = useProfile()
-  const { gardenerId, name, description } = nft
+  const { identifier, name, description, requirement } = nft
   const walletOwnsNft = tokenIds.length > 0
   const Icon = isOpen ? ChevronUpIcon : ChevronDownIcon
 
@@ -60,46 +62,58 @@ const NftCard: React.FC<NftCardProps> = ({ nft, onSuccess, canClaim = false, tok
     setIsOpen(!isOpen)
   }
 
-  const [onPresentTransferModal] = useModal(<TransferNftModal nft={nft} tokenIds={tokenIds} onSuccess={onSuccess} />)
-  const [onPresentClaimModal] = useModal(<ClaimNftModal nft={nft} onSuccess={onSuccess} />)
+  const handleSuccess = () => {
+    refresh()
+  }
+
+  const [onPresentTransferModal] = useModal(
+    <TransferNftModal nft={nft} tokenIds={tokenIds} onSuccess={handleSuccess} />,
+  )
+  const [onPresentClaimModal] = useModal(<ClaimNftModal nft={nft} onSuccess={handleSuccess} onClaim={onClaim} />)
 
   return (
-    <Card isActive={walletOwnsNft || canClaim}>
+    <Card isActive={walletOwnsNft}>
       <Preview nft={nft} isOwned={walletOwnsNft} />
       <CardBody>
         <Header>
           <Heading>{name}</Heading>
           {walletOwnsNft && (
             <Tag outline variant="secondary">
-              {TranslateString(728, 'In Wallet')}
+              {t('In Wallet')}
             </Tag>
           )}
-          {profile?.nft?.gardenerId === gardenerId && (
+          {profile?.nft?.identifier === identifier && (
             <Tag outline variant="success">
-              {TranslateString(999, 'Profile Pic')}
+              {t('Profile Pic')}
             </Tag>
           )}
         </Header>
         {canClaim && (
           <Button width="100%" mt="24px" onClick={onPresentClaimModal}>
-            {TranslateString(652, 'Claim this NFT')}
+            {t('Claim this NFT')}
           </Button>
         )}
         {walletOwnsNft && (
           <Button width="100%" variant="secondary" mt="24px" onClick={onPresentTransferModal}>
-            {TranslateString(999, 'Transfer')}
+            {t('Transfer')}
           </Button>
         )}
       </CardBody>
       <CardFooter p="0">
         <DetailsButton width="100%" endIcon={<Icon width="24px" color="primary" />} onClick={handleClick}>
-          {TranslateString(658, 'Details')}
+          {t('Details')}
         </DetailsButton>
         {isOpen && (
           <InfoBlock>
             <Text as="p" color="textSubtle" style={{ textAlign: 'center' }}>
-              {description}
+              {t(description)}
             </Text>
+            {requirement && (
+              <Text as="p" color="textSubtle" style={{ textAlign: 'center' }}>
+                <br />
+                {t(requirement)}
+              </Text>
+            )}
           </InfoBlock>
         )}
       </CardFooter>

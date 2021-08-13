@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Heading } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
-import { useAchievements } from 'state/hooks'
+import { Flex, Heading } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
+import { useAchievements } from 'state/achievements/hooks'
 import AchievementCard from './AchievementCard'
 
 const Grid = styled.div`
@@ -16,7 +16,7 @@ const Grid = styled.div`
 `
 
 const AchievementsList = () => {
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
   const achievements = useAchievements()
 
   return (
@@ -28,8 +28,8 @@ const AchievementsList = () => {
       </Grid>
       {achievements.length === 0 && (
         <Flex alignItems="center" justifyContent="center" style={{ height: '64px' }}>
-          <Heading as="h5" size="md" color="textDisabled">
-            {TranslateString(999, 'No achievements yet!')}
+          <Heading as="h5" scale="md" color="textDisabled">
+            {t('No achievements yet!')}
           </Heading>
         </Flex>
       )}

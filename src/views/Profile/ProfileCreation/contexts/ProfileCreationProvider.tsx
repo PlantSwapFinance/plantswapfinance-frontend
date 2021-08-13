@@ -1,7 +1,8 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { getGardeningSchoolContract } from 'utils/contractHelpers'
+import { getGardeningSchoolNftContract } from 'utils/contractHelpers'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { MINT_COST, REGISTER_COST, ALLOWANCE_MULTIPLIER } from '../config'
 import { Actions, State, ContextType } from './types'
 
@@ -12,10 +13,13 @@ const initialState: State = {
   isInitialized: false,
   currentStep: 0,
   teamId: null,
-  tokenId: null,
-//  userName: '',
-  minimumPlantRequired: new BigNumber(totalCost).multipliedBy(new BigNumber(10).pow(18)),
-  allowance: new BigNumber(allowance).multipliedBy(new BigNumber(10).pow(18)),
+  selectedNft: {
+    nftAddress: null,
+    tokenId: null,
+  },
+  userName: '',
+  minimumPlantRequired: new BigNumber(totalCost).multipliedBy(DEFAULT_TOKEN_DECIMAL),
+  allowance: new BigNumber(allowance).multipliedBy(DEFAULT_TOKEN_DECIMAL),
 }
 
 const reducer = (state: State, action: Actions): State => {
@@ -36,16 +40,19 @@ const reducer = (state: State, action: Actions): State => {
         ...state,
         teamId: action.teamId,
       }
-    case 'set_tokenid':
+    case 'set_selected_nft':
       return {
         ...state,
-        tokenId: action.tokenId,
+        selectedNft: {
+          tokenId: action.tokenId,
+          nftAddress: action.nftAddress,
+        },
       }
- //   case 'set_username':
- //     return {
- //       ...state,
- //       userName: action.userName,
- //     }
+    case 'set_username':
+      return {
+        ...state,
+        userName: action.userName,
+      }
     default:
       return state
   }
@@ -62,8 +69,8 @@ const ProfileCreationProvider: React.FC = ({ children }) => {
     let isSubscribed = true
 
     const fetchData = async () => {
-      const gardeningSchoolContract = getGardeningSchoolContract()
-      const canMint = await gardeningSchoolContract.methods.canMint(account).call()
+      const gardeningSchoolContract = getGardeningSchoolNftContract()
+      const canMint = await gardeningSchoolContract.canMint(account)
       dispatch({ type: 'initialize', step: canMint ? 0 : 1 })
 
       // When changing wallets quickly unmounting before the hasClaim finished causes a React error
@@ -85,7 +92,9 @@ const ProfileCreationProvider: React.FC = ({ children }) => {
     () => ({
       nextStep: () => dispatch({ type: 'next_step' }),
       setTeamId: (teamId: number) => dispatch({ type: 'set_team', teamId }),
-      setTokenId: (tokenId: number) => dispatch({ type: 'set_tokenid', tokenId }),
+      setSelectedNft: (tokenId: number, nftAddress: string) =>
+        dispatch({ type: 'set_selected_nft', tokenId, nftAddress }),
+      setUserName: (userName: string) => dispatch({ type: 'set_username', userName }),
     }),
     [dispatch],
   )
@@ -94,5 +103,3 @@ const ProfileCreationProvider: React.FC = ({ children }) => {
 }
 
 export default ProfileCreationProvider
-
-// setUserName: (userName: string) => dispatch({ type: 'set_username', userName }),

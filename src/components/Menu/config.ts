@@ -1,126 +1,112 @@
-import { MenuEntry } from '@plantswap-libs/uikit'
+import { MenuEntry } from '@plantswap/uikit'
+import { ContextApi } from 'contexts/Localization/types'
 
-const config: MenuEntry[] = [
+const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
   {
-    label: 'Home',
+    label: t('Home'),
     icon: 'HomeIcon',
     href: '/',
   },
   {
-    label: 'Trade (PancakeSwap)',
+    label: t('Trade'),
     icon: 'TradeIcon',
     items: [
       {
-        label: 'Exchange',
-        href: 'https://exchange.pancakeswap.finance/#/swap?inputCurrency=BNB&outputCurrency=0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
+        label: t('Exchange'),
+        href: '/swap',
       },
       {
-        label: 'Liquidity',
-        href: 'https://exchange.pancakeswap.finance/#/add/BNB/0x58BA5Bd8872ec18BD360a9592149daed2fC57c69',
+        label: t('Liquidity'),
+        href: '/pool',
       },
     ],
   },
   {
-    label: 'Farms',
+    label: t('Foundation'),
+    icon: 'ContributionIcon',
+    href: '/foundation',
+  },
+  {
+    label: t('Farms'),
     icon: 'FarmIcon',
     href: '/farms',
   },
   {
-    label: 'Gardens',
+    label: t('Gardens'),
     icon: 'PoolIcon',
     href: '/gardens',
   },
   {
-    label: 'Vertical Gardens',
+    label: t('Vertical Gardens'),
     icon: 'TreeIcon',
     href: '/verticalGardens',
     status: {
-      text: 'LIVE',
+      text: 'NEW',
       color: 'failure',
     },
   },
   {
-    label: 'Teams & Profile',
+    label: t('Teams & Profile'),
     icon: 'GroupsIcon',
-    calloutClass: 'rainbow',
     items: [
       {
-        label: 'Leaderboard',
+        label: t('Leaderboard'),
         href: '/teams',
-        status: {
-          text: 'NEW',
-          color: 'success',
-        },
       },
       {
-        label: 'Task Center',
+        label: t('Task Center'),
         href: '/profile/tasks',
-        status: {
-          text: 'SOON',
-          color: 'textSubtle',
-        },
       },
       {
-        label: 'Your Profile',
+        label: t('Your Profile'),
         href: '/profile',
-        status: {
-          text: 'NEW',
-          color: 'success',
-        },
       },
     ],
   },
   {
-    label: 'Collectibles',
+    label: t('Collectibles'),
     icon: 'NftIcon',
     href: '/collectibles',
-    status: {
-      text: 'SOON',
-      color: 'textSubtle',
-    },
   },
   {
-    label: 'Governance',
+    label: t('Governance'),
     icon: 'VoteIcon',
     href: '/vote',
   },
   {
-    label: 'Barn',
-    icon: 'BarnIcon',
-    href: '/barns',
-  },
-  {
-    label: 'Development Fund',
-    icon: 'TreePlantingIcon',
-    href: '/developmentFund',
-  },
-  {
-    label: "Project",
-    icon: "ProjectIcon",
-    href: "/project",
-  },
-  {
-    label: 'More',
+    label: t('More'),
     icon: 'MoreIcon',
     items: [
       {
-        label: 'Github',
+        label: t('Contact'),
+        href: 'https://plantswap.finance/contact-us',
+      },
+      {
+        label: t('Github'),
         href: 'https://github.com/plantswapfinance',
       },
       {
-        label: "Blog",
+        label: t('Blog'),
         href: "https://plantswapfinance.medium.com",
       },
       {
-        label: 'Roadmap',
+        label: t('Roadmap'),
         href: '/roadmap',
       },
       {
-        label: "dex.guru",
+        label: t('Development Fund'),
+        href: '/developmentFund',
+      },
+      {
+        label: t('Project'),
+        href: 'project',
+      },
+      {
+        label: t('dex.guru'),
         href: "https://dex.guru/token/0x58BA5Bd8872ec18BD360a9592149daed2fC57c69-bsc",
       },
       {
-        label: "PlantSwap Token",
+        label: t('PlantSwap Token'),
         href: "https://bscscan.com/token/0x58BA5Bd8872ec18BD360a9592149daed2fC57c69",
       },
     ],

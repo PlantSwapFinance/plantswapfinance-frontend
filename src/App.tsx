@@ -1,88 +1,76 @@
-import React, { useEffect, lazy } from 'react'
-import { Helmet } from 'react-helmet'
+import React, { lazy } from 'react'
 import { Router, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from '@plantswap-libs/uikit'
+import { ResetCSS } from '@plantswap/uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
-import { useFetchPriceList, useFetchProfile, useFetchPublicData, useFetchPancakeSwapPublicData } from 'state/hooks'
-import useGetDocumentTitlePrice from './hooks/useGetDocumentTitlePrice'
+import { usePollBlockNumber } from 'state/block/hooks'
+import { usePollCoreFarmData } from 'state/farms/hooks'
+import { useFetchProfile } from 'state/profile/hooks'
+import { DatePickerPortal } from 'components/DatePicker'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import SuspenseWithChunkError from './components/SuspenseWithChunkError'
-import ToastListener from './components/ToastListener'
-import PageLoader from './components/PageLoader'
+import { ToastListener } from './contexts/ToastsContext'
+import PageLoader from './components/Loader/PageLoader'
 import EasterEgg from './components/EasterEgg'
-import GardenV1 from './views/GardenV1'
-import Barns from './views/Barns'
-import Tree from './views/Tree'
-import DevelopmentFund from './views/DevelopmentFund'
 import history from './routerHistory'
+// Views included in the main bundle
+import VerticalGardens from './views/VerticalGardens'
+import Swap from './views/Swap'
+import {
+  RedirectDuplicateTokenIds,
+  RedirectOldAddLiquidityPathStructure,
+  RedirectToAddLiquidity,
+} from './views/AddLiquidity/redirects'
+import RedirectOldRemoveLiquidityPathStructure from './views/RemoveLiquidity/redirects'
+import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
 const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
 const Gardens = lazy(() => import('./views/Gardens'))
-const VerticalGarden = lazy(() => import('./views/VerticalGarden'))
-const BarnsBeta = lazy(() => import('./views/BarnsBeta'))
-const BarnPlantswap = lazy(() => import('./views/BarnPlantswap'))
-const BarnPancakeswap = lazy(() => import('./views/BarnPancakeswap'))
-const BarnGoose = lazy(() => import('./views/BarnGoose'))
-const BarnCafeswap = lazy(() => import('./views/BarnCafeswap'))
+const Foundation = lazy(() => import('./views/Foundation'))
+const FoundationProposal = lazy(() => import('./views/Foundation/Proposal'))
+const Donate = lazy(() => import('./views/Foundation/Donate'))
+const FoundationCreateProposal = lazy(() => import('./views/Foundation/CreateProposal'))
+const Pools = lazy(() => import('./views/Pools'))
+const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Collectibles = lazy(() => import('./views/Collectibles'))
 const Teams = lazy(() => import('./views/Teams'))
 const Team = lazy(() => import('./views/Teams/Team'))
-const Roadmap = lazy(() => import('./views/Roadmap'))
 const Profile = lazy(() => import('./views/Profile'))
-const Project = lazy(() => import('./views/Project'))
-const Vote = lazy(() => import('./views/Vote'))
-// Beta
-const Beta2 = lazy(() => import('./views/Beta2'))
-const Beta5 = lazy(() => import('./views/Beta5'))
+const Voting = lazy(() => import('./views/Voting'))
+const Proposal = lazy(() => import('./views/Voting/Proposal'))
+const CreateProposal = lazy(() => import('./views/Voting/CreateProposal'))
 
-// This config is required for number formating
+const DevelopmentFund = lazy(() => import('./views/DevelopmentFund'))
+const Project = lazy(() => import('./views/Project'))
+const Roadmap = lazy(() => import('./views/Roadmap'))
+const Tree = lazy(() => import('./views/Tree'))
+const Vote = lazy(() => import('./views/Vote'))
+const PlantArt = lazy(() => import('./views/PlantArt'))
+
+const AddLiquidity = lazy(() => import('./views/AddLiquidity'))
+const Liquidity = lazy(() => import('./views/Pool'))
+const PoolFinder = lazy(() => import('./views/PoolFinder'))
+const RemoveLiquidity = lazy(() => import('./views/RemoveLiquidity'))
+
+// This config is required for number formatting
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
   DECIMAL_PLACES: 80,
 })
 
 const App: React.FC = () => {
-  // Monkey patch warn() because of web3 flood
-  // To be removed when web3 1.3.5 is released
-  useEffect(() => {
-    console.warn = () => null
-  }, [])
-
+  usePollBlockNumber()
   useEagerConnect()
-  useFetchPublicData()
-  useFetchPancakeSwapPublicData()
   useFetchProfile()
-  useFetchPriceList()
-  useGetDocumentTitlePrice()
+  usePollCoreFarmData()
 
   return (
     <Router history={history}>
-      <Helmet>
-        <title>PlantSwap.finance</title>
-        <meta name="description" content="Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain." />
-        <meta name="keywords" content="plantswap,defi,yield farming,bsc,binance smart chain" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta name="twitter:image" content="https://plantswap.finance/logo192.png" />
-        <meta name="twitter:domain" content="PlantSwap.finance" />
-        <meta name="twitter:description" content="Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain." />
-        <meta name="twitter:site" content="@plantswapdefi" />
-        <meta name="twitter:creator" content="@plantswapdefi" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="PlantSwap.Finance - Farm $PLANT with us and save the planet🌱" />
-        <meta property="og:title" content="PlantSwap.Finance - Farm $PLANT with us and save the planet🌱" />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://plantswap.finance/" />
-        <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
-        <meta property="og:description" content="Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain." />
-        <meta property="og:site_name" content="PlantSwap.finance" />
-      </Helmet>
       <ResetCSS />
       <GlobalStyle />
       <Menu>
@@ -91,68 +79,35 @@ const App: React.FC = () => {
             <Route path="/" exact>
               <Home />
             </Route>
-            <Route path="/farm">
-              <Farms />
-            </Route>
             <Route path="/farms">
               <Farms />
             </Route>
-            <Route path="/garden">
-              <Gardens tokenMode/>
-            </Route>
             <Route path="/gardens">
-              <Gardens tokenMode/>
-            </Route>
-            <Route path="/verticalGarden">
-              <VerticalGarden />
+              <Gardens tokenMode />
             </Route>
             <Route path="/verticalGardens">
-              <VerticalGarden />
+              <VerticalGardens />
             </Route>
-            <Route path="/gardensv1">
-              <GardenV1 />
+            <Route exact path="/foundation">
+              <Foundation />
             </Route>
-            <Route path="/barn">
-              <Barns />
+            <Route exact path="/foundation/proposal/create">
+              <FoundationCreateProposal />
             </Route>
-            <Route path="/barns">
-              <Barns />
+            <Route exact path="/foundation/donate">
+              <Donate />
             </Route>
-            <Route path="/barnsBeta">
-              <BarnsBeta />
+            <Route path="/foundation/nonprofit/:id">
+              <FoundationProposal />
             </Route>
-            <Route path="/barnPlantswap">
-              <BarnPlantswap />
+            <Route path="/foundation/proposal/:id">
+              <FoundationProposal />
             </Route>
-            <Route path="/barnPlantswapToken">
-              <BarnPlantswap tokenMode/>
+            <Route path="/pools">
+              <Pools />
             </Route>
-            <Route path="/barnPancakeswap">
-              <BarnPancakeswap />
-            </Route>
-            <Route path="/barnPancakeswapToken">
-              <BarnPancakeswap tokenMode/>
-            </Route>
-            <Route path="/barnGoose">
-              <BarnGoose />
-            </Route>
-            <Route path="/barnGooseToken">
-              <BarnGoose tokenMode/>
-            </Route>
-            <Route path="/barnCafeswap">
-              <BarnCafeswap />
-            </Route>
-            <Route path="/barnCafeswapToken">
-              <BarnCafeswap tokenMode/>
-            </Route>
-            <Route path="/tree">
-              <Tree />
-            </Route>
-            <Route path="/developmentFund">
-              <DevelopmentFund />
-            </Route>
-            <Route path="/collectible">
-              <Collectibles />
+            <Route path="/ifo">
+              <Ifos />
             </Route>
             <Route path="/collectibles">
               <Collectibles />
@@ -160,39 +115,71 @@ const App: React.FC = () => {
             <Route exact path="/teams">
               <Teams />
             </Route>
-            <Route exact path="/roadmap">
-              <Roadmap />
-            </Route>
             <Route path="/teams/:id">
               <Team />
             </Route>
             <Route path="/profile">
               <Profile />
             </Route>
-            <Route path="/Project">
+            <Route path="/developmentFund">
+              <DevelopmentFund />
+            </Route>
+            <Route path="/project">
               <Project />
             </Route>
-            <Route exact path="/vote">
+            <Route path="/roadmap">
+              <Roadmap />
+            </Route>
+            <Route path="/tree">
+              <Tree />
+            </Route>
+            <Route path="/vote">
               <Vote />
             </Route>
-            
-            <Route exact path="/beta2">
-              <Beta2 />
-            </Route>
-            <Route exact path="/beta5">
-              <Beta5 />
+            <Route path="/plantArt">
+              <PlantArt />
             </Route>
 
+            <Route exact path="/voting">
+              <Voting />
+            </Route>
+            <Route exact path="/voting/proposal/create">
+              <CreateProposal />
+            </Route>
+            <Route path="/voting/proposal/:id">
+              <Proposal />
+            </Route>
+
+            {/* Using this format because these components use routes injected props. We need to rework them with hooks */}
+            <Route exact strict path="/swap" component={Swap} />
+            <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
+            <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
+            <Route exact strict path="/find" component={PoolFinder} />
+            <Route exact strict path="/liquidity" component={Liquidity} />
+            <Route exact strict path="/create" component={RedirectToAddLiquidity} />
+            <Route exact path="/add" component={AddLiquidity} />
+            <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+            <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+            <Route exact path="/create" component={AddLiquidity} />
+            <Route exact path="/create/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+            <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+            <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
+            <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+
             {/* Redirect */}
+            <Route path="/pool">
+              <Redirect to="/liquidity" />
+            </Route>
             <Route path="/staking">
               <Redirect to="/pools" />
             </Route>
-            <Route path="/pools">
-              <Redirect to="/gardens" />
+            <Route path="/syrup">
+              <Redirect to="/pools" />
             </Route>
             <Route path="/nft">
               <Redirect to="/collectibles" />
             </Route>
+
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>
@@ -200,6 +187,7 @@ const App: React.FC = () => {
       </Menu>
       <EasterEgg iterations={2} />
       <ToastListener />
+      <DatePickerPortal />
     </Router>
   )
 }

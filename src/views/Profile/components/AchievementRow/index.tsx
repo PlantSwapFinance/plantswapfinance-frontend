@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, Flex } from '@plantswap-libs/uikit'
+import { AutoRenewIcon, Button, Flex } from '@plantswap/uikit'
 import { Achievement } from 'state/types'
-import { useToast } from 'state/hooks'
-import useI18n from 'hooks/useI18n'
+import useToast from 'hooks/useToast'
+import { useTranslation } from 'contexts/Localization'
 import { usePointCenterIfoContract } from 'hooks/useContract'
 import ActionColumn from '../ActionColumn'
 import PointsLabel from './PointsLabel'
@@ -18,7 +17,7 @@ interface AchievementRowProps {
 }
 
 const StyledAchievementRow = styled(Flex)`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   padding-bottom: 16px;
   padding-top: 16px;
 `
@@ -40,27 +39,22 @@ const Body = styled(Flex)`
 
 const AchievementRow: React.FC<AchievementRowProps> = ({ achievement, onCollectSuccess }) => {
   const [isCollecting, setIsCollecting] = useState(false)
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
   const pointCenterContract = usePointCenterIfoContract()
-  const { account } = useWeb3React()
   const { toastError, toastSuccess } = useToast()
 
-  const handleCollectPoints = () => {
-    pointCenterContract.methods
-      .getPoints(achievement.address)
-      .send({ from: account })
-      .on('sending', () => {
-        setIsCollecting(true)
-      })
-      .on('receipt', () => {
-        setIsCollecting(false)
-        onCollectSuccess(achievement)
-        toastSuccess('Points Collected!')
-      })
-      .on('error', (error) => {
-        toastError('Error', error?.message)
-        setIsCollecting(false)
-      })
+  const handleCollectPoints = async () => {
+    const tx = await pointCenterContract.getPoints(achievement.address)
+    setIsCollecting(true)
+    const receipt = await tx.wait()
+    if (receipt.status) {
+      setIsCollecting(false)
+      onCollectSuccess(achievement)
+      toastSuccess(t('Points Collected!'))
+    } else {
+      toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
+      setIsCollecting(false)
+    }
   }
 
   return (
@@ -80,7 +74,7 @@ const AchievementRow: React.FC<AchievementRowProps> = ({ achievement, onCollectS
             disabled={isCollecting}
             variant="secondary"
           >
-            {TranslateString(999, 'Collect')}
+            {t('Collect')}
           </Button>
         </ActionColumn>
       </Body>

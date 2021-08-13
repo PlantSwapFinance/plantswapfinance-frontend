@@ -1,13 +1,13 @@
+import BigNumber from 'bignumber.js'
 import verticalGardensConfig from 'config/constants/verticalGardens'
 import verticalGardenABI from 'config/abi/verticalGardens.json'
 import plantABI from 'config/abi/plant.json'
 import wbnbABI from 'config/abi/weth.json'
 import multicall from 'utils/multicall'
 import { getAddress, getWbnbAddress } from 'utils/addressHelpers'
-import BigNumber from 'bignumber.js'
 
 export const fetchVerticalGardenTotalStaked = async () => { // NEW
-  const verticalGardensTotalStaked = verticalGardensConfig.filter((v) => v.vgId !== 0)
+  const verticalGardensTotalStaked = verticalGardensConfig.filter((v) => v.vgId)
   const callsTotalStaked = verticalGardensTotalStaked.map((verticalGardenConfig) => {
     return {
       address: getAddress(verticalGardenConfig.verticalGardenContractAddress),
@@ -218,6 +218,7 @@ export const fetchVerticalGardenInfo = async () => { // NEW
     }
   })
 }
+
 
 export const fetchVerticalGardensTotalStatking = async () => { // OLD
   const nonBnbVerticalGardens = verticalGardensConfig.filter((v) => v.stakingToken.symbol !== 'BNB')

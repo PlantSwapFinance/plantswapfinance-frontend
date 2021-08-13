@@ -1,104 +1,87 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { useWeb3React } from '@web3-react/core'
-import { Button, useModal } from '@plantswap-libs/uikit'
+import React, { useState } from 'react'
+import { Button, Heading, Skeleton, Text } from '@plantswap/uikit'
 import BigNumber from 'bignumber.js'
-import styled from 'styled-components'
-import { FarmWithStakedValue } from 'views/Gardens/components/GardenCard/GardenCard'
-import { getBalanceNumber } from 'utils/formatBalance'
-import { useHarvest } from 'hooks/useHarvest'
-import useStake from 'hooks/useStake'
-import useI18n from 'hooks/useI18n'
-import { usePricePlantBusd } from 'state/hooks'
-import { useCountUp } from 'react-countup'
-import ShareModal from 'views/Gardens/components/ShareModal'
+import { useWeb3React } from '@web3-react/core'
+import { GardenWithStakedValue } from 'views/Gardens/components/GardenCard/GardenCard'
+import Balance from 'components/Balance'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getBalanceAmount } from 'utils/formatBalance'
+import { useAppDispatch } from 'state'
+import { fetchFarmUserDataAsync } from 'state/farms'
+import { usePricePlantBusd } from 'state/farms/hooks'
+import useToast from 'hooks/useToast'
+import { useTranslation } from 'contexts/Localization'
+import useHarvestGarden from '../../../hooks/useHarvestGarden'
 
-import { ActionContainer, ActionTitles, Title, Subtle, ActionContent, Earned, Staked } from './styles'
+import { ActionContainer, ActionTitles, ActionContent } from './styles'
 
-const CompoundAndHarvest = styled.div`
-  padding: 0px
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-`
+interface HarvestActionProps extends GardenWithStakedValue {
+  userDataReady: boolean
+}
 
-const HarvestAction: React.FunctionComponent<FarmWithStakedValue> = ({ pid, userData, token, lpSymbol }) => {
-  const { account } = useWeb3React()
-  const earningsBigNumber = userData && account ? new BigNumber(userData.earnings) : null
+const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userData, userDataReady }) => {
+  const { toastSuccess, toastError } = useToast()
+  const earningsBigNumber = new BigNumber(userData.earnings)
   const plantPrice = usePricePlantBusd()
-  let earnings = null
+  let earnings = BIG_ZERO
   let earningsBusd = 0
-  let displayBalance = '?'
+  let displayBalance = userDataReady ? earnings.toLocaleString() : <Skeleton width={60} />
 
-  if (earningsBigNumber) {
-    earnings = getBalanceNumber(earningsBigNumber)
-    earningsBusd = new BigNumber(earnings).multipliedBy(plantPrice).toNumber()
-    displayBalance = earnings.toLocaleString()
+  // If user didn't connect wallet default balance will be 0
+  if (!earningsBigNumber.isZero()) {
+    earnings = getBalanceAmount(earningsBigNumber)
+    earningsBusd = earnings.multipliedBy(plantPrice).toNumber()
+    displayBalance = earnings.toFixed(3, BigNumber.ROUND_DOWN)
   }
 
   const [pendingTx, setPendingTx] = useState(false)
-  const { onReward } = useHarvest(pid)
-  const pidPlant = 0
-  const { onStake } = useStake(pidPlant)
-  const [onHarvestDone] = useModal(<ShareModal harvested={displayBalance} tokenHarvested={token.symbol} tokenName={lpSymbol} usdHarvested={earningsBusd} />)
-  const [onCompoundDone] = useModal(<ShareModal harvested={displayBalance} type="compound" tokenHarvested={token.symbol} tokenName={lpSymbol} usdHarvested={earningsBusd} />)
-  const TranslateString = useI18n()
-
-  const { countUp, update } = useCountUp({
-    start: 0,
-    end: earningsBusd,
-    duration: 1,
-    separator: ',',
-    decimals: 3,
-  })
-  const updateValue = useRef(update)
-
-  useEffect(() => {
-    updateValue.current(earningsBusd)
-  }, [earningsBusd, updateValue])
+  const { onReward } = useHarvestGarden(pid)
+  const { t } = useTranslation()
+  const dispatch = useAppDispatch()
+  const { account } = useWeb3React()
 
   return (
     <ActionContainer>
       <ActionTitles>
-        <Title>PLANT </Title>
-        <Subtle>{TranslateString(999, 'EARNED')}</Subtle>
+        <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
+          PLANT
+        </Text>
+        <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
+          {t('Earned')}
+        </Text>
       </ActionTitles>
       <ActionContent>
         <div>
-          <Earned>{displayBalance}</Earned>
-          <Staked>~{countUp}USD</Staked>
+          <Heading>{displayBalance}</Heading>
+          {earningsBusd > 0 && (
+            <Balance fontSize="12px" color="textSubtle" decimals={2} value={earningsBusd} unit=" USD" prefix="~" />
+          )}
         </div>
-        <CompoundAndHarvest>
-          {pid === 0 ? (
-          <Button
-              disabled={earnings === 0 || pendingTx}
-              size="sm"
-              variant="secondary"
-              marginBottom="6px"
-              onClick={async () => {
-                setPendingTx(true)
-                await onStake(earnings.toString())
-                setPendingTx(false)
-                onCompoundDone()
-              }}
-              >
-                {TranslateString(999, 'Compound')}
-              </Button>
-            ) : null}
-
-          <Button
-            disabled={!earnings || pendingTx || !account}
-            onClick={async () => {
-              setPendingTx(true)
+        <Button
+          disabled={earnings.eq(0) || pendingTx || !userDataReady}
+          onClick={async () => {
+            setPendingTx(true)
+            try {
               await onReward()
+              toastSuccess(
+                `${t('Harvested')}!`,
+                t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'PLANT' }),
+              )
+            } catch (e) {
+              toastError(
+                t('Error'),
+                t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+              )
+              console.error(e)
+            } finally {
               setPendingTx(false)
-              onHarvestDone()
-            }}
-            ml="4px"
-          >
-            {TranslateString(562, 'Harvest')}
-          </Button>
-        </CompoundAndHarvest>
+            }
+            dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+          }}
+          ml="4px"
+        >
+          {t('Harvest')}
+        </Button>
       </ActionContent>
     </ActionContainer>
   )

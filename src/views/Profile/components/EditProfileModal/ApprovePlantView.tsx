@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { useWeb3React } from '@web3-react/core'
-import { AutoRenewIcon, Button, Flex, InjectedModalProps, Text } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
+import { AutoRenewIcon, Button, Flex, InjectedModalProps, Text } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
 import { usePlant } from 'hooks/useContract'
-import { useProfile, useToast } from 'state/hooks'
+import useToast from 'hooks/useToast'
+import { useProfile } from 'state/profile/hooks'
 import { getPlantProfileAddress } from 'utils/addressHelpers'
 import { getFullDisplayBalance } from 'utils/formatBalance'
-import useGetProfileCosts from 'hooks/useGetProfileCosts'
+import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
 import { UseEditProfileResponse } from './reducer'
 
 interface ApprovePlantPageProps extends InjectedModalProps {
@@ -16,27 +16,22 @@ interface ApprovePlantPageProps extends InjectedModalProps {
 const ApprovePlantPage: React.FC<ApprovePlantPageProps> = ({ goToChange, onDismiss }) => {
   const [isApproving, setIsApproving] = useState(false)
   const { profile } = useProfile()
-  const TranslateString = useI18n()
-  const { account } = useWeb3React()
+  const { t } = useTranslation()
   const { numberPlantToUpdate, numberPlantToReactivate } = useGetProfileCosts()
   const plantContract = usePlant()
   const { toastError } = useToast()
   const cost = profile.isActive ? numberPlantToUpdate : numberPlantToReactivate
 
-  const handleApprove = () => {
-    plantContract.methods
-      .approve(getPlantProfileAddress(), cost.times(2).toJSON())
-      .send({ from: account })
-      .on('sending', () => {
-        setIsApproving(true)
-      })
-      .on('receipt', () => {
-        goToChange()
-      })
-      .on('error', (error) => {
-        toastError('Error', error?.message)
-        setIsApproving(false)
-      })
+  const handleApprove = async () => {
+    const tx = await plantContract.approve(getPlantProfileAddress(), cost.times(2).toJSON())
+    setIsApproving(true)
+    const receipt = await tx.wait()
+    if (receipt.status) {
+      goToChange()
+    } else {
+      toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
+      setIsApproving(false)
+    }
   }
 
   if (!profile) {
@@ -46,10 +41,8 @@ const ApprovePlantPage: React.FC<ApprovePlantPageProps> = ({ goToChange, onDismi
   return (
     <Flex flexDirection="column">
       <Flex alignItems="center" justifyContent="space-between" mb="24px">
-        <Text>
-          {profile.isActive ? TranslateString(999, 'Cost to update:') : TranslateString(999, 'Cost to reactivate:')}
-        </Text>
-        <Text>{TranslateString(999, `${getFullDisplayBalance(cost)} PLANT`)}</Text>
+        <Text>{profile.isActive ? t('Cost to update:') : t('Cost to reactivate:')}</Text>
+        <Text>{getFullDisplayBalance(cost)} PLANT</Text>
       </Flex>
       <Button
         disabled={isApproving}
@@ -59,10 +52,10 @@ const ApprovePlantPage: React.FC<ApprovePlantPageProps> = ({ goToChange, onDismi
         mb="8px"
         onClick={handleApprove}
       >
-        {TranslateString(999, 'Approve')}
+        {t('Enable')}
       </Button>
       <Button variant="text" width="100%" onClick={onDismiss} disabled={isApproving}>
-        {TranslateString(999, 'Close Window')}
+        {t('Close Window')}
       </Button>
     </Flex>
   )

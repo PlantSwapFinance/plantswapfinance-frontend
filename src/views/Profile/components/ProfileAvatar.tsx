@@ -1,5 +1,5 @@
 import React from 'react'
-import { NoProfileAvatarIcon } from '@plantswap-libs/uikit'
+import { NoProfileAvatarIcon } from '@plantswap/uikit'
 import { Profile } from 'state/types'
 import styled from 'styled-components'
 
@@ -37,7 +37,7 @@ const AvatarWrapper = styled.div<{ bg: string }>`
     border-radius: 50%;
   }
 `
-// TODO: replace with no provile avatar icon
+// TODO: replace with no profile avatar icon
 const AvatarInactive = styled(NoProfileAvatarIcon)`
   width: 100%;
   height: 100%;

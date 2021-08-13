@@ -13,9 +13,13 @@ import {
   PrizeIcon,
   OpenNewIcon,
   BlockIcon,
-} from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
-import { useProfile } from 'state/hooks'
+  VisibilityOn,
+  VisibilityOff,
+} from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
+import { useProfile } from 'state/profile/hooks'
+import usePersistState from 'hooks/usePersistState'
+import { getBscScanLink } from 'utils'
 import Menu from './components/Menu'
 import CardHeader from './components/CardHeader'
 import Collectibles from './components/Collectibles'
@@ -80,11 +84,22 @@ const Section = styled.div`
 const PublicProfile = () => {
   const { account } = useWeb3React()
   const { profile } = useProfile()
-  const TranslateString = useI18n()
+  const [usernameVisibilityToggled, setUsernameVisibility] = usePersistState(false, {
+    localStorageKey: 'username_visibility_toggled',
+  })
+  const { t } = useTranslation()
 
   if (!account) {
     return <WalletNotConnected />
   }
+
+  const toggleUsernameVisibility = () => {
+    setUsernameVisibility(!usernameVisibilityToggled)
+  }
+
+  const { username, team, isActive, points } = profile
+
+  const Icon = usernameVisibilityToggled ? VisibilityOff : VisibilityOn
 
   return (
     <>
@@ -95,33 +110,36 @@ const PublicProfile = () => {
             <Flex alignItems={['start', null, 'center']} flexDirection={['column', null, 'row']}>
               <EditProfileAvatar profile={profile} />
               <Content>
-                <Username>{`@${profile.username}`}</Username>
                 <Flex alignItems="center">
-                  <AddressLink href={`https://bscscan.com/address/${account}`} color="text" external>
-                    {account}
-                  </AddressLink>
-                  <OpenNewIcon ml="4px" />
+                  <Username>@{usernameVisibilityToggled ? username : username.replace(/./g, '*')}</Username>
+                  <Icon ml="4px" onClick={toggleUsernameVisibility} cursor="pointer" />
                 </Flex>
-                <ResponsiveText bold>{profile.team.name}</ResponsiveText>
+                <Flex alignItems="center">
+                  <AddressLink href={getBscScanLink(account, 'address')} color="text" external>
+                    {account}
+                    <OpenNewIcon ml="4px" />
+                  </AddressLink>
+                </Flex>
+                <ResponsiveText bold>{team.name}</ResponsiveText>
               </Content>
             </Flex>
             <Status>
-              {profile.isActive ? (
+              {isActive ? (
                 <Tag startIcon={<CheckmarkCircleIcon width="18px" />} outline>
-                  {TranslateString(698, 'Active')}
+                  {t('Active')}
                 </Tag>
               ) : (
                 <Tag variant="failure" startIcon={<BlockIcon width="18px" />} outline>
-                  {TranslateString(999, 'Paused')}
+                  {t('Paused')}
                 </Tag>
               )}
             </Status>
           </CardHeader>
           <CardBody>
-            <StatBox icon={PrizeIcon} title={profile.points} subtitle={TranslateString(999, 'Points')} mb="24px" />
+            <StatBox icon={PrizeIcon} title={points} subtitle={t('Points')} mb="24px" />
             <Section>
-              <Heading as="h4" size="md" mb="16px">
-                {TranslateString(1092, 'Achievements')}
+              <Heading as="h4" scale="md" mb="16px">
+                {t('Achievements')}
               </Heading>
               <AchievementsList />
             </Section>

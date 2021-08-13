@@ -1,10 +1,12 @@
+import BigNumber from 'bignumber.js'
 import poolsConfig from 'config/constants/pools'
 import sousChefABI from 'config/abi/sousChef.json'
 import plantABI from 'config/abi/plant.json'
 import wbnbABI from 'config/abi/weth.json'
 import multicall from 'utils/multicall'
 import { getAddress, getWbnbAddress } from 'utils/addressHelpers'
-import BigNumber from 'bignumber.js'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getSouschefV2Contract } from 'utils/contractHelpers'
 
 export const fetchPoolsBlockLimits = async () => {
   const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
@@ -35,7 +37,7 @@ export const fetchPoolsBlockLimits = async () => {
   })
 }
 
-export const fetchPoolsTotalStatking = async () => {
+export const fetchPoolsTotalStaking = async () => {
   const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'BNB')
   const bnbPool = poolsConfig.filter((p) => p.stakingToken.symbol === 'BNB')
 
@@ -68,4 +70,34 @@ export const fetchPoolsTotalStatking = async () => {
       totalStaked: new BigNumber(bnbPoolsTotalStaked[index]).toJSON(),
     })),
   ]
+}
+
+export const fetchPoolStakingLimit = async (sousId: number): Promise<BigNumber> => {
+  try {
+    const sousContract = getSouschefV2Contract(sousId)
+    const stakingLimit = await sousContract.poolLimitPerUser()
+    return new BigNumber(stakingLimit.toString())
+  } catch (error) {
+    return BIG_ZERO
+  }
+}
+
+export const fetchPoolsStakingLimits = async (
+  poolsWithStakingLimit: number[],
+): Promise<{ [key: string]: BigNumber }> => {
+  const validPools = poolsConfig
+    .filter((p) => p.stakingToken.symbol !== 'BNB' && !p.isFinished)
+    .filter((p) => !poolsWithStakingLimit.includes(p.sousId))
+
+  // Get the staking limit for each valid pool
+  // Note: We cannot batch the calls via multicall because V1 pools do not have "poolLimitPerUser" and will throw an error
+  const stakingLimitPromises = validPools.map((validPool) => fetchPoolStakingLimit(validPool.sousId))
+  const stakingLimits = await Promise.all(stakingLimitPromises)
+
+  return stakingLimits.reduce((accum, stakingLimit, index) => {
+    return {
+      ...accum,
+      [validPools[index].sousId]: stakingLimit,
+    }
+  }, {})
 }

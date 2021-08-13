@@ -1,12 +1,12 @@
 import React, { ImgHTMLAttributes } from 'react'
 import styled from 'styled-components'
-import { PlantPlaceholderIcon } from '@plantswap-libs/uikit'
+import { SproutPlaceholderIcon } from '@plantswap/uikit'
 
 interface AchievementAvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
   badge?: string
 }
 
-const NoBadgePlaceholder = styled(PlantPlaceholderIcon)`
+const NoBadgePlaceholder = styled(SproutPlaceholderIcon)`
   height: 48px;
   width: 48px;
 
@@ -17,7 +17,6 @@ const NoBadgePlaceholder = styled(PlantPlaceholderIcon)`
 `
 
 const StyledAchievementAvatar = styled.img`
-  border-radius: 50%;
   height: 48px;
   width: 48px;
 

@@ -1,11 +1,13 @@
 {
-  "short_name": "PlantSwap",
-  "name": "PlantSwap.finance",
-  "description": "Swap and farm $PLANT with other's and with our smart contracts on Binance Smart Chain and help the planet.",
-  "homepage_url": "https://plantswap.finance",
-  "author": "PlantSwapFinance",
-  "categories": ["ecology", "finance", "cryptocurrency", "defi"],
-  "lang": "en-US",
+  "short_name": "PancakeSwap",
+  "name": "PancakeSwap",
+  "description": "Farm CAKE with Pancake LP Tokens",
+  "homepage_url": "https://pancakeswap.finance",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1FC7D4",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "favicon.ico",
@@ -13,42 +15,9 @@
       "sizes": "256x256"
     },
     {
-      "src": "favicon.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "plantswap.png",
-      "sizes": "196x196",
+      "src": "logo.png",
       "type": "image/png",
-      "purpose": "maskable"
+      "sizes": "512x512"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff",
-  "screenshots" : [
-    {
-      "src": "plantSwapFinance_screenshot01.jpg",
-      "sizes": "643x1280",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "plantSwapFinance_screenshot02.jpg",
-      "sizes": "641x1280",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "plantSwapFinance_screenshot02.jpg",
-      "sizes": "641x1280",
-      "type": "image/jpeg"
-    },
   ]
 }

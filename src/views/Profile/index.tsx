@@ -1,9 +1,11 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
-import Page from 'components/layout/Page'
-import PageLoader from 'components/PageLoader'
-import { useFetchAchievements, useProfile } from 'state/hooks'
+import { EndPage } from '@plantswap/uikit'
+import Page from 'components/Layout/Page'
+import PageLoader from 'components/Loader/PageLoader'
+import { useProfile } from 'state/profile/hooks'
+import { useFetchAchievements } from 'state/achievements/hooks'
 import ProfileCreation from './ProfileCreation'
 import Header from './components/Header'
 import TaskCenter from './TaskCenter'
@@ -36,6 +38,7 @@ const Profile = () => {
       <Route path="/profile/tasks">
         <TaskCenter />
       </Route>
+      <EndPage />
     </Page>
   )
 }

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { AutoRenewIcon, Button, Checkbox, Flex, InjectedModalProps, Text } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
-import useGetProfileCosts from 'hooks/useGetProfileCosts'
-import { useDispatch } from 'react-redux'
-import { useProfile, useToast } from 'state/hooks'
+import { AutoRenewIcon, Button, Checkbox, Flex, InjectedModalProps, Text } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
+import useGetProfileCosts from 'views/Profile/hooks/useGetProfileCosts'
+import { useAppDispatch } from 'state'
+import { useProfile } from 'state/profile/hooks'
 import { fetchProfile } from 'state/profile'
+import useToast from 'hooks/useToast'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useProfile as useProfileContract } from 'hooks/useContract'
 import { useWeb3React } from '@web3-react/core'
@@ -16,32 +17,27 @@ const PauseProfilePage: React.FC<PauseProfilePageProps> = ({ onDismiss }) => {
   const [isConfirming, setIsConfirming] = useState(false)
   const { profile } = useProfile()
   const { numberPlantToReactivate } = useGetProfileCosts()
-  const TranslateString = useI18n()
-  const plantswapGardenersProfileContract = useProfileContract()
+  const { t } = useTranslation()
+  const plantswapProfileContract = useProfileContract()
   const { account } = useWeb3React()
   const { toastSuccess, toastError } = useToast()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const handleChange = () => setIsAcknowledged(!isAcknowledged)
 
-  const handleDeactivateProfile = () => {
-    plantswapGardenersProfileContract.methods
-      .pauseProfile()
-      .send({ from: account })
-      .on('sending', () => {
-        setIsConfirming(true)
-      })
-      .on('receipt', async () => {
-        // Re-fetch profile
-        await dispatch(fetchProfile(account))
-        toastSuccess('Profile Paused!')
-
-        onDismiss()
-      })
-      .on('error', (error) => {
-        toastError('Error', error?.message)
-        setIsConfirming(false)
-      })
+  const handleDeactivateProfile = async () => {
+    const tx = await plantswapProfileContract.pauseProfile()
+    setIsConfirming(true)
+    const receipt = await tx.wait()
+    if (receipt.status) {
+      // Re-fetch profile
+      await dispatch(fetchProfile(account))
+      toastSuccess(t('Profile Paused!'))
+      onDismiss()
+    } else {
+      toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
+      setIsConfirming(false)
+    }
   }
 
   if (!profile) {
@@ -51,21 +47,20 @@ const PauseProfilePage: React.FC<PauseProfilePageProps> = ({ onDismiss }) => {
   return (
     <>
       <Text as="p" color="failure" mb="24px">
-        {TranslateString(999, 'This will suspend your profile and send your Collectible back to your wallet')}
+        {t('This will suspend your profile and send your Collectible back to your wallet')}
       </Text>
       <Text as="p" color="textSubtle" mb="24px">
-        {TranslateString(
-          999,
+        {t(
           "While your profile is suspended, you won't be able to earn points, but your achievements and points will stay associated with your profile",
         )}
       </Text>
       <Text as="p" color="textSubtle" mb="24px">
-        {TranslateString(999, `Cost to reactivate in future: ${getBalanceNumber(numberPlantToReactivate)} PLANT`)}
+        {t('Cost to reactivate in the future: %cost% PLANT', { cost: getBalanceNumber(numberPlantToReactivate) })}
       </Text>
       <label htmlFor="acknowledgement" style={{ cursor: 'pointer', display: 'block', marginBottom: '24px' }}>
         <Flex alignItems="center">
           <Checkbox id="acknowledgement" checked={isAcknowledged} onChange={handleChange} scale="sm" />
-          <Text ml="8px">{TranslateString(999, 'I understand')}</Text>
+          <Text ml="8px">{t('I understand')}</Text>
         </Flex>
       </label>
       <Button
@@ -76,10 +71,10 @@ const PauseProfilePage: React.FC<PauseProfilePageProps> = ({ onDismiss }) => {
         onClick={handleDeactivateProfile}
         mb="8px"
       >
-        {TranslateString(999, 'Confirm')}
+        {t('Confirm')}
       </Button>
       <Button variant="text" width="100%" onClick={onDismiss}>
-        {TranslateString(999, 'Close Window')}
+        {t('Close Window')}
       </Button>
     </>
   )

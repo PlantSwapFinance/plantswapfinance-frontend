@@ -1,37 +1,64 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
+import { save, load } from 'redux-localstorage-simple'
+import { useDispatch } from 'react-redux'
 import farmsReducer from './farms'
-import gardensReducer from './gardens'
 import verticalGardensReducer from './verticalGardens'
-import barnsBetaReducer from './barnsBeta'
-import toastsReducer from './toasts'
 import poolsReducer from './pools'
-import pricesReducer from './prices'
 import profileReducer from './profile'
 import teamsReducer from './teams'
 import achievementsReducer from './achievements'
 import blockReducer from './block'
-import plantswapFarmsReducer from './plantswapFarms'
-import pancakeSwapFarmsReducer from './pancakeSwapFarms'
-import gooseFarmsReducer from './gooseFarms'
-import cafeswapFarmsReducer from './cafeswapFarms'
+import collectiblesReducer from './collectibles'
+import votingReducer from './voting'
+import barnPancakeswapFarmsReducer from './barns/pancakeswap/farms'
+import application from './application/reducer'
+import { updateVersion } from './global/actions'
+import user from './user/reducer'
+import transactions from './transactions/reducer'
+import swap from './swap/reducer'
+import mint from './mint/reducer'
+import lists from './lists/reducer'
+import burn from './burn/reducer'
+import multicall from './multicall/reducer'
 
-export default configureStore({
+const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
+
+const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   reducer: {
-    farms: farmsReducer,
-    gardens: gardensReducer,
-    verticalGardens: verticalGardensReducer,
-    barnsBeta: barnsBetaReducer,
-    toasts: toastsReducer,
-    pools: poolsReducer,
-    prices: pricesReducer,
-    profile: profileReducer,
-    teams: teamsReducer,
     achievements: achievementsReducer,
     block: blockReducer,
-    plantswapFarms: plantswapFarmsReducer,
-    pancakeSwapFarms: pancakeSwapFarmsReducer,
-    gooseFarms: gooseFarmsReducer,
-    cafeswapFarms: cafeswapFarmsReducer,
+    farms: farmsReducer,
+    verticalGardens: verticalGardensReducer,
+    pools: poolsReducer,
+    profile: profileReducer,
+    teams: teamsReducer,
+    collectibles: collectiblesReducer,
+    voting: votingReducer,
+    foundationVoting: votingReducer,
+    barnPancakeswapFarms: barnPancakeswapFarmsReducer,
+
+    // Exchange
+    application,
+    user,
+    transactions,
+    swap,
+    mint,
+    burn,
+    multicall,
+    lists,
   },
+  middleware: [...getDefaultMiddleware({ thunk: true }), save({ states: PERSISTED_KEYS })],
+  preloadedState: load({ states: PERSISTED_KEYS }),
 })
+
+store.dispatch(updateVersion())
+
+/**
+ * @see https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
+ */
+export type AppDispatch = typeof store.dispatch
+export type AppState = ReturnType<typeof store.getState>
+export const useAppDispatch = () => useDispatch()
+
+export default store

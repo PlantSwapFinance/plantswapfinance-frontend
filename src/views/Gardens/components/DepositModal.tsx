@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal, Text } from '@plantswap-libs/uikit'
-import ModalActions from 'components/ModalActions'
-import ModalInput from 'components/ModalInput'
-import useI18n from 'hooks/useI18n'
+import { Button, Modal, LinkExternal, Text } from '@plantswap/uikit'
+import { ModalActions, ModalInput } from 'components/Modal'
+import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance } from 'utils/formatBalance'
+import useToast from 'hooks/useToast'
 
 interface DepositModalProps {
   max: BigNumber
@@ -17,15 +17,21 @@ interface DepositModalProps {
 
 const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, depositFee }) => {
   const [val, setVal] = useState('')
+  const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
   const fullBalance = useMemo(() => {
     return getFullDisplayBalance(max)
   }, [max])
 
+  const valNumber = new BigNumber(val)
+  const fullBalanceNumber = new BigNumber(fullBalance)
+
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
-      setVal(e.currentTarget.value)
+      if (e.currentTarget.validity.valid) {
+        setVal(e.currentTarget.value.replace(/,/g, '.'))
+      }
     },
     [setVal],
   )
@@ -35,7 +41,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={TranslateString(1068, 'Stake tokens')} onDismiss={onDismiss}>
+    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss}>
       {depositFee > 0 && (<Text>This Garden has a {depositFee/100}% deposit fee!</Text>)}
       <ModalInput
         value={val}
@@ -44,25 +50,38 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         max={fullBalance}
         symbol={tokenName}
         addLiquidityUrl={addLiquidityUrl}
-        inputTitle={TranslateString(1070, 'Stake')}
+        inputTitle={t('Stake')}
       />
       <ModalActions>
-        <Button variant="secondary" onClick={onDismiss} width="100%">
-          {TranslateString(462, 'Cancel')}
+        <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
+          {t('Cancel')}
         </Button>
         <Button
           width="100%"
-          disabled={pendingTx || fullBalance === '0' || val === '0'}
+          disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
           onClick={async () => {
             setPendingTx(true)
-            await onConfirm(val)
-            setPendingTx(false)
-            onDismiss()
+            try {
+              await onConfirm(val)
+              toastSuccess(t('Staked!'), t('Your funds have been staked in the garden'))
+              onDismiss()
+            } catch (e) {
+              toastError(
+                t('Error'),
+                t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+              )
+              console.error(e)
+            } finally {
+              setPendingTx(false)
+            }
           }}
         >
-          {pendingTx ? TranslateString(488, 'Pending Confirmation') : TranslateString(464, 'Confirm')}
+          {pendingTx ? t('Confirming') : t('Confirm')}
         </Button>
       </ModalActions>
+      <LinkExternal href={addLiquidityUrl} style={{ alignSelf: 'center' }}>
+        {t('Get %symbol%', { symbol: tokenName })}
+      </LinkExternal>
     </Modal>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { Breadcrumbs, Heading, Text } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
+import { Breadcrumbs, Heading, Text } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
 import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
 
 const Wrapper = styled.div`
@@ -10,34 +10,36 @@ const Wrapper = styled.div`
   padding-bottom: 24px;
 `
 
-
-const steps = [
-  { translationId: 776, label: 'Get Starter Collectible' },
-  { translationId: 778, label: 'Set Profile Picture' },
-  { translationId: 780, label: 'Join Team' },
- // { translationId: 782, label: 'Set Name' },
-]
+const steps = ['Get Starter Collectible', 'Set Profile Picture', 'Join Team'] // , 'Set Name'
 
 const Header: React.FC = () => {
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
   const { currentStep } = useContext(ProfileCreationContext)
 
   return (
     <Wrapper>
-      <Heading as="h1" size="xxl" color="secondary" mb="8px">
-        {TranslateString(770, 'Profile Setup')}
-      </Heading>
-      <Heading as="h2" size="lg" mb="8px">
-        {TranslateString(772, 'Build yourself a unique profile')}
-      </Heading>
-      <Text color="textSubtle" mb="24px">
-        {TranslateString(999, 'Total cost: 2 PLANT')}
-      </Text>
+      <Hero>
+        <div>
+            <Heading as="h1" scale="xxl" color="secondary">
+              {t('Create your Profile')}
+            </Heading>
+            <Text bold>
+              {t('Creat a unique profile by minting a Gardeners (NFT)and locking it in your profile.')}
+            </Text>
+            <Text bold>
+              {t('This gardeners profile will give you access to special things...')}
+            </Text>
+            <Text color="secondary">
+              {t('Total cost: 2 PLANT')}
+            </Text>
+        </div>
+        <img src="/images/teams.svg" alt="Plantswap Teams" width={400} height={210} />
+      </Hero>
       <Breadcrumbs>
-        {steps.map(({ translationId, label }, index) => {
+        {steps.map((translationKey, index) => {
           return (
-            <Text key={label} color={index <= currentStep ? 'text' : 'textDisabled'}>
-              {TranslateString(translationId, label)}
+            <Text key={translationKey} color={index <= currentStep ? 'text' : 'textDisabled'}>
+              {t(translationKey)}
             </Text>
           )
         })}
@@ -45,5 +47,35 @@ const Header: React.FC = () => {
     </Wrapper>
   )
 }
+
+const Hero = styled.div`
+  align-items: center;
+  color: ${({ theme }) => theme.colors.primary};
+  display: grid;
+  grid-gap: 32px;
+  grid-template-columns: 1fr;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 250px;
+  padding: 48px 0;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    font-size: 16px;
+    li {
+      margin-bottom: 4px;
+    }
+  }
+  img {
+    height: auto;
+    max-width: 100%;
+  }
+  @media (min-width: 576px) {
+    grid-template-columns: 1fr 1fr;
+    margin: 0;
+    max-width: none;
+  }
+`
 
 export default Header

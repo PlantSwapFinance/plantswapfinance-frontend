@@ -1,18 +1,11 @@
 import { useEffect } from 'react'
-import { usePricePlantBusd } from 'state/hooks'
+import { usePlantBusdPrice } from 'hooks/useBUSDPrice'
 
 const useGetDocumentTitlePrice = () => {
-  const plantPriceUsd = usePricePlantBusd()
-
-  const plantPriceUsdString = plantPriceUsd.eq(0)
-    ? ''
-    : ` - $${plantPriceUsd.toNumber().toLocaleString(undefined, {
-        minimumFractionDigits: 3,
-        maximumFractionDigits: 3,
-      })}`
-
+  const plantPriceBusd = usePlantBusdPrice()
   useEffect(() => {
-    document.title = `PlantSwap${plantPriceUsdString}`
-  }, [plantPriceUsdString])
+    const plantPriceBusdString = plantPriceBusd ? plantPriceBusd.toFixed(2) : ''
+    document.title = `Plant Swap - ${plantPriceBusdString}`
+  }, [plantPriceBusd])
 }
 export default useGetDocumentTitlePrice

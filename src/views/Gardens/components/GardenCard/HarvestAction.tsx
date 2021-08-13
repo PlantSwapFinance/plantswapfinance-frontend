@@ -1,79 +1,66 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
-import styled from 'styled-components'
-import { Button, Flex, Heading, useModal } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
-import { useHarvest } from 'hooks/useHarvest'
-import useStake from 'hooks/useStake'
-import { getBalanceNumber } from 'utils/formatBalance'
-import { usePricePlantBusd } from 'state/hooks'
+import { Button, Flex, Heading } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
+import { useAppDispatch } from 'state'
+import { fetchFarmUserDataAsync } from 'state/farms'
+import useToast from 'hooks/useToast'
+import { getBalanceAmount } from 'utils/formatBalance'
+import { BIG_ZERO } from 'utils/bigNumber'
 import { useWeb3React } from '@web3-react/core'
-import ShareModal from 'views/Gardens/components/ShareModal'
+import { usePricePlantBusd } from 'state/farms/hooks'
+import Balance from 'components/Balance'
+import useHarvestGarden from '../../hooks/useHarvestGarden'
 
-interface FarmCardActionsProps {
+interface GardenCardActionsProps {
   earnings?: BigNumber
   pid?: number
-  lpSymbol?: string
 }
 
-const CompoundAndHarvest = styled.div`
-  padding: 0px
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-`
-
-const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, lpSymbol }) => {
+const HarvestAction: React.FC<GardenCardActionsProps> = ({ earnings, pid }) => {
   const { account } = useWeb3React()
-  const TranslateString = useI18n()
-  const plantPrice = usePricePlantBusd()
+  const { toastSuccess, toastError } = useToast()
+  const { t } = useTranslation()
   const [pendingTx, setPendingTx] = useState(false)
-  const { onReward } = useHarvest(pid)
-  const pidPlant = 0
-  const { onStake } = useStake(pidPlant)
-  let earningsBusd = 0
-
-  const rawEarningsBalance = account ? getBalanceNumber(earnings) : 0
-  earningsBusd = new BigNumber(rawEarningsBalance).multipliedBy(plantPrice).toNumber()
-  const displayBalance = rawEarningsBalance.toLocaleString()
-
-  const [onHarvestDone] = useModal(<ShareModal harvested={displayBalance} tokenHarvested="PLANT" tokenName={lpSymbol} usdHarvested={earningsBusd} />)
-  const [onCompoundDone] = useModal(<ShareModal harvested={displayBalance} type="compound" tokenHarvested="PLANT" tokenName={lpSymbol} usdHarvested={earningsBusd} />)
+  const { onReward } = useHarvestGarden(pid)
+  const plantPrice = usePricePlantBusd()
+  const dispatch = useAppDispatch()
+  const rawEarningsBalance = account ? getBalanceAmount(earnings) : BIG_ZERO
+  const displayBalance = rawEarningsBalance.toFixed(3, BigNumber.ROUND_DOWN)
+  const earningsBusd = rawEarningsBalance ? rawEarningsBalance.multipliedBy(plantPrice).toNumber() : 0
 
   return (
     <Flex mb="8px" justifyContent="space-between" alignItems="center">
-      <Heading color={rawEarningsBalance === 0 ? 'textDisabled' : 'text'}>{displayBalance}</Heading>
-      <CompoundAndHarvest>
-        {pid === 0 ? (
-        <Button
-            disabled={rawEarningsBalance === 0 || pendingTx}
-            size="sm"
-            variant="secondary"
-            marginBottom="6px"
-            onClick={async () => {
-              setPendingTx(true)
-              await onStake(rawEarningsBalance.toString())
-              setPendingTx(false)
-              onCompoundDone()
-            }}
-            >
-              {TranslateString(999, 'Compound')}
-            </Button>
-          ) : null}
-
-        <Button
-          disabled={rawEarningsBalance === 0 || pendingTx}
-          onClick={async () => {
-            setPendingTx(true)
+      <Flex flexDirection="column" alignItems="flex-start">
+        <Heading color={rawEarningsBalance.eq(0) ? 'textDisabled' : 'text'}>{displayBalance}</Heading>
+        {earningsBusd > 0 && (
+          <Balance fontSize="12px" color="textSubtle" decimals={2} value={earningsBusd} unit=" USD" prefix="~" />
+        )}
+      </Flex>
+      <Button
+        disabled={rawEarningsBalance.eq(0) || pendingTx}
+        onClick={async () => {
+          setPendingTx(true)
+          try {
             await onReward()
+            toastSuccess(
+              `${t('Harvested')}!`,
+              t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'PLANT' }),
+            )
+          } catch (e) {
+            toastError(
+              t('Error'),
+              t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+            )
+            console.error(e)
+          } finally {
             setPendingTx(false)
-            onHarvestDone()
-          }}
-        >
-          {TranslateString(562, 'Harvest')}
-        </Button>
-      </CompoundAndHarvest>
+          }
+          dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+        }}
+      >
+        {t('Harvest')}
+      </Button>
     </Flex>
   )
 }

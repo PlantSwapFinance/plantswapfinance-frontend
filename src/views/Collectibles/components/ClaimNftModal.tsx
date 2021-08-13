@@ -1,15 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
+import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
+import { ethers } from 'ethers'
 import { useWeb3React } from '@web3-react/core'
-import { useGardenersSchool } from 'hooks/useContract'
-import { useToast } from 'state/hooks'
-import { Button, InjectedModalProps, Modal, Text, Flex } from '@plantswap-libs/uikit'
+import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
+import { Button, InjectedModalProps, Modal, Text, Flex } from '@plantswap/uikit'
 import { Nft } from 'config/constants/types'
-import useI18n from 'hooks/useI18n'
+import useHasPlantBalance from 'hooks/useHasPlantBalance'
+import { usePlant, useMasterGardeningSchoolNftContract } from 'hooks/useContract'
+import { getMasterGardeningSchoolNftAddress } from 'utils/addressHelpers'
+import { useTranslation } from 'contexts/Localization'
+import useToast from 'hooks/useToast'
+import ApproveConfirmButtons from './ApproveConfirmButtons'
 
 interface ClaimNftModalProps extends InjectedModalProps {
   nft: Nft
   onSuccess: () => void
+  onClaim: () => Promise<ethers.providers.TransactionResponse>
 }
 
 const ModalContent = styled.div`
@@ -23,46 +30,106 @@ const Actions = styled.div`
 `
 
 const ClaimNftModal: React.FC<ClaimNftModalProps> = ({ nft, onSuccess, onDismiss }) => {
-  const [isConfirming, setIsConfirming] = useState(false)
-  const TranslateString = useI18n()
+       // const [isConfirming, setIsConfirming] = useState(false)
+  const { t } = useTranslation()
   const { account } = useWeb3React()
+  const plantContract = usePlant()
+  const masterGardeningSchoolNftContract = useMasterGardeningSchoolNftContract()
+  const masterGardeningSchoolNftContractAddress = getMasterGardeningSchoolNftAddress()
   const { toastError, toastSuccess } = useToast()
-  const gardeningOGContract = useGardenersSchool()
 
-  const handleConfirm = async () => {
-    gardeningOGContract.methods
-      .mintNFT(nft.gardenerId)
-      .send({ from: account })
-      .on('sending', () => {
-        setIsConfirming(true)
-      })
-      .on('receipt', () => {
-        toastSuccess('Successfully claimed!')
+  const nftCost = new BigNumber(1000000000000000000)
+  const nftApproval = new BigNumber(5).times(nftCost)
+  
+  const nftCostDisplay = nftCost.div(1000000000000000000)
+
+  const hasMinimumPlantRequired = useHasPlantBalance(nftCost)
+
+  const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
+    useApproveConfirmTransaction({
+      onRequiresApproval: async () => {
+        // TODO: Move this to a helper, this check will be probably be used many times
+        try {
+          const response = await plantContract.allowance(account, masterGardeningSchoolNftContractAddress)
+          const currentAllowance = new BigNumber(response.toString())
+          return currentAllowance.gte(nftApproval)
+        } catch (error) {
+          toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
+          return false
+        }
+      },
+      onApprove: () => {
+        return plantContract.approve(masterGardeningSchoolNftContractAddress, nftApproval.toJSON())
+      },
+      onConfirm: () => {
+        return masterGardeningSchoolNftContract.mintNFT(nft.variationId)
+      },
+      onSuccess: () => {
+        toastSuccess(t('Successfully claimed!'))
         onDismiss()
         onSuccess()
-      })
-      .on('error', (error) => {
-        console.error('Unable to claim NFT', error)
-        toastError('Error', 'Unable to claim NFT, please try again.')
-        setIsConfirming(false)
-      })
+        return null
+      },
+    })
+/*
+  const plantAllowance = async () => { await plantContract.allowance(account, masterGardeningSchoolNftContractAddress) }
+
+  const handleConfirm = async () => {
+    const tx = await onClaim()
+    setIsConfirming(true)
+    const receipt = await tx.wait()
+    if (receipt.status) {
+      toastSuccess(t('Successfully claimed!'))
+      onDismiss()
+      onSuccess()
+    } else {
+      toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
+      setIsConfirming(false)
+    }
   }
 
+  const handleApprove = () => {
+    plantContract.approve(masterGardeningSchoolNftContractAddress, nftApproval.toJSON())
+  } */
+  /*
+  const allowance = async () => {
+    // TODO: Move this to a helper, this check will be probably be used many times
+    try {
+      const response = await plantContract.allowance(account, masterGardeningSchoolNftContractAddress)
+      const currentAllowance = new BigNumber(response.toString())
+      return currentAllowance.gte(nftCost)
+    } catch (error) {
+      return false
+    }
+  } */
+    
   return (
-    <Modal title={TranslateString(999, 'Claim Collectible')} onDismiss={onDismiss}>
+    <Modal title={t('Claim Collectible')} onDismiss={onDismiss}>
       <ModalContent>
         <Flex alignItems="center" mb="8px" justifyContent="space-between">
-          <Text>{TranslateString(626, 'You will receive')}:</Text>
-          <Text bold>{`1x "${nft.name}" Collectible`}</Text>
+          <Text>{t('You will receive')}:</Text>
+          <Text bold>{t('1x %nftName% Collectible', { nftName: nft.name })}</Text>
+        </Flex>
+        <Flex alignItems="center" mb="8px" justifyContent="space-between">
+          {!hasMinimumPlantRequired ? (
+            <Text small color="warning">{t('Minimum plant required: %nftCost% PLANT', { nftCost: nftCostDisplay.toNumber() })}</Text>
+          ) : (
+            <Text small color="textSubtle">{t('Minting cost: %nftCost% PLANT', { nftCost: nftCostDisplay.toNumber() })} </Text>
+          )}
         </Flex>
       </ModalContent>
       <Actions>
         <Button width="100%" variant="secondary" onClick={onDismiss}>
-          {TranslateString(462, 'Cancel')}
+          {t('Cancel')}
         </Button>
-        <Button width="100%" onClick={handleConfirm} disabled={!account || isConfirming}>
-          {TranslateString(464, 'Confirm')}
-        </Button>
+        <ApproveConfirmButtons
+            isApproveDisabled={nft.variationId === null || isConfirmed || isConfirming || isApproved}
+            isApproving={isApproving}
+            isConfirmDisabled={!isApproved || isConfirmed || !hasMinimumPlantRequired}
+            isConfirming={isConfirming}
+            onApprove={handleApprove}
+            onConfirm={handleConfirm}
+          />
       </Actions>
     </Modal>
   )

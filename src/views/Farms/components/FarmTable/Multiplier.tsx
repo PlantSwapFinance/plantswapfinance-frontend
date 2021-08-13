@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { HelpIcon } from '@plantswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
+import { HelpIcon, Skeleton, useTooltip } from '@plantswap/uikit'
+import { useTranslation } from 'contexts/Localization'
 
-import Tooltip from '../Tooltip/Tooltip'
+const ReferenceElement = styled.div`
+  display: inline-block;
+`
 
 export interface MultiplierProps {
   multiplier: string
@@ -13,49 +15,42 @@ const MultiplierWrapper = styled.div`
   color: ${({ theme }) => theme.colors.text};
   width: 36px;
   text-align: right;
+  margin-right: 14px;
 
-  ${({ theme }) => theme.mediaQueries.sm} {
+  ${({ theme }) => theme.mediaQueries.lg} {
     text-align: left;
+    margin-right: 0;
   }
 `
 
 const Container = styled.div`
   display: flex;
   align-items: center;
-
-  svg {
-    margin-left: 14px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    svg {
-      margin-left: 0;
-    }
-  }
 `
 
 const Multiplier: React.FunctionComponent<MultiplierProps> = ({ multiplier }) => {
-  const displayMultipler = multiplier ? multiplier.toLowerCase() : '-'
-  const TranslateString = useI18n()
+  const displayMultiplier = multiplier ? multiplier.toLowerCase() : <Skeleton width={30} />
+  const { t } = useTranslation()
+  const tooltipContent = (
+    <>
+      {t('The multiplier represents the amount of PLANT rewards each farm gets.')}
+      <br />
+      <br />
+      {t('For example, if a 1x farm was getting 1 PLANT per block, a 40x farm would be getting 40 PLANT per block.')}
+    </>
+  )
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(tooltipContent, {
+    placement: 'top-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
     <Container>
-      <MultiplierWrapper>{displayMultipler}</MultiplierWrapper>
-      <Tooltip
-        content={
-          <div>
-            {TranslateString(999, 'The multiplier represents the amount of PLANT rewards each farm gets.')}
-            <br />
-            <br />
-            {TranslateString(
-              999,
-              'For example, if a 1x farm was getting 1 PLANT per block, a 40x farm would be getting 40 PLANT per block.',
-            )}
-          </div>
-        }
-      >
+      <MultiplierWrapper>{displayMultiplier}</MultiplierWrapper>
+      <ReferenceElement ref={targetRef}>
         <HelpIcon color="textSubtle" />
-      </Tooltip>
+      </ReferenceElement>
+      {tooltipVisible && tooltip}
     </Container>
   )
 }

@@ -1,12 +1,13 @@
 import React from 'react'
-import useI18n from 'hooks/useI18n'
+import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components'
-import { Text, Flex, Link, LinkExternal } from '@plantswap-libs/uikit'
+import { Text, Flex, LinkExternal, Skeleton } from '@plantswap/uikit'
 
 export interface ExpandableSectionProps {
   bscScanAddress?: string
+  infoAddress?: string
   removed?: boolean
-  totalValueFormated?: string
+  totalValueFormatted?: string
   lpLabel?: string
   addLiquidityUrl?: string
 }
@@ -16,46 +17,30 @@ const Wrapper = styled.div`
 `
 
 const StyledLinkExternal = styled(LinkExternal)`
-  text-decoration: none;
-  font-weight: normal;
-  color: ${({ theme }) => theme.colors.text};
-  display: flex;
-  align-items: center;
-
-  svg {
-    padding-left: 4px;
-    height: 18px;
-    width: auto;
-    fill: ${({ theme }) => theme.colors.primary};
-  }
+  font-weight: 400;
 `
 
 const DetailsSection: React.FC<ExpandableSectionProps> = ({
   bscScanAddress,
+  infoAddress,
   removed,
-  totalValueFormated,
+  totalValueFormatted,
   lpLabel,
   addLiquidityUrl,
 }) => {
-  const TranslateString = useI18n()
+  const { t } = useTranslation()
 
   return (
     <Wrapper>
       <Flex justifyContent="space-between">
-        <Text>{TranslateString(316, 'Stake')}:</Text>
-        <StyledLinkExternal href={addLiquidityUrl}>{lpLabel}</StyledLinkExternal>
+        <Text>{t('Total Liquidity')}:</Text>
+        {totalValueFormatted ? <Text>{totalValueFormatted}</Text> : <Skeleton width={75} height={25} />}
       </Flex>
       {!removed && (
-        <Flex justifyContent="space-between">
-          <Text>{TranslateString(354, 'Total Liquidity')}:</Text>
-          <Text>{totalValueFormated}</Text>
-        </Flex>
+        <StyledLinkExternal href={addLiquidityUrl}>{t('Get %symbol%', { symbol: lpLabel })}</StyledLinkExternal>
       )}
-      <Flex justifyContent="flex-start">
-        <Link external href={bscScanAddress} bold={false}>
-          {TranslateString(356, 'View on BscScan')}
-        </Link>
-      </Flex>
+      <StyledLinkExternal href={bscScanAddress}>{t('View Contract')}</StyledLinkExternal>
+      <StyledLinkExternal href={infoAddress}>{t('See Pair Info')}</StyledLinkExternal>
     </Wrapper>
   )
 }

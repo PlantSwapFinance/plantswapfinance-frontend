@@ -1,33 +1,29 @@
-import React, { useContext } from 'react'
-import { Menu as UikitMenu } from '@plantswap-libs/uikit'
-import { useWeb3React } from '@web3-react/core'
-import { allLanguages } from 'config/localisation/languageCodes'
-import { LanguageContext } from 'contexts/Localisation/languageContext'
+import React from 'react'
+import { Menu as UikitMenu } from '@plantswap/uikit'
+import { languageList } from 'config/localization/languages'
+import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
-import useAuth from 'hooks/useAuth'
-import { usePricePlantBusd, useProfile } from 'state/hooks'
+import { usePricePlantBusd } from 'state/farms/hooks'
+import { useProfile } from 'state/profile/hooks'
 import config from './config'
+import UserMenu from './UserMenu'
 
 const Menu = (props) => {
-  const { account } = useWeb3React()
-  const { login, logout } = useAuth()
-  const { selectedLanguage, setSelectedLanguage } = useContext(LanguageContext)
   const { isDark, toggleTheme } = useTheme()
   const plantPriceUsd = usePricePlantBusd()
   const { profile } = useProfile()
+  const { currentLanguage, setLanguage, t } = useTranslation()
 
   return (
     <UikitMenu
-      account={account}
-      login={login}
-      logout={logout}
+      userMenu={<UserMenu />}
       isDark={isDark}
       toggleTheme={toggleTheme}
-      currentLang={selectedLanguage && selectedLanguage.code}
-      langs={allLanguages}
-      setLang={setSelectedLanguage}
-          plantPriceUsd={plantPriceUsd.toNumber()}
-      links={config}
+      currentLang={currentLanguage.code}
+      langs={languageList}
+      setLang={setLanguage}
+      plantPriceUsd={plantPriceUsd.toNumber()}
+      links={config(t)}
       profile={{
         username: profile?.username,
         image: profile?.nft ? `/images/nfts/${profile.nft?.images.sm}` : undefined,
