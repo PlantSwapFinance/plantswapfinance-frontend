@@ -41,7 +41,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss}>
+    <Modal title={t('Stake tokens')} onDismiss={onDismiss}>
       {depositFee > 0 && (<Text>This Garden has a {depositFee/100}% deposit fee!</Text>)}
       <ModalInput
         value={val}

@@ -73,7 +73,7 @@ const PlantDataRow = () => {
       </StyledColumn>
       <StyledColumn noMobileBorder>
         <Text color="textSubtle">{t('Total contribution')}</Text>
-        {mcap?.gt(0) && ecologicalContributionString ? (
+        {ecologicalContributionString ? (
           <Heading scale="lg">{t('$%ecologicalContribution%', { ecologicalContribution: ecologicalContributionString })}</Heading>
         ) : (
           <Skeleton height={24} width={126} my="4px" />

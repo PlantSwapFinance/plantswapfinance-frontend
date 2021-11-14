@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk'
 import { AnyAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
-import { CampaignType, FarmConfig, VerticalGardenConfig, Nft, PoolConfig, Team } from 'config/constants/types'
+import { CampaignType, FarmConfig, VerticalGardenConfig, CollectiblesFarmConfig, Nft, PoolConfig, Team } from 'config/constants/types'
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
 
@@ -75,6 +75,46 @@ export interface VerticalGarden extends VerticalGardenConfig {
   }
 }
 
+export interface CollectiblesFarm extends CollectiblesFarmConfig {
+  totalStaked?: BigNumber //
+  nftAddress?: string
+  totalTokenPerBlock?: BigNumber //
+  totalRewardToShare?: BigNumber //
+  totalRewardExtraTokenToShare?: BigNumber //
+  pendingPlantInMasterGardener?: BigNumber //
+  variantIdStart?: number //
+  variantIdEnd?: number //
+  isActive?: boolean //
+  lastReward?: BigNumber //
+  lastRewardBlock?: BigNumber //
+  lastNftStakedCount?: BigNumber //
+  isUserRestricted?: boolean //
+  isAddedByUser?: boolean //
+  isExtraReward?: boolean //
+  depositBlockTimeMinimum?: BigNumber //
+  depositPointsPerToken?: BigNumber //
+  apr?: number
+  stakingTokenPrice?: number
+  stakingExtraRewardTokenPrice?: number
+  userData?: {
+    allowancesRewardToken: BigNumber
+    allowancesExtraRewardToken: BigNumber
+    isApprovedForAll: boolean
+    collectiblesBalance: BigNumber
+    collectiblesUse: BigNumber
+    nftBalance: BigNumber
+    rewardsHarvested: BigNumber
+    extraRewardsHarvested: BigNumber
+    userTokens: {
+      tokenId: number
+      nft: {
+        [key: string]: number[]
+      }
+      variantId: any
+    }
+  }
+}
+
 export interface Pool extends PoolConfig {
   totalStaked?: BigNumber
   stakingLimit?: BigNumber
@@ -123,6 +163,55 @@ export interface Profile {
   hasRegistered: boolean
 }
 
+export interface Market {
+  numberActiveItems: number
+  numberActiveSalesItems: number
+  numberUnclaimedSaleItems: number
+  numberSales: number
+  numberPlantToUpdate: number
+  numberPlantToSell: number
+  numberPlantToBuy: number
+  numberPlantToExtra: number
+  numberPlantToOffer: number
+  costPlantToUpdate: number
+  costPlantToSell: number
+  costPlantToBuy: number
+  costPlantToExtra: number
+  numberPointToSell: number
+  numberPointToBuy: number
+  numberPointToExtra: number
+  numberPointToOffer: number
+}
+
+export interface Listings {
+  listingId: number
+  seller: string
+  sellType: number
+  sellTypeValue: number
+  blocknumber: number
+  buyNftElseToken: boolean
+  buyTokenAddress: string
+  buyTokenId: number
+  buyCount: BigNumber
+  sellNftElseToken: boolean
+  sellTokenAddress: string
+  sellTokenId: number
+  sellCount: BigNumber
+  isSold: boolean
+  isActive: boolean
+  isCanceled: boolean
+}
+
+export interface Items {
+  itemsId: number
+  nft: boolean
+  itemAddress: string
+  tokenId: number
+  countActive: number
+  countSold: number
+  countUnclaim: number
+}
+
 // Slices states
 
 export interface FarmsState {
@@ -160,6 +249,11 @@ export interface VerticalGardensState {
   userDataLoaded: boolean
 }
 
+export interface CollectiblesFarmsState {
+  data: CollectiblesFarm[]
+  userDataLoaded: boolean
+}
+
 export interface PoolsState {
   data: Pool[]
   userDataLoaded: boolean
@@ -176,6 +270,17 @@ export interface ProfileState {
   isLoading: boolean
   hasRegistered: boolean
   data: Profile
+}
+
+export interface MarketState {
+  data: Market[]
+  marketDataLoaded: boolean
+}
+
+export interface ListingsState {
+  data: Listings[]
+  listingsDataLoaded: boolean
+  userDataLoaded: boolean
 }
 
 export type TeamResponse = {
@@ -208,6 +313,20 @@ export interface Achievement {
 
 export interface AchievementState {
   data: Achievement[]
+}
+
+export interface Task {
+  id: string
+  type: CampaignType
+  address: string
+  title: TranslatableText
+  description?: TranslatableText
+  badge: string
+  points: number
+}
+
+export interface TaskState {
+  data: Task[]
 }
 
 // Block
@@ -298,6 +417,7 @@ export interface FoundationVotingState {
   foundationVotes: {
     [key: string]: FoundationVote[]
   }
+  fondationGeneral: FoundationGeneral
 }
 
 // Voting
@@ -390,13 +510,17 @@ export type UserTicketsResponse = [ethers.BigNumber[], number[], boolean[]]
 
 export interface State {
   achievements: AchievementState
+  tasks: TaskState
   block: BlockState
   farms: FarmsState
   verticalGardens: VerticalGardensState
+  collectiblesFarms: CollectiblesFarmsState
   pools: PoolsState
   profile: ProfileState
   teams: TeamsState
   collectibles: CollectiblesState
+  market: MarketState
+  listings: ListingsState
   voting: VotingState
   foundationVoting: FoundationVotingState
   barnPancakeswapFarms: BarnPancakeswapFarmsState

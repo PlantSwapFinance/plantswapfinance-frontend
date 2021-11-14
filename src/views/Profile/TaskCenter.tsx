@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardBody, CardHeader, Flex, Heading, Text } from '@plantswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import AchievementsList from './components/AchievementsList'
+import TasksList from './components/TasksList'
 import ClaimPointsCallout from './components/ClaimPointsCallout '
 import ComingSoon from './components/ComingSoon'
 import Menu from './components/Menu'
@@ -42,6 +43,7 @@ const TaskCenter = () => {
         </CardHeader>
         <CardBody>
           <ComingSoon />
+          <TasksList />
         </CardBody>
       </Card>
     </>

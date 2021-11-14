@@ -5,4 +5,9 @@ export enum CurrencyModalView {
   importList,
 }
 
-export default CurrencyModalView
+export enum NftModalView {
+  search,
+  manage,
+  importNft,
+  importNftList,
+}

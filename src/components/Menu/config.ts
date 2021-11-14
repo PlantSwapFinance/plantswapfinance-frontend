@@ -40,10 +40,20 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     label: t('Vertical Gardens'),
     icon: 'TreeIcon',
     href: '/verticalGardens',
+  },
+  {
+    label: t('Collectibles Farms'),
+    icon: 'CollectiblesFarmIcon',
+    href: '/collectiblesFarms',
     status: {
-      text: 'NEW',
-      color: 'failure',
+      text: 'BETA',
+      color: 'warning',
     },
+  },
+  {
+    label: t('Foundation'),
+    icon: 'ContributionIcon',
+    href: '/foundation',
   },
   {
     label: t('Teams & Profile'),
@@ -67,6 +77,10 @@ const config: (t: ContextApi['t']) => MenuEntry[] = (t) => [
     label: t('Collectibles'),
     icon: 'NftIcon',
     href: '/collectibles',
+    status: {
+      text: 'NEW',
+      color: 'success',
+    },
   },
   {
     label: t('Governance'),

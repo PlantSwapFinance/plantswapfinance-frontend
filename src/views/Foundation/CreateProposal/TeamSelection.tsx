@@ -5,11 +5,15 @@ import { useTeams } from 'state/teams/hooks'
 import { useTranslation } from 'contexts/Localization'
 import SelectionCard from '../components/SelectionCard'
 
-const Team: React.FC = () => {
+
+interface TeamProps {
+  currentTeamId: number
+  onChange: (value: number) => void
+}
+
+const Team: React.FC<TeamProps> = ({ currentTeamId, onChange }) => {
   const { t } = useTranslation()
   const { teams } = useTeams()
-
-  const handleTeamSelection = () => null
   const teamValues = useMemo(() => shuffle(Object.values(teams)), [teams])
 
   return (
@@ -27,8 +31,9 @@ const Team: React.FC = () => {
                   key={team.name}
                   name="teams-selection"
                   value={team.id}
+                  isChecked={currentTeamId === team.id}
                   image={`/images/teams/${team.images.md}`}
-                  onChange={handleTeamSelection}
+                  onChange={(value) => onChange(parseInt(value, 10))}
                   disabled={!team.isJoinable}
                 >
                   <Text bold>{team.name}</Text>

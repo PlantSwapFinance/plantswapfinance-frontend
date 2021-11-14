@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import BigNumber from 'bignumber.js'
 import { Modal, Text, Flex, Image, Button, Slider, BalanceInput, AutoRenewIcon, Link } from '@plantswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
-import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import { VerticalGarden } from 'state/types'
 import { getAddress } from 'utils/addressHelpers'
@@ -28,10 +28,12 @@ const StyledLink = styled(Link)`
 const StakeModal: React.FC<StakeModalProps> = ({
   verticalGarden,
   stakingTokenPrice,
+  stakingTokenBalance,
   isRemovingStake = false,
   onDismiss,
 }) => {
-  const { vgId, stakingToken, stakingRewardToken, depositFee } = verticalGarden
+  const { vgId, stakingToken, userData, stakingRewardToken, depositFee } = verticalGarden
+  const { stakedBalance } = userData
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { onStake } = useStakeVerticalGarden(vgId)
@@ -40,13 +42,19 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const [pendingTx, setPendingTx] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const [percent, setPercent] = useState(0)
+  const getCalculatedStakingLimit = () => {
+    if (isRemovingStake) {
+      return stakedBalance
+    }
+    return stakingTokenBalance
+  }
 
   const usdValueStaked = stakeAmount && formatNumber(new BigNumber(stakeAmount).times(stakingTokenPrice).toNumber())
 
   const handleStakeInputChange = (input: string) => {
     if (input) {
       const convertedInput = getDecimalAmount(new BigNumber(input), stakingToken.decimals)
-      const percentage = Math.floor(convertedInput.multipliedBy(100).toNumber())
+      const percentage = Math.floor(convertedInput.dividedBy(getCalculatedStakingLimit()).multipliedBy(100).toNumber())
       setPercent(Math.min(percentage, 100))
     } else {
       setPercent(0)
@@ -56,7 +64,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
 
   const handleChangePercent = (sliderPercent: number) => {
     if (sliderPercent > 0) {
-      const percentageOfStakingMax = new BigNumber(sliderPercent).dividedBy(100)
+      const percentageOfStakingMax = new BigNumber(getCalculatedStakingLimit()).dividedBy(100).multipliedBy(sliderPercent)
       const amountToStake = getFullDisplayBalance(percentageOfStakingMax, stakingToken.decimals, stakingToken.decimals)
       setStakeAmount(amountToStake)
     } else {

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import plantswapFoundationNonProfitAbi from 'config/abi/verticalGardens.json'
+import plantswapFoundationNonProfitAbi from 'config/abi/plantswapFoundationNonProfit.json'
 import multicall from 'utils/multicall'
 import { getFoundationNonProfitAddress } from 'utils/addressHelpers'
 import { SerializedBigNumber } from '../types'

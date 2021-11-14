@@ -247,6 +247,152 @@ const Nfts: Nft[] = [
     type: NftType.GARDENERS,
     variationId: 104,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
   },
+
+  
+  {
+    name: 'Active Lily',
+    description: "Active Lily rewards you for being active on PlantSwap.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 25 points.",
+    images: {
+      lg: 'active-lily.png',
+      md: 'active-lily-md.png',
+      sm: 'active-lily-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-lily.png',
+      blur: 'active-lily-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Lily',
+    type: NftType.GARDENERS,
+    variationId: 91,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Gladiolus',
+    description: "Grow your Plants, get Active Gladiolus.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 75 points.",
+    images: {
+      lg: 'active-gladiolus.png',
+      md: 'active-gladiolus-md.png',
+      sm: 'active-gladiolus-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-gladiolus.png',
+      blur: 'active-gladiolus-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Gladiolus',
+    type: NftType.GARDENERS,
+    variationId: 92,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Poppy',
+    description: "Plants are your friends, Active Poppy thanks your for this.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 150 points.",
+    images: {
+      lg: 'active-poppy.png',
+      md: 'active-poppy-md.png',
+      sm: 'active-poppy-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-poppy.png',
+      blur: 'active-poppy-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Poppy',
+    type: NftType.GARDENERS,
+    variationId: 93,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Hyacinth',
+    description: "Active Hyacinth, for the active you.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 250 points.",
+    images: {
+      lg: 'active-hyacinth.png',
+      md: 'active-hyacinth-md.png',
+      sm: 'active-hyacinth-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-hyacinth.png',
+      blur: 'active-hyacinth-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Hyacinth',
+    type: NftType.GARDENERS,
+    variationId: 94,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Anemone',
+    description: "Active Anemone, reward your Plantswap health.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 400 points.",
+    images: {
+      lg: 'active-anemone.png',
+      md: 'active-anemone-md.png',
+      sm: 'active-anemone-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-anemone.png',
+      blur: 'active-anemone-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Anemone',
+    type: NftType.GARDENERS,
+    variationId: 95,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Tulip',
+    description: "Farming, Gardening, Collecting, may earn you Active Tulip.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 550 points.",
+    images: {
+      lg: 'active-tulip.png',
+      md: 'active-tulip-md.png',
+      sm: 'active-tulip-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-tulip.png',
+      blur: 'active-tulip-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Tulip',
+    type: NftType.GARDENERS,
+    variationId: 96,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Dianella',
+    description: "Active Dianella, for actives gardeners, by actives gardeners.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 750 points.",
+    images: {
+      lg: 'active-dianella.png',
+      md: 'active-dianella-md.png',
+      sm: 'active-dianella-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-dianella.png',
+      blur: 'active-dianella-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Dianella',
+    type: NftType.GARDENERS,
+    variationId: 97,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Orchid',
+    description: "Every thousand points earn you another flower.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 1000 points.",
+    images: {
+      lg: 'active-orchid.png',
+      md: 'active-orchid-md.png',
+      sm: 'active-orchid-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-orchid.png',
+      blur: 'active-orchid-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Orchid',
+    type: NftType.GARDENERS,
+    variationId: 98,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
+  {
+    name: 'Active Daffodil',
+    description: "Active Daffodil. Because You Deserve to be Rewarded.",
+    requirement: "To claim this collectible you need an active Plantswap Profile and a minimum of 1250 points.",
+    images: {
+      lg: 'active-daffodil.png',
+      md: 'active-daffodil-md.png',
+      sm: 'active-daffodil-md.png',
+      ipfs: 'https://gateway.pinata.cloud/ipfs/QmV6o4joGcKAcv88atEsm1EPEny5cVcFFJT4VkRAKTyU47/pointsRewardSchool/active-daffodil.png',
+      blur: 'active-daffodil-blur.png',
+    },
+    sortOrder: 15,
+    identifier: 'Active Daffodil',
+    type: NftType.GARDENERS,
+    variationId: 99,        // https://gateway.pinata.cloud/ipfs/QmazHH85gkiwNJKfQUL46vfg688vn48TguUrcQ8U43EV33
+  },
 ]
 
 export default Nfts

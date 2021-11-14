@@ -1,8 +1,9 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
+import { MASTERGARDENERDEVADDRESS } from 'config'
 import { useWeb3React } from '@web3-react/core'
-import { Heading, RowType, Toggle, Text, Flex, EndPage } from '@plantswap/uikit'
+import { Heading, RowType, Toggle, Text, Flex, EndPage, IconButton, AddIcon, useModal } from '@plantswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 import styled from 'styled-components'
 import FlexLayout from 'components/Layout/Flex'
@@ -26,6 +27,7 @@ import FarmTabButtons from './components/FarmTabButtons'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
+import AddFarmsModal from './components/AddFarmsModal'
 
 export interface FarmsProps{
   tokenMode?: boolean
@@ -96,6 +98,12 @@ const ViewControls = styled.div`
       padding: 0;
     }
   }
+`
+
+const IconButtonWrapper = styled.div`
+  display: flex;
+  padding-top: 6px;
+  padding-left: 12px;
 `
 
 const NUMBER_OF_FARMS_VISIBLE = 12
@@ -386,6 +394,12 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     setSortOption(option.value)
   }
 
+  const [onAddFarmModal] = useModal(
+    <AddFarmsModal
+      account={account}
+    />,
+  )
+
   return (
     <>
       <PageHeader>
@@ -448,6 +462,18 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
               <Text textTransform="uppercase">{t('Search')}</Text>
               <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
             </LabelWrapper>
+            {account === MASTERGARDENERDEVADDRESS && (
+            <LabelWrapper>
+              <IconButtonWrapper>
+                <IconButton
+                  variant="secondary"
+                  onClick={onAddFarmModal}
+                >
+                  <AddIcon color="primary" width="14px" />
+                </IconButton>
+              </IconButtonWrapper>
+            </LabelWrapper>
+            )}
           </FilterContainer>
         </ControlContainer>
         {renderContent()}

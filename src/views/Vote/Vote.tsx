@@ -1,11 +1,10 @@
 import React from 'react'
-import Page from 'components/Layout/Page'
 import PageHeader from 'components/PageHeader'
 import { Heading, Flex, EndPage } from '@plantswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import Divider from './components/Divider'
 
-const Tree = () => {
+const Vote = () => {
   const { t } = useTranslation()
 
   return (
@@ -26,7 +25,6 @@ const Tree = () => {
           </Flex>
         </Flex>
       </PageHeader>
-      <Page>
         <iframe 
           title="Snapshot Voting" 
           src="https://snapshot.org/#/plantswap.eth" 
@@ -35,9 +33,8 @@ const Tree = () => {
         />
         <Divider />
         <EndPage />
-      </Page>
     </>
   )
 }
 
-export default Tree
+export default Vote

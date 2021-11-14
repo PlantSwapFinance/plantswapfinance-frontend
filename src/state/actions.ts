@@ -13,6 +13,19 @@ export {
   vgupdateUserHarvestedPlant,
   vgupdateUserCompoundedReward
 } from './verticalGardens'
+
+export {
+  fetchCollectiblesFarmsPublicDataAsync,
+  fetchCollectiblesFarmsUserDataAsync,
+  cfupdateUserRewardTokenAllowance,
+  cfupdateUserIsApprovedForAl,
+  cfupdateUserCollectiblesBalance,
+  cfupdateUserCollectiblesUse,
+  cfupdateUserBalances,
+  cfupdateUserRewardsHarvested,
+  cfupdateUserExtraRewardsHarvested
+} from './collectiblesFarms'
+
 export {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,

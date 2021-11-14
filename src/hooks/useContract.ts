@@ -3,24 +3,24 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import {
   getBep20Contract,
   getPlantContract,
-  getBunnyFactoryContract,
-  getBunnySpecialContract,
-  getPlantswapGardenersContract,
-  getProfileContract,
-  getIfoV1Contract,
-  getIfoV2Contract,
+  getErc721Contract,
   getMasterchefContract,
   getVerticalGardenContract,
-  getPointCenterIfoContract,
-  getSouschefContract,
-  getClaimRefundContract,
+  getCollectiblesFarmContract,
+  getCollectiblesFarmingPoolContract,
+  getPlantswapGardenersContract,
+  getFoundationNonProfitContract,
   getGardeningSchoolNftContract,
   getMasterGardeningSchoolNftContract,
-  getErc721Contract,
+  getPointsRewardSchoolNftContract,
+  getSharePlantswapLoveSchoolNftContract,
+  getProfileContract,
+  getPlantswapMarketContract,
+  getIfoV1Contract,
+  getIfoV2Contract,
+  getSouschefContract,
+  getPointCenterIfoContract,
   getChainlinkOracleContract,
-  getSouschefV2Contract,
-  getBunnySpecialPlantVaultContract,
-  getBunnySpecialPredictionContract,
 } from 'utils/contractHelpers'
 
 // Imports below migrated from Exchange useContract.ts
@@ -54,6 +54,16 @@ export const useVerticalGarden = (id) => {
   return useMemo(() => getVerticalGardenContract(id, library.getSigner()), [id, library])
 }
 
+export const useCollectiblesFarm = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getCollectiblesFarmContract(library.getSigner()), [library])
+}
+
+export const useCollectiblesFarmingPool = (id) => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getCollectiblesFarmingPoolContract(id, library.getSigner()), [id, library])
+}
+
 // GardenV1
 
 export const useSousChef = (id) => {
@@ -69,11 +79,22 @@ export const usePlantswapGardeners = () => {
 }
 
 // Foundations
+export const useFoundationNonProfit = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getFoundationNonProfitContract(library.getSigner()), [library])
+}
+
 // Profile
 
 export const useProfile = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getProfileContract(library.getSigner()), [library])
+}
+
+// Market
+export const usePlantswapMarket = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getPlantswapMarketContract(library.getSigner()), [library])
 }
 
 // Collectibles Claiming School
@@ -86,6 +107,16 @@ export const useGardeningSchoolNftContract = () => {
 export const useMasterGardeningSchoolNftContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getMasterGardeningSchoolNftContract(library.getSigner()), [library])
+}
+
+export const usePointsRewardSchoolNftContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getPointsRewardSchoolNftContract(library.getSigner()), [library])
+}
+
+export const useSharePlantswapLoveSchoolNftContract = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getSharePlantswapLoveSchoolNftContract(library.getSigner()), [library])
 }
 
 // Multicall and other basic abi
@@ -101,7 +132,6 @@ export const useERC721 = (address: string) => {
 
 // Not used
 
-
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
@@ -116,48 +146,14 @@ export const useIfoV2Contract = (address: string) => {
   return useMemo(() => getIfoV2Contract(address, library.getSigner()), [address, library])
 }
 
-/**
- * @see https://docs.openzeppelin.com/contracts/3.x/api/token/erc721
- */
-
-export const useBunnyFactory = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnyFactoryContract(library.getSigner()), [library])
-}
-
-export const useSousChefV2 = (id) => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getSouschefV2Contract(id, library.getSigner()), [id, library])
-}
-
 export const usePointCenterIfoContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getPointCenterIfoContract(library.getSigner()), [library])
 }
 
-export const useBunnySpecialContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialContract(library.getSigner()), [library])
-}
-
-export const useClaimRefundContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getClaimRefundContract(library.getSigner()), [library])
-}
-
 export const useChainlinkOracleContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getChainlinkOracleContract(library.getSigner()), [library])
-}
-
-export const useSpecialBunnyPlantVaultContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialPlantVaultContract(library.getSigner()), [library])
-}
-
-export const useSpecialBunnyPredictionContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialPredictionContract(library.getSigner()), [library])
 }
 
    //  const { account, library } = useActiveWeb3React()

@@ -1,6 +1,7 @@
-import React, { ChangeEvent, lazy, useMemo, useState } from 'react'
+import React, { ChangeEvent, FormEvent, lazy, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import {
+  AutoRenewIcon,
   Box,
   Breadcrumbs,
   Button,
@@ -16,11 +17,15 @@ import {
 } from '@plantswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import times from 'lodash/times'
+import isEmpty from 'lodash/isEmpty'
 import { useTranslation } from 'contexts/Localization'
 import { getBscScanLink } from 'utils'
+import { DEFAULT_GAS_LIMIT } from 'config'
 import truncateWalletAddress from 'utils/truncateWalletAddress'
 import Container from 'components/Layout/Container'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useFoundationNonProfit } from 'hooks/useContract'
+import useToast from 'hooks/useToast'
 import ReactMarkdown from 'components/ReactMarkdown'
 import BreadcrumbLink from '../components/BreadcrumbLink'
 import { FormState } from './types'
@@ -49,24 +54,51 @@ const StyledCard = styled(Card)`
       : 'linear-gradient(180deg, rgba(218, 255, 224, 0.9) 0%,  rgba(185, 254, 197, 0.9) 51.04%, rgba(170, 230, 180, 0.9) 100%)'};
 `
 
+const gasOptions = {
+  gasLimit: DEFAULT_GAS_LIMIT,
+}
+
 const CreateProposal = () => {
   const [state, setState] = useState<FormState>({
     name: '',
     body: '',
     donationAddress: '',
+    teamId: 1,
     logoUrl: 'https://',
     organisationTeam: times(MINIMUM_CHOICES).map(makeChoice),
     websiteAndSocialList: times(MINIMUM_ADDRESS).map(makeAddress),
   })
+  const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   
   const { t } = useTranslation()
+  const { toastSuccess, toastError } = useToast()
   const { account } = useWeb3React()
   
-  const { name, body, donationAddress, logoUrl, organisationTeam, websiteAndSocialList } = state
+  const { name, body, donationAddress, logoUrl, teamId, organisationTeam, websiteAndSocialList } = state
   const formErrors = getFormErrors(state, t)
+  const foundationNonProfitContract = useFoundationNonProfit()
   
-  const updateValue = (key: string, value: string | TeamMember[] | Address[]) => {
+  const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault()
+    
+    try {
+      setIsLoading(true)
+      
+    const tx = await foundationNonProfitContract.submitProposal(name, donationAddress, logoUrl, teamId, gasOptions)
+    // eslint-disable-next-line
+    const receipt = await tx.wait()
+    toastSuccess(t('Proposal created!'))
+    } catch (error) {
+      toastError(t('Error'), error?.message || error?.error)
+      console.error(error)
+      setIsLoading(false)
+    }
+  }
+
+  
+
+  const updateValue = (key: string, value: string | number | TeamMember[] | Address[]) => {
     setState((prevState) => ({
       ...prevState,
       [key]: value,
@@ -94,6 +126,10 @@ const CreateProposal = () => {
 
   const handleAddressChange = (newWebsiteAndSocialList: Address[]) => {
     updateValue('websiteAndSocialList', newWebsiteAndSocialList)
+  }
+
+  const handleTeamChange = (value: number) => {
+    updateValue('teamId', value)
   }
 
   const options = useMemo(
@@ -127,7 +163,7 @@ const CreateProposal = () => {
           <Text>{t('Make a Proposal')}</Text>
         </Breadcrumbs>
       </Box>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Layout>
           <Box>
             <Box mb="24px">
@@ -185,7 +221,7 @@ const CreateProposal = () => {
             )}
           </Box>
             <Box mb="24px">
-              <TeamSelection />
+              <TeamSelection currentTeamId={teamId} onChange={handleTeamChange} />
               <WebsiteAndSocialList websiteAndSocialList={websiteAndSocialList} onChange={handleAddressChange} />
               {formErrors.websiteAndSocialList && fieldsState.websiteAndSocialList && <FormErrors errors={formErrors.websiteAndSocialList} />}
             </Box>
@@ -212,6 +248,9 @@ const CreateProposal = () => {
                     <Button
                       type="submit"
                       width="100%"
+                      isLoading={isLoading}
+                      endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                      disabled={!isEmpty(formErrors)}
                       mb="16px"
                     >
                       {t('Submit')}

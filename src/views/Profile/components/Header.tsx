@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Flex, Heading, useModal, PresentWonIcon } from '@plantswap/uikit'
+import { Button, Flex, Heading, useModal, GiftIcon } from '@plantswap/uikit'
 import { useProfile } from 'state/profile/hooks'
 import { useTranslation } from 'contexts/Localization'
 import ClaimNftAndPlantModal, { useCanClaim } from './ClaimGiftModal'
@@ -30,8 +30,8 @@ const ProfileHeader = () => {
           {hasProfile && <Button onClick={onEditProfileModal}>{t('Edit Profile')}</Button>}
         </div>
         {canClaim && (
-          <Button variant="tertiary" onClick={onPresentClaimGiftModal} startIcon={<PresentWonIcon />}>
-            {t('You’ve got a gift to claim!')}
+          <Button variant="tertiary" onClick={onPresentClaimGiftModal} startIcon={<GiftIcon />}>
+            {t('You’ve got a points reward to claim!')}
           </Button>
         )}
       </Flex>

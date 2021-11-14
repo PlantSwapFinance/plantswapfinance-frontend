@@ -1,5 +1,11 @@
-import { TranslatableText } from 'state/types'
-
+export type TranslatableText =
+  | string
+  | {
+      key: string
+      data?: {
+        [key: string]: string | number
+      }
+    }
 export interface Address {
   97?: string
   56: string
@@ -59,6 +65,15 @@ export enum VerticalGardenCategory {
   'BINANCE' = 'Binance', // Pools using native BNB behave differently than pools using a token
 }
 
+export enum CollectiblesFarmCategory {
+  'COMMUNITY' = 'Community',
+  'CORE' = 'Core',
+  'PANCAKE' = 'PlantSwap',
+  'CAFE' = 'CafeSwap',
+  'GOOSE' = 'GooseFinance',
+  'BINANCE' = 'Binance', // Pools using native BNB behave differently than pools using a token
+}
+
 export interface FarmConfig {
   pid: number
   risk?: number
@@ -97,6 +112,24 @@ export interface VerticalGardenConfig {
   rewardCut?: number
   rewardCutSplitDevelopmentFund?: number
   rewardCutSplitBuyPlantAndBurn?: number
+  displayOnHomePage?: boolean
+}
+
+export interface CollectiblesFarmConfig {
+  cfId: number
+  label: string
+  labelSvg?: string
+  description?: string
+  collectiblesFarmingPoolContract: Address
+  stakingRewardToken: Token
+  stakingExtraRewardToken?: Token
+  collectiblesFarmMasterGardenerPId?: number
+  collectiblesFarmMasterGardenerAllocPt?: number
+  collectiblesFarmCategory?: CollectiblesFarmCategory
+  harvest?: boolean
+  sortOrder?: number
+  isFinished?: boolean
+  isExtraReward?: boolean
   displayOnHomePage?: boolean
 }
 
@@ -162,7 +195,7 @@ export type Nft = {
   identifier: string
 
   // Used to be "bunnyId". Used when minting NFT
-  variationId?: number | string
+  variationId?: number
 }
 
 export type TeamImages = {
@@ -181,11 +214,21 @@ export type Team = {
   textColor: string
 }
 
-export type CampaignType = 'ifo' | 'teambattle' | 'participation'
+export type CampaignType = 'participation' | 'teambattle' | 'ifo'
 
 export type Campaign = {
   id: string
   type: CampaignType
+  title?: TranslatableText
+  description?: TranslatableText
+  badge?: string
+}
+
+export type TaskType = 'participation' | 'foundation' | 'donation' | 'market'
+
+export type Task = {
+  id: string
+  type: TaskType
   title?: TranslatableText
   description?: TranslatableText
   badge?: string

@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { simpleRpcProvider } from 'utils/providers'
-import { verticalGardensConfig, poolsConfig } from 'config/constants'
+import { verticalGardensConfig, collectiblesFarmConfig, poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 
 // Addresses
@@ -8,20 +8,19 @@ import {
   getAddress,
   getPlantAddress,
   getMasterGardenerAddress,
+  getCollectiblesFarmContractAddress,
+  getPlantswapGardenersAddress,
   getFoundationNonProfitAddress,
+  getPlantswapMarketAddress, 
   getPlantProfileAddress,
   getPlantProfileExtra1Address,
-  getPlantswapGardenersAddress,
   getGardeningSchoolNftAddress,
   getMasterGardeningSchoolNftAddress,
+  getPointsRewardSchoolNftAddress,
+  getSharePlantswapLoveSchooldNftAddress,
   getMulticallAddress,
-  getBunnyFactoryAddress,
-  getBunnySpecialAddress,
   getPointCenterIfoAddress,
-  getClaimRefundAddress,
   getChainlinkOracleAddress,
-  getBunnySpecialPlantVaultAddress,
-  getBunnySpecialPredictionAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -29,18 +28,24 @@ import plantAbi from 'config/abi/plant.json'
   // Farms and Gardens
 import masterGardener from 'config/abi/masterchef.json'
 import verticalGardens from 'config/abi/verticalGardens.json'
+import plantswapCollectiblesFarming from 'config/abi/plantswapCollectiblesFarming.json'
+import collectiblesFarmingPool from 'config/abi/collectiblesFarmingPool.json'
   // GardenV1
 import sousChef from 'config/abi/sousChef.json'
   // Collectibles
 import plantswapGardenersAbi from 'config/abi/plantswapGardeners.json'
   // Foundations
 import plantswapFoundationNonProfitAbi from 'config/abi/plantswapFoundationNonProfit.json'
+  // Market
+import plantswapPlantswapMarketAbi from 'config/abi/plantswapMarket.json'
   // Profile
 import profileABI from 'config/abi/plantswapGardenersProfile.json'
 import plantswapProfileExtra1ABI from 'config/abi/plantswapGardenersProfileExtra1.json'
   // Collectibles Claiming School
 import gardeningSchoolNftAbi from 'config/abi/gardeningSchool.json'
 import masterGardeningSchoolNftAbi from 'config/abi/masterGardeningSchool.json'
+import pointsRewardSchoolAbi from 'config/abi/pointsRewardSchool.json'
+import sharePlantswapLoveSchooldAbi from 'config/abi/sharePlantswapLoveSchoold.json'
 
   // Multicall and other basic abi
 import bep20Abi from 'config/abi/erc20.json'
@@ -53,14 +58,8 @@ import ifoV2Abi from 'config/abi/ifoV2.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
-import claimRefundAbi from 'config/abi/claimRefund.json'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
 import MultiCallAbi from 'config/abi/Multicall.json'
-import bunnySpecialPlantVaultAbi from 'config/abi/bunnySpecialCakeVault.json'
-import bunnySpecialPredictionAbi from 'config/abi/bunnySpecialPrediction.json'
-
-import bunnyFactoryAbi from 'config/abi/bunnyFactory.json'
-import bunnySpecialAbi from 'config/abi/bunnySpecial.json'
 import { ChainLinkOracleContract } from './types'
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
@@ -81,6 +80,16 @@ export const getVerticalGardenContract = (id: number, signer?: ethers.Signer | e
   const abi = verticalGardens
   return getContract(abi, getAddress(config.verticalGardenContractAddress), signer)
 }
+export const getCollectiblesFarmContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  const abi = plantswapCollectiblesFarming
+  return getContract(abi, getCollectiblesFarmContractAddress(), signer)
+}
+export const getCollectiblesFarmingPoolContract = (id: number, signer?: ethers.Signer | ethers.providers.Provider) => {
+  const config = collectiblesFarmConfig.find((collectiblesFarm) => collectiblesFarm.cfId === id)
+  const abi = collectiblesFarmingPool
+  return getContract(abi, getAddress(config.collectiblesFarmingPoolContract), signer)
+}
+
 // GardenV1
 export const getSouschefContract = (id: number, signer?: ethers.Signer | ethers.providers.Provider) => {
   const config = poolsConfig.find((pool) => pool.sousId === id)
@@ -91,8 +100,12 @@ export const getSouschefContract = (id: number, signer?: ethers.Signer | ethers.
 export const getPlantswapGardenersContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(plantswapGardenersAbi, getPlantswapGardenersAddress(), signer)
 }
+// Market
+export const getPlantswapMarketContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(plantswapPlantswapMarketAbi, getPlantswapMarketAddress(), signer)
+}
 // Foundations
-export const getPlantProfileContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+export const getFoundationNonProfitContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(plantswapFoundationNonProfitAbi, getFoundationNonProfitAddress(), signer)
 }
 // Profile
@@ -108,6 +121,12 @@ export const getGardeningSchoolNftContract = (signer?: ethers.Signer | ethers.pr
 }
 export const getMasterGardeningSchoolNftContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(masterGardeningSchoolNftAbi, getMasterGardeningSchoolNftAddress(), signer)
+}
+export const getPointsRewardSchoolNftContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(pointsRewardSchoolAbi, getPointsRewardSchoolNftAddress(), signer)
+}
+export const getSharePlantswapLoveSchoolNftContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(sharePlantswapLoveSchooldAbi, getSharePlantswapLoveSchooldNftAddress(), signer)
 }
 // Multicall and other basic abi
 export const getMulticallContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
@@ -138,21 +157,6 @@ export const getSouschefV2Contract = (id: number, signer?: ethers.Signer | ether
 export const getPointCenterIfoContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(pointCenterIfo, getPointCenterIfoAddress(), signer)
 }
-export const getBunnyFactoryContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(bunnyFactoryAbi, getBunnyFactoryAddress(), signer)
-}
-export const getBunnySpecialContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(bunnySpecialAbi, getBunnySpecialAddress(), signer)
-}
-export const getClaimRefundContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(claimRefundAbi, getClaimRefundAddress(), signer)
-}
 export const getChainlinkOracleContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(chainlinkOracleAbi, getChainlinkOracleAddress(), signer) as ChainLinkOracleContract
-}
-export const getBunnySpecialPlantVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(bunnySpecialPlantVaultAbi, getBunnySpecialPlantVaultAddress(), signer)
-}
-export const getBunnySpecialPredictionContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(bunnySpecialPredictionAbi, getBunnySpecialPredictionAddress(), signer)
 }

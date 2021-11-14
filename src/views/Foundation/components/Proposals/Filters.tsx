@@ -7,7 +7,7 @@ import { ProposalState } from 'state/types'
 interface FiltersProps {
   filterState: ProposalState
   onFilterChange: (filterState: ProposalState) => void
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 const StyledFilters = styled(Flex).attrs({ alignItems: 'center' })`

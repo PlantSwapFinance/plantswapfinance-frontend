@@ -6,6 +6,13 @@ import {
   CardBody,
   Heading,
   Tag,
+  HarvestIcon,
+  AuctionIcon, 
+  MegaphoneIcon, 
+  SchoolIcon, 
+  SuperMarketIcon, 
+  SyncAltIcon,
+  BidIcon, 
   Button,
   ChevronUpIcon,
   ChevronDownIcon,
@@ -16,6 +23,10 @@ import {
 import { useProfile } from 'state/profile/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { Nft } from 'config/constants/types'
+// To filter dev features
+import { MASTERGARDENERDEVADDRESS } from 'config'
+import { useWeb3React } from '@web3-react/core'
+// 
 import InfoRow from '../InfoRow'
 import TransferNftModal from '../TransferNftModal'
 import ClaimNftModal from '../ClaimNftModal'
@@ -54,7 +65,8 @@ const NftCard: React.FC<NftCardProps> = ({ nft, canClaim = false, tokenIds = [],
   const [isOpen, setIsOpen] = useState(false)
   const { t } = useTranslation()
   const { profile } = useProfile()
-  const { identifier, name, description, requirement } = nft
+  const { account } = useWeb3React()
+  const { identifier, variationId, name, description, requirement } = nft
   const walletOwnsNft = tokenIds.length > 0
   const Icon = isOpen ? ChevronUpIcon : ChevronDownIcon
 
@@ -66,9 +78,7 @@ const NftCard: React.FC<NftCardProps> = ({ nft, canClaim = false, tokenIds = [],
     refresh()
   }
 
-  const [onPresentTransferModal] = useModal(
-    <TransferNftModal nft={nft} tokenIds={tokenIds} onSuccess={handleSuccess} />,
-  )
+  const [onPresentTransferModal] = useModal(<TransferNftModal nft={nft} tokenIds={tokenIds} onSuccess={handleSuccess} />)
   const [onPresentClaimModal] = useModal(<ClaimNftModal nft={nft} onSuccess={handleSuccess} onClaim={onClaim} />)
 
   return (
@@ -88,14 +98,23 @@ const NftCard: React.FC<NftCardProps> = ({ nft, canClaim = false, tokenIds = [],
             </Tag>
           )}
         </Header>
-        {canClaim && (
-          <Button width="100%" mt="24px" onClick={onPresentClaimModal}>
-            {t('Claim this NFT')}
-          </Button>
+        <br />
+        {/* Still in development:1 */}
+        {account === MASTERGARDENERDEVADDRESS && profile && (
+          <>
+            <Tag outline variant="success" startIcon={<AuctionIcon />}>
+              {t('Auction in progress')}
+            </Tag>
+            <br />
+            <Tag outline variant="success" startIcon={<HarvestIcon />}>
+              {t('Available to buy')}
+            </Tag>
+          </>
         )}
-        {walletOwnsNft && (
-          <Button width="100%" variant="secondary" mt="24px" onClick={onPresentTransferModal}>
-            {t('Transfer')}
+        {/* End of 1st dev filter */}
+        {canClaim && (
+          <Button width="100%" mt="24px" onClick={onPresentClaimModal} startIcon={<SchoolIcon />}>
+            {t('Claim this NFT')}
           </Button>
         )}
       </CardBody>
@@ -113,6 +132,56 @@ const NftCard: React.FC<NftCardProps> = ({ nft, canClaim = false, tokenIds = [],
                 <br />
                 {t(requirement)}
               </Text>
+            )}
+            {/* Still in development:2 */}
+            {account === MASTERGARDENERDEVADDRESS && walletOwnsNft && (
+              <>
+                {/* Place for sell */}
+                <a href={`/market/sellNft/${variationId}`} target="_blank" rel="noopener noreferrer">
+                  <Button width="100%" variant="secondary" mt="24px" startIcon={<SuperMarketIcon />}>
+                    {t('Place for sale')}
+                  </Button>
+                </a>
+                <br />
+                {/* Place for buy */}
+                <a href={`/market/createAuction/${variationId}`} target="_blank" rel="noopener noreferrer">
+                  <Button width="100%" variant="secondary" mt="24px" startIcon={<MegaphoneIcon />}>
+                    {t('Place for auction')}
+                  </Button>
+                </a>
+              </>
+            )}
+            {/* End of 2nd dev filter */}
+
+            {/* Buy, bid place buy order */}
+            
+            {/* Still in development:3 */}
+            {account === MASTERGARDENERDEVADDRESS && (
+              <>
+                {/* variant="" */}
+                <a href={`/market/makeOffer/${variationId}`} target="_blank" rel="noopener noreferrer">
+                  <Button width="100%" variant="tertiary" mt="24px" onClick={null} startIcon={<HarvestIcon />}>
+                    {t('Buy from %countSellOffer% sell offer', { countSellOffer: 7 })}
+                  </Button>
+                </a>
+                {/* variant="success" */}
+                <a href={`/market/makeOffer/${variationId}`} target="_blank" rel="noopener noreferrer">
+                  <Button width="100%" variant="tertiary" mt="24px" onClick={null} startIcon={<AuctionIcon />}>
+                    {t('Bid on %countAuction% auction', { countAuction: 8 })}
+                  </Button>
+                </a>
+                <a href={`/market/buyNft/${variationId}`} target="_blank" rel="noopener noreferrer">
+                  <Button width="100%" variant="tertiary" mt="24px" onClick={null} startIcon={<BidIcon />}>
+                    {t('Place a buy offer')}
+                  </Button>
+                </a>
+              </>
+            )}
+            {/* End of 3rd dev filter */}
+            {walletOwnsNft && (
+              <Button width="100%" variant="tertiary" mt="24px" onClick={onPresentTransferModal} startIcon={<SyncAltIcon />}>
+                {t('Transfer')}
+              </Button>
             )}
           </InfoBlock>
         )}

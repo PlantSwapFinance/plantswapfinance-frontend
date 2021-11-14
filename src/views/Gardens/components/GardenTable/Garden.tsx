@@ -5,7 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 import { Text } from '@plantswap/uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { Token } from 'config/constants/types'
-import { TokenPairImage } from 'components/TokenImage'
+import { TokenImage } from 'components/TokenImage'
 
 export interface GardenProps {
   label: string
@@ -33,7 +33,7 @@ const TokenWrapper = styled.div`
   }
 `
 
-const Garden: React.FunctionComponent<GardenProps> = ({ token, rewardToken, label, pid }) => {
+const Garden: React.FunctionComponent<GardenProps> = ({ token, label, pid }) => {
   const { stakedBalance } = useFarmUser(pid)
   const { t } = useTranslation()
   const rawStakedBalance = getBalanceNumber(stakedBalance)
@@ -46,14 +46,13 @@ const Garden: React.FunctionComponent<GardenProps> = ({ token, rewardToken, labe
         </Text>
       )
     }
-
     return null
   }
 
   return (
     <Container>
       <TokenWrapper>
-        <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={rewardToken} width={40} height={40} />
+        <TokenImage token={token} width={40} height={40} />
       </TokenWrapper>
       <div>
         {handleRenderGardening()}

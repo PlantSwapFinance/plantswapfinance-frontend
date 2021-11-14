@@ -28,10 +28,9 @@ const ProfilePicture: React.FC = () => {
   const { t } = useTranslation()
   const { isLoading, nftsInWallet, tokenIds } = useGetCollectibles()
   const { toastError } = useToast()
-  
+
   const plantswapGardenersContract = usePlantswapGardeners()
 
-  
   const handleApprove = async () => {
     const tx = await plantswapGardenersContract.approve(getPlantProfileAddress(), selectedNft.tokenId)
     setIsApproving(true)
@@ -53,6 +52,9 @@ const ProfilePicture: React.FC = () => {
         </Heading>
         <Text bold fontSize="20px" mb="24px">
           {t('We couldn’t find any Gardeners Collectibles in your wallet.')}
+        </Text>
+        <Text bold fontSize="20px" mb="24px">
+          {t('If the last transaction got approved, please try to refresh this page or contact the support via Twitter.')}
         </Text>
         <Text as="p">
           {t(

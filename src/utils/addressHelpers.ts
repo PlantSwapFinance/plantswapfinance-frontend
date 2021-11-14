@@ -19,6 +19,9 @@ export const getMasterGardenerAddress = () => {
 export const getVerticalGardenAddress = () => {
   return getAddress(addresses.verticalGarden)
 }
+export const getCollectiblesFarmContractAddress = () => {
+  return getAddress(addresses.collectiblesFarm)
+}
 // Foundations
 export const getFoundationNonProfitAddress = () => {
   return getAddress(addresses.plantswapFoundationNonProfit)
@@ -34,12 +37,22 @@ export const getPlantProfileExtra1Address = () => {
 export const getPlantswapGardenersAddress = () => {
   return getAddress(addresses.plantswapGardeners)
 }
+// Market
+export const getPlantswapMarketAddress = () => {
+  return getAddress(addresses.plantswapMarket)
+}
 // Collectibles Claiming School
 export const getGardeningSchoolNftAddress = () => {
   return getAddress(addresses.gardeningSchoolNft)
 }
 export const getMasterGardeningSchoolNftAddress = () => {
   return getAddress(addresses.masterGardeningSchoolNft)
+}
+export const getPointsRewardSchoolNftAddress = () => {
+  return getAddress(addresses.pointsRewardSchool)
+}
+export const getSharePlantswapLoveSchooldNftAddress = () => {
+  return getAddress(addresses.sharePlantswapLoveSchool)
 }
 // Multicall
 export const getMulticallAddress = () => {
@@ -51,27 +64,12 @@ export const getWbnbAddress = () => {
 
 
  // Not used anymore
-export const getBunnyFactoryAddress = () => {
-  return getAddress(addresses.bunnyFactory)
-}
-export const getClaimRefundAddress = () => {
-  return getAddress(addresses.claimRefund)
-}
 export const getPointCenterIfoAddress = () => {
   return getAddress(addresses.pointCenterIfo)
-}
-export const getBunnySpecialAddress = () => {
-  return getAddress(addresses.bunnySpecial)
 }
 export const getPlantVaultAddress = () => {
   return getAddress(addresses.plantVault)
 }
 export const getChainlinkOracleAddress = () => {
   return getAddress(addresses.chainlinkOracle)
-}
-export const getBunnySpecialPlantVaultAddress = () => {
-  return getAddress(addresses.bunnySpecialPlantVault)
-}
-export const getBunnySpecialPredictionAddress = () => {
-  return getAddress(addresses.bunnySpecialPrediction)
 }

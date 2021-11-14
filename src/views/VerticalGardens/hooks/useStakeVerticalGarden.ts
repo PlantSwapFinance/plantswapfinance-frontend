@@ -3,11 +3,11 @@ import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
 import { updateUserStakedBalance, updateUserBalance } from 'state/actions'
 import BigNumber from 'bignumber.js'
-import { DEFAULT_GAS_LIMIT } from 'config'
+import { VERTICALGARDEN_GAS_LIMIT } from 'config'
 import { useVerticalGarden } from 'hooks/useContract'
 
 const options = {
-  gasLimit: DEFAULT_GAS_LIMIT,
+  gasLimit: VERTICALGARDEN_GAS_LIMIT,
 }
 const verticalDeposit = async (verticalGardenContract, amount) => {
   const tx = await verticalGardenContract.deposit(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString(), options)
